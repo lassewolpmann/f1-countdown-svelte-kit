@@ -1,2 +1,15 @@
-<h1>Welcome to SvelteKit</h1>
-<p>Visit <a href="https://kit.svelte.dev">kit.svelte.dev</a> to read the documentation</p>
+<script>
+    import Timer from "$lib/Timer.svelte";
+    import RaceTitle from "$lib/RaceTitle.svelte";
+    import UpcomingEventList from "$lib/UpcomingEventList.svelte";
+
+    export let data;
+    let currentSession = 'Race'
+</script>
+
+<RaceTitle data={data.nextEvent} />
+<Timer
+        currentSession={currentSession}
+        nextEventSessions={data.nextEventSessions}
+/>
+<UpcomingEventList nextEvents={data.nextEvents} />
