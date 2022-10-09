@@ -1,46 +1,53 @@
 <script>
     export let timeValue;
-    export let timeValueDeg;
+    export let timeValuePct;
     export let timeUnit;
-    export let borderColor;
+    export let strokeColor;
 </script>
 
 <style>
     .timer {
-        margin: 30px;
+        margin: 20px;
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        width: 250px;
-        height: 250px;
-        border-radius: 50%;
+        width: 270px;
+        height: 270px;
         font-size: 2rem;
-        background: conic-gradient(var(--color) var(--deg), transparent var(--deg));
     }
 
-    .timer span.time {
+    .time {
         font-weight: bold;
-        z-index: 2;
     }
 
-    .timer span.text {
+    .text {
         color: grey;
-        z-index: 2;
     }
 
-    .timer::after {
-        content: "";
+    svg {
+        width: 270px;
+        height: 270px;
         position: absolute;
-        min-width: 235px;
-        min-height: 235px;
-        background: #111;
-        border-radius: 50%;
-        z-index: 1;
+        stroke: var(--color);
+    }
+
+    svg > circle {
+        fill: transparent;
+        stroke-width: 10px;
+        stroke-dasharray: calc(2 * 3.14 * 125); /* 2*pi*r */
+        stroke-dashoffset: calc((2 * 3.14 * 125) - (2 * 3.14 * 125) * var(--perc));
+        stroke-linecap: round;
+        transform: rotate(-90deg);
+        transform-origin: center;
+        transition: stroke-dashoffset 0.5s ease-in-out;
     }
 </style>
 
-<div class="timer" style="--color: {borderColor}; --deg: {timeValueDeg}deg">
+<div class="timer">
+    <svg style="--color: {strokeColor}">
+        <circle cx="50%" cy="50%" r="125" style="--perc: {timeValuePct}"/>
+    </svg>
     <span class="time">{timeValue}</span>
     <span class="text">{timeUnit}</span>
 </div>

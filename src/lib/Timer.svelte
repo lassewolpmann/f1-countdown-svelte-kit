@@ -8,7 +8,7 @@
     export let nextEventSessions;
 
     let days, hours, minutes, seconds
-    let daysDeg, hoursDeg, minutesDeg, secondsDeg
+    let daysPct, hoursPct, minutesPct, secondsPct
     let nextSessionTimestamp
     let delta;
 
@@ -27,10 +27,11 @@
         minutes = Math.floor(delta % 86400 % 3600 / 60);
         seconds = Math.floor(delta % 86400 % 3600 % 60);
 
-        daysDeg = ((delta / 86400) / 7) * 360;
-        hoursDeg = ((delta % 86400 / 3600) / 24) * 360;
-        minutesDeg = ((delta % 86400 % 3600 / 60) / 60) * 360;
-        secondsDeg = ((delta % 86400 % 3600 % 60) / 60) * 360;
+        // set daysPct to 1, if the calculated value is >= 1
+        daysPct = (delta / 86400) / 7 <= 1 ? (delta / 86400) / 7 : 1;
+        hoursPct = (delta % 86400 / 3600) / 24;
+        minutesPct = (delta % 86400 % 3600 / 60) / 60;
+        secondsPct = (delta % 86400 % 3600 % 60) / 60;
     }
 
     onMount(() => {
@@ -61,10 +62,10 @@
 </style>
 
 <div class="timer-elements">
-    <TimerElement timeValue={days} timeValueDeg={daysDeg} timeUnit="days" borderColor="white"/>
-    <TimerElement timeValue={hours} timeValueDeg={hoursDeg} timeUnit="hours" borderColor="yellow"/>
-    <TimerElement timeValue={minutes} timeValueDeg={minutesDeg} timeUnit="minutes" borderColor="red"/>
-    <TimerElement timeValue={seconds} timeValueDeg={secondsDeg} timeUnit="seconds" borderColor="blue"/>
+    <TimerElement timeValue={days} timeValuePct={daysPct} timeUnit="days" strokeColor="white"/>
+    <TimerElement timeValue={hours} timeValuePct={hoursPct} timeUnit="hours" strokeColor="yellow"/>
+    <TimerElement timeValue={minutes} timeValuePct={minutesPct} timeUnit="minutes" strokeColor="red"/>
+    <TimerElement timeValue={seconds} timeValuePct={secondsPct} timeUnit="seconds" strokeColor="blue"/>
 </div>
 
 <div class="session-selection">

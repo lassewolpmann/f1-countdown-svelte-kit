@@ -7,6 +7,13 @@
 
         return d.toDateString() + ', ' + d.toLocaleTimeString()
     }
+
+    async function getFlag(countryName) {
+        const response = await fetch('https://restcountries.com/v3.1/name/' + countryName);
+        const data = await response.json();
+
+        return data[0]['flags']['svg']
+    }
 </script>
 
 <style>
@@ -15,6 +22,7 @@
         flex-direction: column;
         align-items: center;
         justify-content: center;
+        margin-inline: 20px;
     }
 
     .event-table {
@@ -29,13 +37,12 @@
         font-size: 1rem;
         color: grey;
         text-align: left;
-        padding-top: 40px;
-        padding-bottom: 20px;
+        padding: 50px 0 10px 0;
     }
 
     .event-table th, td {
         border-bottom: 2px solid #222222;
-        padding: 10px 0 10px 0;
+        padding: 20px 0;
         text-align: left;
     }
 
@@ -47,14 +54,24 @@
         border-bottom: 0;
     }
 
-    .event-table .race-location {
-        padding-inline: 20px;
+    .event-table .race-name {
+        padding-inline: 10px;
         text-align: left;
     }
 
     .event-table .race-date {
-        padding-inline: 20px;
+        padding-inline: 10px;
         text-align: right;
+    }
+
+    .flag {
+        padding-inline: 10px;
+    }
+
+    .flag > img {
+        display: flex;
+        width: 35px;
+        height: auto;
     }
 </style>
 
@@ -64,8 +81,12 @@
         <tbody>
         {#each nextEvents as event}
             <tr>
-                <th>{event['raceName']}</th>
-                <td class="race-location">{event['Circuit']['circuitName']}</td>
+                {#await getFlag(event['Circuit']['Location']['country']) then flag}
+                    <th class="flag">
+                        <img src="{flag}" alt="Flag of {event['Circuit']['Location']['country']}">
+                    </th>
+                {/await}
+                <td class="race-name">{event['raceName']}</td>
                 <td class="race-date">{getDate(event)}</td>
             </tr>
         {/each}

@@ -14,7 +14,7 @@ export async function load({fetch}) {
 }
 
 async function getAllEvents({fetch}) {
-    const response = await fetch('http://ergast.com/api/f1/' + new Date().getFullYear() + '.json', {
+    const response = await fetch('https://ergast.com/api/f1/' + new Date().getFullYear() + '.json', {
         method: 'GET',
         cache: 'no-cache',
         credentials: 'same-origin',
@@ -30,9 +30,15 @@ async function getAllEvents({fetch}) {
 function getNextEvents(allEvents) {
     const timestamp = new Date().getTime();
 
-    return allEvents.filter((event) => {
+    let nextEvents = allEvents.filter((event) => {
         return new Date(event['date'] + ' ' + event['time']).getTime() > timestamp
     })
+
+    if (nextEvents.length === 0) {
+        nextEvents = [allEvents[allEvents.length - 1]]
+    }
+
+    return nextEvents
 }
 
 function getNextEventSessions(nextEvent) {
