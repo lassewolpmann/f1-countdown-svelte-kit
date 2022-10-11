@@ -11,5 +11,6 @@
 <Timer
         currentSession={currentSession}
         nextEventSessions={data.nextEventSessions}
+        lastEventSessions={data.lastEventSessions}
 />
 <UpcomingEventList nextEvents={data.nextEvents} />

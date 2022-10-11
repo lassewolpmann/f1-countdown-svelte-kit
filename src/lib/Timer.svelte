@@ -6,11 +6,24 @@
 
     export let currentSession;
     export let nextEventSessions;
+    export let lastEventSessions;
 
-    let days, hours, minutes, seconds
-    let daysPct, hoursPct, minutesPct, secondsPct
-    let nextSessionTimestamp
+    let days, hours, minutes, seconds;
+    let daysPct, hoursPct, minutesPct, secondsPct;
+    let nextSessionTimestamp, lastSessionTimestamp;
     let delta;
+    let daysDelta;
+
+    function calculateDaysDelta(nextEventSessions, lastEventSessions) {
+        const currentSessionIndex = nextEventSessions.findIndex((index) => index.name === currentSession)
+
+        nextSessionTimestamp = Date.parse(nextEventSessions[currentSessionIndex]['date'] + ' ' + nextEventSessions[currentSessionIndex]['time'])
+        lastSessionTimestamp = Date.parse(lastEventSessions[currentSessionIndex]['date'] + ' ' + lastEventSessions[currentSessionIndex]['time'])
+
+        delta = Math.floor((nextSessionTimestamp - lastSessionTimestamp) / 1000)
+
+        daysDelta = Math.floor(delta / 86400)
+    }
 
     function calculateDelta() {
         const currentSessionIndex = nextEventSessions.findIndex((index) => index.name === currentSession)
@@ -28,13 +41,15 @@
         seconds = Math.floor(delta % 86400 % 3600 % 60);
 
         // set daysPct to 1, if the calculated value is >= 1
-        daysPct = (delta / 86400) / 7 <= 1 ? (delta / 86400) / 7 : 1;
+        daysPct = (delta / 86400) / daysDelta;
         hoursPct = (delta % 86400 / 3600) / 24;
         minutesPct = (delta % 86400 % 3600 / 60) / 60;
         secondsPct = (delta % 86400 % 3600 % 60) / 60;
     }
 
     onMount(() => {
+        calculateDaysDelta(nextEventSessions, lastEventSessions)
+
         calculateDelta()    // initial calculation to not show "undefined"
 
         setInterval(() => {

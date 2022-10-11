@@ -38,7 +38,7 @@
     svg > circle {
         fill: transparent;
         stroke-width: 10px;
-        stroke-dasharray: var(--dashArray); /* 2*pi*r */
+        stroke-dasharray: var(--dashArray);
         stroke-dashoffset: var(--dashOffset);
         stroke-linecap: round;
         transform: rotate(-90deg);

@@ -3,13 +3,17 @@ export async function load({fetch}) {
     const allEvents = await getAllEvents({fetch})
     const nextEvents = getNextEvents(allEvents)
     const nextEvent = nextEvents[0]
-    const nextEventSessions = getNextEventSessions(nextEvent)
+    const lastEvent = getLastEvent(allEvents, nextEvent)
+    const nextEventSessions = getEventSessions(nextEvent)
+    const lastEventSession = getEventSessions(lastEvent)
 
     return {
         allEvents: allEvents,
         nextEvents: nextEvents,
         nextEvent: nextEvent,
-        nextEventSessions: nextEventSessions
+        lastEvent: lastEvent,
+        nextEventSessions: nextEventSessions,
+        lastEventSessions: lastEventSession
     }
 }
 
@@ -41,24 +45,29 @@ function getNextEvents(allEvents) {
     return nextEvents
 }
 
-function getNextEventSessions(nextEvent) {
-    const nextEventSessionNames = Object.keys(nextEvent).slice(7)
+function getEventSessions(eventData) {
+    const eventSessionNames = Object.keys(eventData).slice(7)
 
-    let nextEventSessions = []
+    let eventSessions = []
 
-    for (let i = 0; i < nextEventSessionNames.length; i++) {
-        nextEventSessions.push({
-            name: nextEventSessionNames[i],
-            date: nextEvent[nextEventSessionNames[i]]['date'],
-            time: nextEvent[nextEventSessionNames[i]]['time']
+    for (let i = 0; i < eventSessionNames.length; i++) {
+        eventSessions.push({
+            name: eventSessionNames[i],
+            date: eventData[eventSessionNames[i]]['date'],
+            time: eventData[eventSessionNames[i]]['time']
         })
     }
 
-    nextEventSessions.push({
+    eventSessions.push({
         name: 'Race',
-        date: nextEvent['date'],
-        time: nextEvent['time']
+        date: eventData['date'],
+        time: eventData['time']
     })
 
-    return nextEventSessions
+    return eventSessions
+}
+
+function getLastEvent(allEvents, nextEvent) {
+    const nextEventIndex = nextEvent['round'] - 1
+    return allEvents[nextEventIndex - 1]
 }
