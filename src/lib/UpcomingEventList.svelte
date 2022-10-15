@@ -70,8 +70,6 @@
 
     .flag > img {
         display: flex;
-        width: 35px;
-        height: auto;
     }
 </style>
 
@@ -83,7 +81,7 @@
             <tr>
                 {#await getFlag(event['Circuit']['Location']['country']) then flag}
                     <th class="flag">
-                        <img src="{flag}" alt="Flag of {event['Circuit']['Location']['country']}">
+                        <img src="{flag}" alt="Flag of {event['Circuit']['Location']['country']}" width="35px" height="auto">
                     </th>
                 {/await}
                 <td class="race-name">{event['raceName']}</td>
