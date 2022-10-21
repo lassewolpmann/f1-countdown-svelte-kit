@@ -20,15 +20,16 @@ export async function load({fetch}) {
 async function getAllEvents({fetch}) {
     const response = await fetch('https://ergast.com/api/f1/' + new Date().getFullYear() + '.json', {
         method: 'GET',
-        cache: 'no-cache',
         credentials: 'same-origin',
         headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'Cache-Control': 'max-age=86400'
         }
     }).catch(console.error)
-    const data = await response.json()
 
-    return data['MRData']['RaceTable']['Races']
+     const data = await response.json()
+
+     return data['MRData']['RaceTable']['Races']
 }
 
 function getNextEvents(allEvents) {
