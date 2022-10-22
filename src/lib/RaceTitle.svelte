@@ -1,7 +1,5 @@
 <script>
     export let data;
-    const circuitName = data['Circuit']['circuitName']
-    const raceName = data['raceName']
 </script>
 
 <style>
@@ -10,6 +8,7 @@
         flex-direction: column;
         align-items: center;
         justify-content: center;
+        margin-bottom: 30px;
     }
 
     .race-name {
@@ -25,6 +24,6 @@
 </style>
 
 <div class="race-title">
-    <span class="race-name">{raceName}</span>
-    <span class="circuit-name">{circuitName}</span>
+    <span class="race-name">{data['raceName']}</span>
+    <span class="circuit-name">{data['Circuit']['circuitName']}</span>
 </div>

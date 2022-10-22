@@ -4,13 +4,13 @@
     export let timeUnit;
     export let strokeColor;
 
-    const radius = 125;
+    const radius = (270 / 2) - 5;
     const dashArray = 2 * Math.PI * radius;
 </script>
 
 <style>
     .timer {
-        margin: 20px;
+        margin: 10px 20px;
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -22,10 +22,12 @@
 
     .time {
         font-weight: bold;
+        z-index: 1;
     }
 
     .text {
-        color: grey;
+        color: #aaa;
+        z-index: 1;
     }
 
     svg {
@@ -36,7 +38,8 @@
     }
 
     svg > circle {
-        fill: transparent;
+        fill: var(--color);
+        fill-opacity: 0.075;
         stroke-width: 10px;
         stroke-dasharray: var(--dashArray);
         stroke-dashoffset: var(--dashOffset);
@@ -49,7 +52,7 @@
 
 <div class="timer" style="--color: {strokeColor}">
     <svg style="--dashArray: {dashArray}">
-        <circle cx="50%" cy="50%" r="{radius}" style="--dashOffset: {dashArray - dashArray * timeValuePct}"/>
+        <circle cx="50%" cy="50%" r="calc(50% - 5px)" style="--dashOffset: {dashArray - dashArray * timeValuePct}" />
     </svg>
     <span class="time">{timeValue}</span>
     <span class="text">{timeUnit}</span>

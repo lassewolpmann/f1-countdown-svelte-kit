@@ -9,6 +9,10 @@
         cursor: pointer;
     }
 
+    span:hover {
+        color: #ff8989;
+    }
+
     span.selected {
         color: red;
     }
