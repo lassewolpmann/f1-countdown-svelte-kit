@@ -12,7 +12,7 @@
     }
 
     .race-name {
-        font-weight: bold;
+        font-weight: 600;
         font-size: 3rem;
         text-align: center;
     }

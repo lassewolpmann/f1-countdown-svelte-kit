@@ -33,7 +33,7 @@
     }
 
     .event-table caption {
-        font-weight: bold;
+        font-weight: 600;
         font-size: 1rem;
         color: grey;
         text-align: left;
