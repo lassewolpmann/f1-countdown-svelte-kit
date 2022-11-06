@@ -49,7 +49,7 @@
     }
 </style>
 
-<div class="timer" style="--color: {strokeColor}">
+<div class="timer" style="--color: {strokeColor}" data-nosnippet>
     <svg style="--dashArray: {dashArray}">
         <circle cx="50%" cy="50%" r="calc(50% - 6px)" style="--dashOffset: {dashArray - dashArray * timeValuePct}" />
     </svg>

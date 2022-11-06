@@ -73,7 +73,7 @@
     }
 </style>
 
-<div class="event-list">
+<div class="event-list" data-nosnippet>
     <table class="event-table">
         <caption>Upcoming Grands Prix</caption>
         <tbody>

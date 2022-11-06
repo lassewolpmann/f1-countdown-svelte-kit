@@ -16,4 +16,4 @@
     }
 </style>
 
-<div class="time">{getDate(timestamp)}</div>
+<div class="time" data-nosnippet>{getDate(timestamp)}</div>

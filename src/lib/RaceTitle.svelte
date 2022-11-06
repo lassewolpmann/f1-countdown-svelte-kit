@@ -23,7 +23,10 @@
     }
 </style>
 
-<div class="race-title">
+<svelte:head>
+    <meta name="description" content="Countdown to the {data['season']} Formula 1 {data['raceName']} at {data['Circuit']['circuitName']}">
+</svelte:head>
+<div class="race-title" data-nosnippet>
     <span class="race-name">{data['raceName']}</span>
     <span class="circuit-name">{data['Circuit']['circuitName']}</span>
 </div>

@@ -77,14 +77,14 @@
     }
 </style>
 
-<div class="timer-elements">
+<div class="timer-elements" data-nosnippet>
     <TimerElement timeValue={days} timeValuePct={daysPct} timeUnit="days" strokeColor="white"/>
     <TimerElement timeValue={hours} timeValuePct={hoursPct} timeUnit="hours" strokeColor="yellow"/>
     <TimerElement timeValue={minutes} timeValuePct={minutesPct} timeUnit="minutes" strokeColor="red"/>
     <TimerElement timeValue={seconds} timeValuePct={secondsPct} timeUnit="seconds" strokeColor="blue"/>
 </div>
 
-<div class="session-selection">
+<div class="session-selection" data-nosnippet>
     {#each nextEventSessions as session}
         <span on:click={() => {
             currentSession = session.name

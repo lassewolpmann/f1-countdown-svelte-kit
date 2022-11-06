@@ -18,7 +18,7 @@
     }
 </style>
 
-<span class={currentSession === session.name ? 'selected' : ''}>
+<span class={currentSession === session.name ? 'selected' : ''} data-nosnippet>
         {#if session.name === 'FirstPractice'}
                 FP1
         {:else if session.name === 'SecondPractice'}
