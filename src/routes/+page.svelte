@@ -7,7 +7,10 @@
     let currentSession = 'Race'
 </script>
 
-<RaceTitle data={data.nextEvent} />
+<RaceTitle
+        data={data.nextEvent}
+        nextEventSessions={data.nextEventSessions}
+/>
 <Timer
         currentSession={currentSession}
         nextEventSessions={data.nextEventSessions}
