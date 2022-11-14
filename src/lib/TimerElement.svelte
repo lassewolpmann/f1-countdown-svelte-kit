@@ -1,11 +1,28 @@
 <script>
+    import { onMount } from "svelte";
+
     export let timeValue;
     export let timeValuePct;
     export let timeUnit;
     export let strokeColor;
 
-    const radius = (270 / 2) - 6;
-    const dashArray = 2 * Math.PI * radius;
+    let diameter, radius, dashArray, strokeWidth;
+
+    onMount(() => {
+        const screenWidth = window.innerWidth;
+
+        if (screenWidth >= 768) {
+            diameter = 270;
+            strokeWidth = 12;
+            radius = (diameter / 2) - 6;
+        } else {
+            diameter = 190;
+            strokeWidth = 8;
+            radius = (diameter / 2) - 4;
+        }
+
+        dashArray = 2 * Math.PI * radius
+    })
 </script>
 
 <style>
@@ -15,8 +32,8 @@
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        width: 270px;
-        height: 270px;
+        width: var(--diameter);
+        height: var(--diameter);
         font-size: 2rem;
     }
 
@@ -31,15 +48,15 @@
     }
 
     svg {
-        width: 270px;
-        height: 270px;
+        width: var(--diameter);
+        height: var(--diameter);
         position: absolute;
         stroke: var(--color);
     }
 
-    svg > circle {
+    svg > .countdown-circle {
         fill: transparent;
-        stroke-width: 12px;
+        stroke-width: var(--strokeWidth);
         stroke-dasharray: var(--dashArray);
         stroke-dashoffset: var(--dashOffset);
         stroke-linecap: round;
@@ -47,11 +64,40 @@
         transform-origin: center;
         transition: stroke-dashoffset 0.5s ease-in-out;
     }
+
+    svg > .fill-circle {
+        fill: transparent;
+        stroke-width: var(--strokeWidth);
+        opacity: 0.1;
+    }
+
+    @media only screen and (max-width: 768px) {
+        .time {
+            font-size: 3rem;
+        }
+
+        .text {
+            font-size: 1rem;
+        }
+    }
 </style>
 
-<div class="timer" style="--color: {strokeColor}" data-nosnippet>
+<div class="timer" style="--color: {strokeColor}; --diameter: {diameter}px" data-nosnippet>
     <svg style="--dashArray: {dashArray}">
-        <circle cx="50%" cy="50%" r="calc(50% - 6px)" style="--dashOffset: {dashArray - dashArray * timeValuePct}" />
+        <circle
+                class="countdown-circle"
+                cx="50%"
+                cy="50%"
+                r="{radius}px"
+                style="--dashOffset: {dashArray - dashArray * timeValuePct}; --strokeWidth: {strokeWidth}px"
+        />
+        <circle
+                class="fill-circle"
+                cx="50%"
+                cy="50%"
+                r="{radius}px"
+                style="--dashOffset: {dashArray - dashArray * timeValuePct}; --strokeWidth: {strokeWidth}px"
+        />
     </svg>
     <span class="time">{timeValue}</span>
     <span class="text">{timeUnit}</span>
