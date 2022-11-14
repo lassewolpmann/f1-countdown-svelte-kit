@@ -9,6 +9,9 @@
     }
 
     async function getFlag(countryName) {
+        if (countryName === 'UK') {
+            countryName = 'GB'
+        }
         const response = await fetch('https://restcountries.com/v3.1/name/' + countryName);
         const data = await response.json();
 
@@ -22,22 +25,23 @@
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        margin-inline: 20px;
+        margin: 40px 20px;
+        padding: 20px;
+        background: #222222;
+        border: none;
+        border-radius: 10px;
     }
 
     .event-table {
-        color: #ddd;
         font-size: 0.9rem;
         border-collapse: collapse;
-        margin-bottom: 50px;
     }
 
     .event-table caption {
         font-weight: 600;
         font-size: 1rem;
-        color: grey;
         text-align: left;
-        padding: 50px 0 10px 0;
+        padding: 10px 0;
     }
 
     .event-table th, td {

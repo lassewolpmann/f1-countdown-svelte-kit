@@ -66,6 +66,7 @@
         align-items: center;
         justify-content: center;
         flex-wrap: wrap;
+        margin: 20px 0;
     }
 
     .session-selection {
@@ -73,7 +74,30 @@
         flex-direction: row;
         align-items: center;
         justify-content: center;
-        margin-top: 30px;
+        flex-wrap: wrap;
+        margin: 20px 0;
+    }
+
+    .session-button {
+        margin: 10px;
+        cursor: pointer;
+        background: #444;
+        padding: 5px 10px;
+        border: none;
+        border-radius: 2px;
+        box-shadow: 0 8px 0 #333;
+        transition: all 0.2s ease;
+    }
+
+    .session-button:hover {
+        transform: translateY(2px);
+        box-shadow: 0 6px 0 #333;
+    }
+
+    .session-button.selected {
+        transform: translateY(8px);
+        box-shadow: none;
+        color: #fc4747;
     }
 </style>
 
@@ -86,14 +110,11 @@
 
 <div class="session-selection" data-nosnippet>
     {#each nextEventSessions as session}
-        <span on:click={() => {
+        <span class="session-button {currentSession === session.name ? 'selected' : ''}" on:click={() => {
             currentSession = session.name
             calculateDelta()
         }}>
-            <SessionButton
-                session={session}
-                currentSession={currentSession}
-            />
+            <SessionButton session={session} />
         </span>
     {/each}
 </div>

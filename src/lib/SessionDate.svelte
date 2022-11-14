@@ -12,7 +12,6 @@
     .time {
         text-align: center;
         color: grey;
-        margin-top: 30px;
     }
 </style>
 

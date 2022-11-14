@@ -1,28 +1,23 @@
 <script>
-    import { onMount } from "svelte";
-
     export let timeValue;
     export let timeValuePct;
     export let timeUnit;
     export let strokeColor;
 
-    let diameter, radius, dashArray, strokeWidth;
+    let innerWidth = 0;
+    let diameter, strokeWidth, radius, dashArray;
 
-    onMount(() => {
-        const screenWidth = window.innerWidth;
+    $: if (innerWidth >= 768) {
+        diameter = 270;
+        strokeWidth = 12;
+        radius = diameter / 2 - 6;
+    } else {
+        diameter = 135;
+        strokeWidth = 6;
+        radius = diameter / 2 - 3;
+    }
 
-        if (screenWidth >= 768) {
-            diameter = 270;
-            strokeWidth = 12;
-            radius = (diameter / 2) - 6;
-        } else {
-            diameter = 190;
-            strokeWidth = 8;
-            radius = (diameter / 2) - 4;
-        }
-
-        dashArray = 2 * Math.PI * radius
-    })
+    $: dashArray =  2 * Math.PI * radius;
 </script>
 
 <style>
@@ -68,12 +63,12 @@
     svg > .fill-circle {
         fill: transparent;
         stroke-width: var(--strokeWidth);
-        opacity: 0.1;
+        opacity: 0.2;
     }
 
     @media only screen and (max-width: 768px) {
         .time {
-            font-size: 3rem;
+            font-size: 2.3rem;
         }
 
         .text {
@@ -82,6 +77,7 @@
     }
 </style>
 
+<svelte:window bind:innerWidth />
 <div class="timer" style="--color: {strokeColor}; --diameter: {diameter}px" data-nosnippet>
     <svg style="--dashArray: {dashArray}">
         <circle

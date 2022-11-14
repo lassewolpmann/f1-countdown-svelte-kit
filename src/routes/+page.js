@@ -34,6 +34,7 @@ async function getAllEvents({fetch}) {
 
 function getNextEvents(allEvents) {
     const timestamp = new Date().getTime();
+    // const timestamp = new Date('2022-03-20 15:00:00Z').getTime();
 
     let nextEvents = allEvents.filter((event) => {
         return new Date(event['date'] + ' ' + event['time']).getTime() > timestamp

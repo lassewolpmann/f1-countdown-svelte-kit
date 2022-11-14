@@ -35,7 +35,7 @@
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        margin-bottom: 30px;
+        margin: 20px 0;
     }
 
     .race-name {
