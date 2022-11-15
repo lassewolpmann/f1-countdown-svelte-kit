@@ -33,8 +33,6 @@
         text-align: left;
         background: rgba(22, 22, 22);
         padding: 15px;
-        border: none;
-        border-radius: 10px 10px 0 0;
     }
 
     table > tbody {
@@ -56,7 +54,7 @@
 
     table > tbody > tr > td, th {
         text-align: left;
-        padding: 10px;
+        padding: 15px;
     }
 
     table > tbody > tr > th > img {

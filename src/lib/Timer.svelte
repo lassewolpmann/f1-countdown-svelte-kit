@@ -1,62 +1,55 @@
 <script>
-    import {onMount} from "svelte";
     import SessionDate from "$lib/SessionDate.svelte";
     import TimerElement from "$lib/TimerElement.svelte";
-    import SessionButton from "$lib/SessionButton.svelte";
+    import SessionSelection from "./SessionSelection.svelte";
 
-    export let currentSession;
     export let nextEventSessions;
     export let lastEventSessions;
 
-    let days, hours, minutes, seconds;
-    let daysPct, hoursPct, minutesPct, secondsPct;
-    let nextSessionTimestamp, lastSessionTimestamp;
-    let delta;
-    let daysDelta;
+    let currentSession = 'Race';
 
-    function calculateDaysDelta(nextEventSessions, lastEventSessions) {
-        const currentSessionIndex = nextEventSessions.findIndex((index) => index.name === currentSession)
+    $: currentSessionIndex = nextEventSessions.findIndex((index) => index.name === currentSession);
 
-        nextSessionTimestamp = Date.parse(nextEventSessions[currentSessionIndex]['date'] + ' ' + nextEventSessions[currentSessionIndex]['time'])
-        lastSessionTimestamp = Date.parse(lastEventSessions[currentSessionIndex]['date'] + ' ' + lastEventSessions[currentSessionIndex]['time'])
+    $: nextSessionDate = nextEventSessions[currentSessionIndex]['date'];
+    $: nextSessionTime = nextEventSessions[currentSessionIndex]['time'];
+    $: nextSessionTimestamp = Date.parse(nextSessionDate + ' ' + nextSessionTime);
 
-        delta = Math.floor((nextSessionTimestamp - lastSessionTimestamp) / 1000)
+    $: delta = calculateDelta(currentSessionIndex, nextSessionTimestamp);
+    $: daysDelta = calculateDaysDelta(currentSessionIndex, nextSessionTimestamp);
 
-        daysDelta = Math.floor(delta / 86400)
-    }
+    $: days = Math.floor(delta / 86400);
+    $: hours = Math.floor(delta % 86400 / 3600);
+    $: minutes = Math.floor(delta % 86400 % 3600 / 60);
+    $: seconds = Math.floor(delta % 86400 % 3600 % 60);
 
-    function calculateDelta() {
-        const currentSessionIndex = nextEventSessions.findIndex((index) => index.name === currentSession)
-        nextSessionTimestamp = Date.parse(nextEventSessions[currentSessionIndex]['date'] + ' ' + nextEventSessions[currentSessionIndex]['time'])
+    $: daysPct = (delta / 86400) / daysDelta;
+    $: hoursPct = (delta % 86400 / 3600) / 24;
+    $: minutesPct = (delta % 86400 % 3600 / 60) / 60;
+    $: secondsPct = (delta % 86400 % 3600 % 60) / 60;
 
-        delta = Math.floor((nextSessionTimestamp - new Date().getTime()) / 1000)
+    function calculateDelta(currentSessionIndex, nextSessionTimestamp) {
+        let deltaValue = Math.floor((nextSessionTimestamp - new Date().getTime()) / 1000);
 
         if (Math.floor((nextSessionTimestamp - new Date().getTime()) / 1000) <= 0) {
-            delta = 0
+            deltaValue = 0
         }
 
-        days = Math.floor(delta / 86400);
-        hours = Math.floor(delta % 86400 / 3600);
-        minutes = Math.floor(delta % 86400 % 3600 / 60);
-        seconds = Math.floor(delta % 86400 % 3600 % 60);
-
-        // set daysPct to 1, if the calculated value is >= 1
-        daysPct = (delta / 86400) / daysDelta;
-        hoursPct = (delta % 86400 / 3600) / 24;
-        minutesPct = (delta % 86400 % 3600 / 60) / 60;
-        secondsPct = (delta % 86400 % 3600 % 60) / 60;
+        return deltaValue
     }
 
-    onMount(() => {
-        calculateDaysDelta(nextEventSessions, lastEventSessions)
+    function calculateDaysDelta(currentSessionIndex, nextSessionTimestamp) {
+        const lastSessionDate = lastEventSessions[currentSessionIndex]['date'];
+        const lastSessionTime = lastEventSessions[currentSessionIndex]['time'];
+        const lastSessionTimestamp = Date.parse(lastSessionDate + ' ' + lastSessionTime);
 
-        calculateDelta()    // initial calculation to not show "undefined"
+        const deltaBetweenRaces = Math.floor((nextSessionTimestamp - lastSessionTimestamp) / 1000)
 
-        setInterval(() => {
-            calculateDelta()
-            delta -= 1
-        }, 1000);
-    })
+        return Math.floor(deltaBetweenRaces / 86400)
+    }
+
+    setInterval(() => {
+        delta -= 1
+    }, 1000);
 </script>
 
 <style>
@@ -68,49 +61,9 @@
         flex-wrap: wrap;
         margin: 20px 0;
     }
-
-    .session-selection {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        justify-content: center;
-        flex-wrap: wrap;
-        margin: 20px 0;
-    }
-
-    .session-button {
-        margin: 10px;
-        font-weight: bold;
-        color: grey;
-        cursor: pointer;
-        background: #222;
-        padding: 10px 15px;
-        border: none;
-        border-radius: 5px;
-        transition: all 0.2s ease;
-    }
-
-    .session-button:hover {
-        background: #444;
-        color: white;
-    }
-
-    .session-button.selected {
-        background: rgb(234, 53, 19);
-        color: white;
-    }
 </style>
 
-<div class="session-selection" data-nosnippet>
-    {#each nextEventSessions as session}
-        <span class="session-button {currentSession === session.name ? 'selected' : ''}" on:click={() => {
-            currentSession = session.name
-            calculateDelta()
-        }}>
-            <SessionButton session={session} />
-        </span>
-    {/each}
-</div>
+<SessionSelection nextEventSessions={nextEventSessions} bind:currentSession={currentSession} />
 
 <div class="timer-elements" data-nosnippet>
     <TimerElement timeValue={days} timeValuePct={daysPct} timeUnit="days" strokeColor="rgb(234, 53, 19)"/>

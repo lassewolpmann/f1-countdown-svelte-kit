@@ -4,7 +4,6 @@
     import UpcomingEventList from "$lib/UpcomingEventList.svelte";
 
     export let data;
-    let currentSession = 'Race'
 </script>
 
 <RaceTitle
@@ -12,7 +11,6 @@
         nextEventSessions={data.nextEventSessions}
 />
 <Timer
-        currentSession={currentSession}
         nextEventSessions={data.nextEventSessions}
         lastEventSessions={data.lastEventSessions}
 />
