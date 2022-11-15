@@ -20,78 +20,65 @@
 </script>
 
 <style>
-    .event-list {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        margin: 40px 20px;
-        padding: 20px;
-        background: #222222;
+    table {
+        width: min(80vw, 600px);
+        font-size: 0.9rem;
+        border-collapse: collapse;
+        margin: 50px 0;
+    }
+
+    table > caption {
+        font-weight: 600;
+        font-size: 1rem;
+        text-align: left;
+        background: rgba(22, 22, 22);
+        padding: 15px;
+        border: none;
+        border-radius: 10px 10px 0 0;
+    }
+
+    table > tbody {
+        width: 100%;
+    }
+
+    table > tbody > tr {
+        background: rgba(22, 22, 22);
+    }
+
+    table > tbody > tr:nth-child(2n+1) {
+        background: rgba(29, 29, 29);
+    }
+
+    table > tbody > tr:last-child {
         border: none;
         border-radius: 10px;
     }
 
-    .event-table {
-        font-size: 0.9rem;
-        border-collapse: collapse;
-    }
-
-    .event-table caption {
-        font-weight: 600;
-        font-size: 1rem;
+    table > tbody > tr > td, th {
         text-align: left;
-        padding: 10px 0;
+        padding: 10px;
     }
 
-    .event-table th, td {
-        border-bottom: 2px solid #222222;
-        padding: 20px 0;
-        text-align: left;
-    }
-
-    .event-table tr:last-child td {
-        border-bottom: 0;
-    }
-
-    .event-table tr:last-child th {
-        border-bottom: 0;
-    }
-
-    .event-table .race-name {
-        padding-inline: 10px;
-        text-align: left;
-    }
-
-    .event-table .race-date {
-        padding-inline: 10px;
-        text-align: right;
-    }
-
-    .flag {
-        padding-inline: 10px;
-    }
-
-    .flag > img {
+    table > tbody > tr > th > img {
         display: flex;
+        width: 30px;
+        height: auto;
     }
 </style>
 
-<div class="event-list" data-nosnippet>
-    <table class="event-table">
-        <caption>Upcoming Grands Prix</caption>
-        <tbody>
-        {#each nextEvents as event}
-            <tr>
-                {#await getFlag(event['Circuit']['Location']['country']) then flag}
-                    <th class="flag">
-                        <img src="{flag}" alt="Flag of {event['Circuit']['Location']['country']}" width="35px" height="auto">
-                    </th>
-                {/await}
-                <td class="race-name">{event['raceName']}</td>
-                <td class="race-date">{getDate(event)}</td>
-            </tr>
-        {/each}
-        </tbody>
-    </table>
-</div>
+<table>
+    <caption>Upcoming Grands Prix</caption>
+    <tbody>
+    {#each nextEvents as event}
+        <tr>
+            {#await getFlag(event['Circuit']['Location']['country']) then flag}
+                <th>
+                    <img src="{flag}" alt="Flag of {event['Circuit']['Location']['country']}">
+                </th>
+            {/await}
+            <td>{event['raceName']}</td>
+            <td>{getDate(event)}</td>
+        </tr>
+    {/each}
+    </tbody>
+</table>

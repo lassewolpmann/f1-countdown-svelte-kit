@@ -80,33 +80,26 @@
 
     .session-button {
         margin: 10px;
+        font-weight: bold;
+        color: grey;
         cursor: pointer;
-        background: #444;
-        padding: 5px 10px;
+        background: #222;
+        padding: 10px 15px;
         border: none;
-        border-radius: 2px;
-        box-shadow: 0 8px 0 #333;
+        border-radius: 5px;
         transition: all 0.2s ease;
     }
 
     .session-button:hover {
-        transform: translateY(2px);
-        box-shadow: 0 6px 0 #333;
+        background: #444;
+        color: white;
     }
 
     .session-button.selected {
-        transform: translateY(8px);
-        box-shadow: none;
-        color: #fc4747;
+        background: red;
+        color: white;
     }
 </style>
-
-<div class="timer-elements" data-nosnippet>
-    <TimerElement timeValue={days} timeValuePct={daysPct} timeUnit="days" strokeColor="white"/>
-    <TimerElement timeValue={hours} timeValuePct={hoursPct} timeUnit="hours" strokeColor="yellow"/>
-    <TimerElement timeValue={minutes} timeValuePct={minutesPct} timeUnit="minutes" strokeColor="red"/>
-    <TimerElement timeValue={seconds} timeValuePct={secondsPct} timeUnit="seconds" strokeColor="blue"/>
-</div>
 
 <div class="session-selection" data-nosnippet>
     {#each nextEventSessions as session}
@@ -117,6 +110,13 @@
             <SessionButton session={session} />
         </span>
     {/each}
+</div>
+
+<div class="timer-elements" data-nosnippet>
+    <TimerElement timeValue={days} timeValuePct={daysPct} timeUnit="days" strokeColor="rgb(234, 53, 19)"/>
+    <TimerElement timeValue={hours} timeValuePct={hoursPct} timeUnit="hours" strokeColor="rgb(244, 200, 68)"/>
+    <TimerElement timeValue={minutes} timeValuePct={minutesPct} timeUnit="minutes" strokeColor="rgb(232, 232, 228)"/>
+    <TimerElement timeValue={seconds} timeValuePct={secondsPct} timeUnit="seconds" strokeColor="rgb(57, 97, 164)"/>
 </div>
 
 <SessionDate timestamp={nextSessionTimestamp}/>
