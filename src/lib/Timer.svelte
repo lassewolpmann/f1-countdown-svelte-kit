@@ -96,7 +96,7 @@
     }
 
     .session-button.selected {
-        background: red;
+        background: rgb(234, 53, 19);
         color: white;
     }
 </style>
