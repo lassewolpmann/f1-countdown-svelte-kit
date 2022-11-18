@@ -3,9 +3,9 @@ export async function load({fetch}) {
     const allEvents = await getAllEvents({fetch})
     const nextEvents = getNextEvents(allEvents)
     const nextEvent = nextEvents[0]
-    const lastEvent = getLastEvent(allEvents, nextEvent)
-    const nextEventSessions = getEventSessions(nextEvent)
-    const lastEventSession = getEventSessions(lastEvent)
+    const lastEvent = getLastEvent(allEvents, nextEvents)
+    const nextEventSessions = nextEvent['sessions']
+    const lastEventSession = lastEvent['sessions']
 
     return {
         allEvents: allEvents,
@@ -18,26 +18,55 @@ export async function load({fetch}) {
 }
 
 async function getAllEvents({fetch}) {
-    const response = await fetch('https://ergast.com/api/f1/' + new Date().getFullYear() + '.json', {
+    const apiUrl = 'https://api.motorsportstats.com/widgets/1.0.0'
+    const seasonListResponse = await fetch(apiUrl + '/series/a33f8b4a-2b22-41ce-8e7d-0aea08f0e176/seasons?hasStandings=true', {
         method: 'GET',
-        credentials: 'same-origin',
         headers: {
-            'Content-Type': 'application/json',
-            'Cache-Control': 'max-age=86400'
+            Accept: 'application/json, text/plain, */*',
+            Origin: 'https://widgets.motorsportstats.com',
+            Referer: 'https://widgets.motorsportstats.com/',
+            Host: 'api.motorsportstats.com',
+            'x-parent-referer': 'https://motorsportstats.com/'
         }
     }).catch(console.error)
 
-     const data = await response.json()
+    const seasonListData = await seasonListResponse.json()
+    let seasonUUID;
 
-     return data['MRData']['RaceTable']['Races']
+    for (let i = 0; i < seasonListData.length; i++) {
+        if (seasonListData[i]['year'] === new Date().getFullYear()) {
+            seasonUUID = seasonListData[i]['uuid']
+        }
+    }
+
+    const seasonScheduleResponse = await fetch(apiUrl + '/seasons/' + seasonUUID + '/calendar', {
+        method: 'GET',
+        headers: {
+            Accept: 'application/json, text/plain, */*',
+            Origin: 'https://widgets.motorsportstats.com',
+            Referer: 'https://widgets.motorsportstats.com/',
+            Host: 'api.motorsportstats.com',
+            'x-parent-referer': 'https://motorsportstats.com/'
+        }
+    }).catch(console.error)
+
+    const seasonScheduleData = await seasonScheduleResponse.json()
+
+    return seasonScheduleData['events']
 }
 
 function getNextEvents(allEvents) {
     const timestamp = new Date().getTime();
-    // const timestamp = new Date('2022-03-20 15:00:00Z').getTime();
+    // const timestamp = new Date('2022-01-01 15:00:00Z').getTime();
 
     let nextEvents = allEvents.filter((event) => {
-        return new Date(event['date'] + ' ' + event['time']).getTime() > timestamp
+        const sessions = event['sessions']
+
+        if (sessions.length !== 0) {
+            const race = sessions[sessions.length - 1]
+            const raceEndTimeUtc = race['endTimeUtc'] * 1000
+            return raceEndTimeUtc > timestamp
+        }
     })
 
     if (nextEvents.length === 0) {
@@ -47,29 +76,7 @@ function getNextEvents(allEvents) {
     return nextEvents
 }
 
-function getEventSessions(eventData) {
-    const eventSessionNames = Object.keys(eventData).slice(7)
 
-    let eventSessions = []
-
-    for (let i = 0; i < eventSessionNames.length; i++) {
-        eventSessions.push({
-            name: eventSessionNames[i],
-            date: eventData[eventSessionNames[i]]['date'],
-            time: eventData[eventSessionNames[i]]['time']
-        })
-    }
-
-    eventSessions.push({
-        name: 'Race',
-        date: eventData['date'],
-        time: eventData['time']
-    })
-
-    return eventSessions
-}
-
-function getLastEvent(allEvents, nextEvent) {
-    const nextEventIndex = nextEvent['round'] - 1
-    return allEvents[nextEventIndex - 1]
+function getLastEvent(allEvents, nextEvents) {
+    return allEvents[allEvents.length - nextEvents.length - 1]
 }

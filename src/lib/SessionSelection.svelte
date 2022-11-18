@@ -40,16 +40,8 @@
 
 <div class="session-selection" data-nosnippet>
     {#each nextEventSessions as session}
-        <button class="{currentSession === session.name ? 'selected' : ''}" on:click={() => currentSession = session.name}>
-            {#if session.name === 'FirstPractice'}
-                FP1
-            {:else if session.name === 'SecondPractice'}
-                FP2
-            {:else if session.name === 'ThirdPractice'}
-                FP3
-            {:else}
-                {session.name}
-            {/if}
+        <button class="{currentSession === session['shortCode'] ? 'selected' : ''}" on:click={() => currentSession = session['shortCode']}>
+            {session['shortCode']}
         </button>
     {/each}
 </div>

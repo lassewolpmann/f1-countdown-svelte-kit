@@ -2,18 +2,7 @@
     export let data;
     export let nextEventSessions;
 
-    const sessionNameList = nextEventSessions.map(session => {
-        if (session['name'] === 'FirstPractice') {
-            return 'FP1'
-        } else if (session['name'] === 'SecondPractice') {
-            return 'FP2'
-        } else if (session['name'] === 'ThirdPractice') {
-            return 'FP3'
-        } else {
-            return session['name']
-        }
-    })
-
+    const sessionNameList = nextEventSessions.map(session => session['shortCode'])
     const sessionNames = sessionNameList.join(', ')
 </script>
 
@@ -39,10 +28,10 @@
 </style>
 
 <svelte:head>
-    <meta name="description" content="Countdown to the {data['season']} Formula 1 {data['raceName']} {sessionNames} at {data['Circuit']['circuitName']}">
+    <meta name="description" content="Countdown to the {new Date().getFullYear()} Formula 1 {data['name']} {sessionNames} at {data['venue']['name']}">
 </svelte:head>
 
 <div class="race-title" data-nosnippet>
-    <span class="race-name">{data['raceName']}</span>
-    <span class="circuit-name">{data['Circuit']['circuitName']}</span>
+    <span class="race-name">{data['name']}</span>
+    <span class="circuit-name">{data['venue']['name']}</span>
 </div>

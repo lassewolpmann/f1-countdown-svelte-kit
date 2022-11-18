@@ -8,14 +8,12 @@
 
     let currentSession = 'Race';
 
-    $: currentSessionIndex = nextEventSessions.findIndex((index) => index.name === currentSession);
-
-    $: nextSessionDate = nextEventSessions[currentSessionIndex]['date'];
-    $: nextSessionTime = nextEventSessions[currentSessionIndex]['time'];
-    $: nextSessionTimestamp = Date.parse(nextSessionDate + ' ' + nextSessionTime);
+    $: currentSessionIndex = nextEventSessions.findIndex(session => session['shortCode'] === currentSession);
+    $: nextSessionTimestamp = nextEventSessions[currentSessionIndex]['startTimeUtc'] * 1000;
+    $: lastSessionTimestamp = lastEventSessions[currentSessionIndex]['startTimeUtc'] * 1000;
 
     $: delta = calculateDelta(currentSessionIndex, nextSessionTimestamp);
-    $: daysDelta = calculateDaysDelta(currentSessionIndex, nextSessionTimestamp);
+    $: daysDelta = calculateDaysDelta(currentSessionIndex, nextSessionTimestamp, lastSessionTimestamp);
 
     $: days = Math.floor(delta / 86400);
     $: hours = Math.floor(delta % 86400 / 3600);
@@ -37,11 +35,7 @@
         return deltaValue
     }
 
-    function calculateDaysDelta(currentSessionIndex, nextSessionTimestamp) {
-        const lastSessionDate = lastEventSessions[currentSessionIndex]['date'];
-        const lastSessionTime = lastEventSessions[currentSessionIndex]['time'];
-        const lastSessionTimestamp = Date.parse(lastSessionDate + ' ' + lastSessionTime);
-
+    function calculateDaysDelta(currentSessionIndex, nextSessionTimestamp, lastSessionTimestamp) {
         const deltaBetweenRaces = Math.floor((nextSessionTimestamp - lastSessionTimestamp) / 1000)
 
         return Math.floor(deltaBetweenRaces / 86400)

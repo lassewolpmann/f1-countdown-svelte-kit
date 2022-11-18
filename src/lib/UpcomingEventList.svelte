@@ -2,16 +2,14 @@
     export let nextEvents;
 
     function getDate(event) {
-        const timestamp = Date.parse(event['date'] + ' ' + event['time']);
+        const eventSessions = event['sessions']
+        const timestamp = eventSessions[eventSessions.length - 1]['startTimeUtc'] * 1000;
         const d = new Date(timestamp);
 
         return d.toDateString() + ', ' + d.toLocaleTimeString()
     }
 
     async function getFlag(countryName) {
-        if (countryName === 'UK') {
-            countryName = 'GB'
-        }
         const response = await fetch('https://restcountries.com/v3.1/name/' + countryName);
         const data = await response.json();
 
@@ -69,12 +67,12 @@
     <tbody>
     {#each nextEvents as event}
         <tr>
-            {#await getFlag(event['Circuit']['Location']['country']) then flag}
+            {#await getFlag(event['country']['name']) then flag}
                 <th>
-                    <img src="{flag}" alt="Flag of {event['Circuit']['Location']['country']}">
+                    <img src="{flag}" alt="Flag of {event['country']['name']}">
                 </th>
             {/await}
-            <td>{event['raceName']}</td>
+            <td>{event['name']}</td>
             <td>{getDate(event)}</td>
         </tr>
     {/each}
