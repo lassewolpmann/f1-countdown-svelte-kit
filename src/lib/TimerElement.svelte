@@ -12,7 +12,7 @@
         strokeWidth = 12;
         radius = diameter / 2 - 6;
     } else {
-        diameter = 135;
+        diameter = 125;
         strokeWidth = 6;
         radius = diameter / 2 - 3;
     }
