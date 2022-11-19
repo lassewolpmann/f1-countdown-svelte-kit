@@ -17,13 +17,14 @@
 
     .race-name {
         font-weight: 600;
-        font-size: 3rem;
+        font-size: 2.5rem;
         text-align: center;
     }
 
     .circuit-name {
         color: gray;
-        font-size: 1.5rem;
+        font-size: 1.3rem;
+        text-align: center;
     }
 </style>
 

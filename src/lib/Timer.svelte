@@ -1,14 +1,15 @@
 <script>
     import SessionDate from "$lib/SessionDate.svelte";
     import TimerElement from "$lib/TimerElement.svelte";
-    import SessionSelection from "./SessionSelection.svelte";
+    import SessionSelection from "$lib/SessionSelection.svelte";
+    import RaceTitle from "$lib/RaceTitle.svelte";
 
+    export let nextEvent;
     export let nextEventSessions;
     export let lastEventSessions;
+    export let currentSession;
 
-    let currentSession = 'Race';
-
-    $: currentSessionIndex = nextEventSessions.findIndex(session => session['shortCode'] === currentSession);
+    $: currentSessionIndex = nextEventSessions.findIndex(session => session['uuid'] === currentSession);
     $: nextSessionTimestamp = nextEventSessions[currentSessionIndex]['startTimeUtc'] * 1000;
     $: lastSessionTimestamp = lastEventSessions[currentSessionIndex]['startTimeUtc'] * 1000;
 
@@ -49,6 +50,17 @@
 </script>
 
 <style>
+    .timer {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        flex-wrap: wrap;
+        padding: 15px;
+        border-top: 2px solid rgba(36, 36, 36);
+        border-bottom: 2px solid rgba(36, 36, 36);
+    }
+
     .timer-elements {
         display: flex;
         flex-direction: row;
@@ -59,13 +71,23 @@
     }
 </style>
 
-<SessionSelection nextEventSessions={nextEventSessions} bind:currentSession={currentSession} />
+<div class="timer">
+    <RaceTitle
+            data={nextEvent}
+            nextEventSessions={nextEventSessions}
+    />
 
-<div class="timer-elements" data-nosnippet>
-    <TimerElement timeValue={days} timeValuePct={daysPct} timeUnit="days" strokeColor="rgb(234, 53, 19)"/>
-    <TimerElement timeValue={hours} timeValuePct={hoursPct} timeUnit="hours" strokeColor="rgb(244, 200, 68)"/>
-    <TimerElement timeValue={minutes} timeValuePct={minutesPct} timeUnit="minutes" strokeColor="rgb(232, 232, 228)"/>
-    <TimerElement timeValue={seconds} timeValuePct={secondsPct} timeUnit="seconds" strokeColor="rgb(57, 97, 164)"/>
+    <SessionSelection
+            nextEventSessions={nextEventSessions}
+            bind:currentSession={currentSession}
+    />
+
+    <div class="timer-elements" data-nosnippet>
+        <TimerElement timeValue={days} timeValuePct={daysPct} timeUnit="days" strokeColor="rgb(234, 53, 19)"/>
+        <TimerElement timeValue={hours} timeValuePct={hoursPct} timeUnit="hours" strokeColor="rgb(244, 200, 68)"/>
+        <TimerElement timeValue={minutes} timeValuePct={minutesPct} timeUnit="minutes" strokeColor="rgb(232, 232, 228)"/>
+        <TimerElement timeValue={seconds} timeValuePct={secondsPct} timeUnit="seconds" strokeColor="rgb(57, 97, 164)"/>
+    </div>
+
+    <SessionDate timestamp={nextSessionTimestamp}/>
 </div>
-
-<SessionDate timestamp={nextSessionTimestamp}/>

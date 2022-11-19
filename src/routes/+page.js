@@ -1,25 +1,49 @@
 /** @type {import('./$types').PageLoad} */
 export async function load({fetch}) {
-    const allEvents = await getAllEvents({fetch})
-    const nextEvents = getNextEvents(allEvents)
-    const nextEvent = nextEvents[0]
-    const lastEvent = getLastEvent(allEvents, nextEvents)
-    const nextEventSessions = nextEvent['sessions']
-    const lastEventSession = lastEvent['sessions']
+    let data = {
+        F1: {
+            uuid: 'a33f8b4a-2b22-41ce-8e7d-0aea08f0e176'
+        },
+        F2: {
+            uuid: 'a217f31e-70a6-40d1-9848-6aa2239bfb01'
+        },
+        F3: {
+            uuid: '08ad7230-eb99-43e3-b158-405b49e994c6'
+        }
+    }
+
+    for (let i = 0; i < Object.keys(data).length; i++) {
+        const series = Object.keys(data)[i]
+        data[series] = {
+            allEvents: await getAllEvents({fetch}, data[series]['uuid']),
+            get nextEvents() {
+                return getNextEvents(this.allEvents)
+            },
+            get nextEvent() {
+                return this.nextEvents[0]
+            },
+            get lastEvent() {
+                return getLastEvent(this.allEvents, this.nextEvents)
+            },
+            get nextEventSessions() {
+                return this.nextEvent['sessions']
+            },
+            get lastEventSessions() {
+                return this.lastEvent['sessions']
+            }
+        }
+    }
 
     return {
-        allEvents: allEvents,
-        nextEvents: nextEvents,
-        nextEvent: nextEvent,
-        lastEvent: lastEvent,
-        nextEventSessions: nextEventSessions,
-        lastEventSessions: lastEventSession
+        F1: data.F1,
+        F2: data.F2,
+        F3: data.F3
     }
 }
 
-async function getAllEvents({fetch}) {
+async function getAllEvents({fetch}, uuid) {
     const apiUrl = 'https://api.motorsportstats.com/widgets/1.0.0'
-    const seasonListResponse = await fetch(apiUrl + '/series/a33f8b4a-2b22-41ce-8e7d-0aea08f0e176/seasons?hasStandings=true', {
+    const seasonListResponse = await fetch(apiUrl + '/series/' + uuid + '/seasons?hasStandings=true', {
         method: 'GET',
         headers: {
             Accept: 'application/json, text/plain, */*',
@@ -78,5 +102,9 @@ function getNextEvents(allEvents) {
 
 
 function getLastEvent(allEvents, nextEvents) {
-    return allEvents[allEvents.length - nextEvents.length - 1]
+    if (allEvents.length === nextEvents.length) {
+        return allEvents[0]
+    } else {
+        return allEvents[allEvents.length - nextEvents.length - 1]
+    }
 }

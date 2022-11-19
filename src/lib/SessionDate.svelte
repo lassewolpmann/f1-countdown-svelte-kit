@@ -11,8 +11,16 @@
 <style>
     .time {
         text-align: center;
-        color: grey;
+        background: rgba(36, 36, 36);
+        padding: 15px 50px;
+        border: none;
+        border-radius: 5px;
+        color: gray;
+        font-size: 0.9rem;
+        margin: 20px 0;
     }
 </style>
 
-<div class="time" data-nosnippet>{getDate(timestamp)}</div>
+<div class="time" data-nosnippet>
+    {getDate(timestamp)}
+</div>

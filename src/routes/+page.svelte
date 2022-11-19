@@ -1,17 +1,20 @@
 <script>
     import Timer from "$lib/Timer.svelte";
-    import RaceTitle from "$lib/RaceTitle.svelte";
     import UpcomingEventList from "$lib/UpcomingEventList.svelte";
+    import SeriesSelection from "$lib/SeriesSelection.svelte";
 
     export let data;
+    let currentSeries = 'F1';
+    $: currentSession = data[currentSeries].nextEventSessions[data[currentSeries].nextEventSessions.length - 1]['uuid']
 </script>
 
-<RaceTitle
-        data={data.nextEvent}
-        nextEventSessions={data.nextEventSessions}
+<SeriesSelection
+        bind:currentSeries
 />
 <Timer
-        nextEventSessions={data.nextEventSessions}
-        lastEventSessions={data.lastEventSessions}
+        nextEvent={data[currentSeries].nextEvent}
+        nextEventSessions={data[currentSeries].nextEventSessions}
+        lastEventSessions={data[currentSeries].lastEventSessions}
+        currentSession={currentSession}
 />
-<UpcomingEventList nextEvents={data.nextEvents} />
+<UpcomingEventList nextEvents={data[currentSeries].nextEvents} />

@@ -8,21 +8,22 @@
 
         return d.toDateString() + ', ' + d.toLocaleTimeString()
     }
-
-    async function getFlag(countryName) {
-        const response = await fetch('https://restcountries.com/v3.1/name/' + countryName);
-        const data = await response.json();
-
-        return data[0]['flags']['svg']
-    }
 </script>
 
 <style>
+    .upcoming-events {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        flex-wrap: wrap;
+        padding: 15px;
+        margin: 20px 0;
+    }
+
     table {
-        width: min(80vw, 600px);
         font-size: 0.9rem;
         border-collapse: collapse;
-        margin: 50px 0;
     }
 
     table > caption {
@@ -62,19 +63,19 @@
     }
 </style>
 
-<table>
-    <caption>Upcoming Grands Prix</caption>
-    <tbody>
-    {#each nextEvents as event}
-        <tr>
-            {#await getFlag(event['country']['name']) then flag}
+<div class="upcoming-events">
+    <table>
+        <caption>Upcoming Grands Prix</caption>
+        <tbody>
+        {#each nextEvents as event}
+            <tr>
                 <th>
-                    <img src="{flag}" alt="Flag of {event['country']['name']}">
+                    <img src="{event['country']['picture']}" alt="Flag of {event['country']['name']}">
                 </th>
-            {/await}
-            <td>{event['name']}</td>
-            <td>{getDate(event)}</td>
-        </tr>
-    {/each}
-    </tbody>
-</table>
+                <td>{event['name']}</td>
+                <td>{getDate(event)}</td>
+            </tr>
+        {/each}
+        </tbody>
+    </table>
+</div>
