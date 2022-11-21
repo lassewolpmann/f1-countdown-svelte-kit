@@ -22,11 +22,11 @@
         align-items: center;
         justify-content: center;
         flex-wrap: wrap;
-        padding: 15px;
+        padding: 15px 15px 0 15px;
     }
 
     button {
-        margin: 10px;
+        margin: 10px 10px 0 10px;
         font-family: 'Poppins', sans-serif;
         font-size: 1.1rem;
         color: grey;
@@ -39,12 +39,11 @@
 
     button:hover {
         color: white;
-        box-shadow: 0 2px red;
     }
 
     button.selected {
         color: white;
-        box-shadow: 0 5px red;
+        box-shadow: inset 0 -3px red;
     }
 </style>
 

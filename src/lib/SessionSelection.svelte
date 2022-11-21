@@ -2,6 +2,14 @@
     export let nextEventSessions;
     export let currentSession;
 
+    $: if (nextEventSessions.filter((session) => session.name === 'Race').length > 1) {
+        nextEventSessions[nextEventSessions.length - 2].shortName = 'Race 1';
+        nextEventSessions[nextEventSessions.length - 2].shortCode = 'Race 1';
+
+        nextEventSessions[nextEventSessions.length - 1].shortName = 'Race 2';
+        nextEventSessions[nextEventSessions.length - 1].shortCode = 'Race 2';
+    }
+
     let innerWidth = 0;
 </script>
 
