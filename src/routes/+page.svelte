@@ -5,7 +5,12 @@
 
     export let data;
     let currentSeries = 'F1';
-    $: currentSession = data[currentSeries].nextEventSessions[data[currentSeries].nextEventSessions.length - 1]['uuid']
+
+    let currentSession, currentEventSessions;
+    $: {
+        currentEventSessions = data[currentSeries].nextEventSessions;
+        currentSession = currentEventSessions[currentEventSessions.length - 1]['uuid']
+    }
 </script>
 
 <SeriesSelection

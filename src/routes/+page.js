@@ -13,24 +13,21 @@ export async function load({fetch}) {
     }
 
     for (let i = 0; i < Object.keys(data).length; i++) {
-        const series = Object.keys(data)[i]
+        const series = Object.keys(data)[i];
+        const allEvents = await getAllEvents({fetch}, data[series]['uuid']);
+        const nextEvents = getNextEvents(allEvents);
+        const nextEvent = nextEvents[0];
+        const lastEvent = getLastEvent(allEvents, nextEvents);
+        const nextEventSessions = nextEvent['sessions'];
+        const lastEventSessions = lastEvent['sessions'];
+
         data[series] = {
-            allEvents: await getAllEvents({fetch}, data[series]['uuid']),
-            get nextEvents() {
-                return getNextEvents(this.allEvents)
-            },
-            get nextEvent() {
-                return this.nextEvents[0]
-            },
-            get lastEvent() {
-                return getLastEvent(this.allEvents, this.nextEvents)
-            },
-            get nextEventSessions() {
-                return this.nextEvent['sessions']
-            },
-            get lastEventSessions() {
-                return this.lastEvent['sessions']
-            }
+            allEvents: allEvents,
+            nextEvents: nextEvents,
+            nextEvent: nextEvent,
+            lastEvent: lastEvent,
+            nextEventSessions: nextEventSessions,
+            lastEventSessions: lastEventSessions
         }
     }
 
@@ -42,8 +39,10 @@ export async function load({fetch}) {
 }
 
 async function getAllEvents({fetch}, uuid) {
-    const apiUrl = 'https://api.motorsportstats.com/widgets/1.0.0'
-    const seasonListResponse = await fetch(apiUrl + '/series/' + uuid + '/seasons?hasStandings=true', {
+    const apiUrl = 'https://api.motorsportstats.com/widgets/1.0.0';
+
+    const seasonListURL = apiUrl + '/series/' + uuid + '/seasons';
+    const seasonListResponse = await fetch(seasonListURL, {
         method: 'GET',
         headers: {
             Accept: 'application/json, text/plain, */*',
@@ -54,16 +53,19 @@ async function getAllEvents({fetch}, uuid) {
         }
     }).catch(console.error)
 
-    const seasonListData = await seasonListResponse.json()
+    const seasonListData = await seasonListResponse.json();
     let seasonUUID;
 
+    const currentYear = new Date().getFullYear();
+
     for (let i = 0; i < seasonListData.length; i++) {
-        if (seasonListData[i]['year'] === new Date().getFullYear()) {
+        if (seasonListData[i]['year'] === currentYear) {
             seasonUUID = seasonListData[i]['uuid']
         }
     }
 
-    const seasonScheduleResponse = await fetch(apiUrl + '/seasons/' + seasonUUID + '/calendar', {
+    const seasonScheduleURL = apiUrl + '/seasons/' + seasonUUID + '/calendar';
+    const seasonScheduleResponse = await fetch(seasonScheduleURL, {
         method: 'GET',
         headers: {
             Accept: 'application/json, text/plain, */*',
