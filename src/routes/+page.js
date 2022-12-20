@@ -40,22 +40,25 @@ export async function load({fetch}) {
 
 async function getAllEvents({fetch}, uuid) {
     const apiUrl = 'https://api.motorsportstats.com/widgets/1.0.0';
+    const apiHeaders = {
+        Accept: 'application/json, text/plain, */*',
+        Origin: 'https://widgets.motorsportstats.com',
+        Referer: 'https://widgets.motorsportstats.com/',
+        Host: 'api.motorsportstats.com',
+        'x-parent-referer': 'https://motorsportstats.com/'
+    };
 
+    // request all seasons
     const seasonListURL = apiUrl + '/series/' + uuid + '/seasons';
     const seasonListResponse = await fetch(seasonListURL, {
         method: 'GET',
-        headers: {
-            Accept: 'application/json, text/plain, */*',
-            Origin: 'https://widgets.motorsportstats.com',
-            Referer: 'https://widgets.motorsportstats.com/',
-            Host: 'api.motorsportstats.com',
-            'x-parent-referer': 'https://motorsportstats.com/'
-        }
+        headers: apiHeaders
     }).catch(console.error)
 
     const seasonListData = await seasonListResponse.json();
     let seasonUUID;
 
+    // get uuid of current season
     const currentYear = new Date().getFullYear();
 
     for (let i = 0; i < seasonListData.length; i++) {
@@ -64,16 +67,11 @@ async function getAllEvents({fetch}, uuid) {
         }
     }
 
+    // request season info
     const seasonScheduleURL = apiUrl + '/seasons/' + seasonUUID + '/calendar';
     const seasonScheduleResponse = await fetch(seasonScheduleURL, {
         method: 'GET',
-        headers: {
-            Accept: 'application/json, text/plain, */*',
-            Origin: 'https://widgets.motorsportstats.com',
-            Referer: 'https://widgets.motorsportstats.com/',
-            Host: 'api.motorsportstats.com',
-            'x-parent-referer': 'https://motorsportstats.com/'
-        }
+        headers: apiHeaders
     }).catch(console.error)
 
     const seasonScheduleData = await seasonScheduleResponse.json()
