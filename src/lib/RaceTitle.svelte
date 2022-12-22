@@ -13,6 +13,7 @@
         align-items: center;
         justify-content: center;
         margin: 20px 0;
+        z-index: 1;
     }
 
     .race-name {

@@ -30,6 +30,7 @@
         width: var(--diameter);
         height: var(--diameter);
         font-size: 2rem;
+        z-index: 1;
     }
 
     .time {

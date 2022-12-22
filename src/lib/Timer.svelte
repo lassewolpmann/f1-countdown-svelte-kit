@@ -9,6 +9,15 @@
     export let lastEventSessions;
     export let currentSession;
 
+    let delta, currentTrackMap, currentTrackMapEl;
+
+    $: {
+        currentTrackMap = nextEvent['venue']['picture']
+        if (currentTrackMap !== null && currentTrackMapEl !== undefined) {
+            currentTrackMapEl.style.display = 'block';
+        }
+    }
+
     $: currentSessionIndex = nextEventSessions.findIndex(session => session['uuid'] === currentSession);
     $: nextSessionTimestamp = nextEventSessions[currentSessionIndex]['startTimeUtc'] * 1000;
     $: lastSessionTimestamp = lastEventSessions[currentSessionIndex]['startTimeUtc'] * 1000;
@@ -59,6 +68,7 @@
         padding: 15px;
         border-top: 2px solid rgba(36, 36, 36);
         border-bottom: 2px solid rgba(36, 36, 36);
+        position: relative;
     }
 
     .timer-elements {
@@ -69,9 +79,19 @@
         flex-wrap: wrap;
         margin: 20px 0;
     }
+
+    .track-map {
+        height: 100%;
+        max-width: 100vw;
+        position: absolute;
+        padding: 10px;
+        opacity: 0.7;
+        display: none;
+    }
 </style>
 
 <div class="timer">
+    <img class="track-map" src="{currentTrackMap}" alt="Track Map" bind:this={currentTrackMapEl}>
     <RaceTitle
             data={nextEvent}
             nextEventSessions={nextEventSessions}

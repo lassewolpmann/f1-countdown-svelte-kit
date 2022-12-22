@@ -21,6 +21,7 @@
         justify-content: center;
         flex-wrap: wrap;
         margin: 20px 0;
+        z-index: 1;
     }
 
     button {
