@@ -18,6 +18,27 @@
     }
 
     $: dashArray =  2 * Math.PI * radius;
+
+    let timerEl, svgEl, countdownCircleEl, fillCircleEl;
+    $: {
+        if (timerEl !== undefined && svgEl !== undefined && countdownCircleEl !== undefined && fillCircleEl !== undefined) {
+            diameter = diameter + 'px';
+            strokeWidth = strokeWidth + 'px';
+
+            timerEl.style.width = diameter;
+            timerEl.style.height = diameter;
+
+            svgEl.style.stroke = strokeColor;
+            svgEl.style.width = diameter;
+            svgEl.style.height = diameter;
+
+            countdownCircleEl.style.strokeWidth = strokeWidth;
+            countdownCircleEl.style.strokeDasharray = dashArray;
+            countdownCircleEl.style.strokeDashoffset = dashArray - dashArray * timeValuePct;
+
+            fillCircleEl.style.strokeWidth = strokeWidth;
+        }
+    }
 </script>
 
 <style>
@@ -27,8 +48,6 @@
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        width: var(--diameter);
-        height: var(--diameter);
         font-size: 2rem;
         z-index: 1;
     }
@@ -44,17 +63,11 @@
     }
 
     svg {
-        width: var(--diameter);
-        height: var(--diameter);
         position: absolute;
-        stroke: var(--color);
     }
 
     svg > .countdown-circle {
         fill: transparent;
-        stroke-width: var(--strokeWidth);
-        stroke-dasharray: var(--dashArray);
-        stroke-dashoffset: var(--dashOffset);
         stroke-linecap: round;
         transform: rotate(-90deg);
         transform-origin: center;
@@ -63,7 +76,6 @@
 
     svg > .fill-circle {
         fill: transparent;
-        stroke-width: var(--strokeWidth);
         opacity: 0.2;
     }
 
@@ -79,21 +91,21 @@
 </style>
 
 <svelte:window bind:innerWidth />
-<div class="timer" style="--color: {strokeColor}; --diameter: {diameter}px" data-nosnippet>
-    <svg style="--dashArray: {dashArray}">
+<div class="timer" bind:this={timerEl} data-nosnippet>
+    <svg bind:this={svgEl}>
         <circle
                 class="countdown-circle"
+                bind:this={countdownCircleEl}
                 cx="50%"
                 cy="50%"
                 r="{radius}px"
-                style="--dashOffset: {dashArray - dashArray * timeValuePct}; --strokeWidth: {strokeWidth}px"
         />
         <circle
                 class="fill-circle"
+                bind:this={fillCircleEl}
                 cx="50%"
                 cy="50%"
                 r="{radius}px"
-                style="--dashOffset: {dashArray - dashArray * timeValuePct}; --strokeWidth: {strokeWidth}px"
         />
     </svg>
     <span class="time">{timeValue}</span>
