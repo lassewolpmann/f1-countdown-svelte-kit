@@ -9,7 +9,7 @@
     let currentSession, currentEventSessions;
     $: {
         currentEventSessions = data[currentSeries].nextEventSessions;
-        currentSession = currentEventSessions[currentEventSessions.length - 1]['uuid']
+        currentSession = currentEventSessions[currentEventSessions.length - 1]['uuid'];
     }
 </script>
 

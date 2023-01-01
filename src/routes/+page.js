@@ -1,4 +1,6 @@
 /** @type {import('./$types').PageLoad} */
+import { error } from '@sveltejs/kit';
+
 export async function load({fetch}) {
     let data = {
         F1: {
@@ -18,8 +20,14 @@ export async function load({fetch}) {
         const nextEvents = getNextEvents(allEvents);
         const nextEvent = nextEvents[0];
         const lastEvent = getLastEvent(allEvents, nextEvents);
-        const nextEventSessions = nextEvent['sessions'];
-        const lastEventSessions = lastEvent['sessions'];
+        let nextEventSessions = nextEvent['sessions'];
+        let lastEventSessions = lastEvent['sessions'];
+
+        if (nextEventSessions.length === 0 || lastEventSessions.length === 0){
+            throw error(404, {
+                message: "We don't know enough about the next season yet. Please come back closer to the start of the season."
+            });
+        }
 
         data[series] = {
             allEvents: allEvents,
@@ -43,9 +51,9 @@ async function getAllEvents({fetch}, uuid) {
     const apiHeaders = {
         Accept: 'application/json, text/plain, */*',
         Origin: 'https://widgets.motorsportstats.com',
-        Referer: 'https://widgets.motorsportstats.com/',
+        Referer: 'https://widgets.motorsportstats.com',
         Host: 'api.motorsportstats.com',
-        'x-parent-referer': 'https://motorsportstats.com/'
+        'x-parent-referer': 'https://motorsportstats.com'
     };
 
     // request all seasons
@@ -84,13 +92,8 @@ function getNextEvents(allEvents) {
     // const timestamp = new Date('2022-01-01 15:00:00Z').getTime();
 
     let nextEvents = allEvents.filter((event) => {
-        const sessions = event['sessions']
-
-        if (sessions.length !== 0) {
-            const race = sessions[sessions.length - 1]
-            const raceEndTimeUtc = race['endTimeUtc'] * 1000
-            return raceEndTimeUtc > timestamp
-        }
+        const raceEndTimeUtc = event['endTimeUtc'] * 1000
+        return raceEndTimeUtc > timestamp
     })
 
     if (nextEvents.length === 0) {
