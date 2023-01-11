@@ -2,8 +2,7 @@
     export let nextEvents;
 
     function getDate(event) {
-        const eventSessions = event['sessions']
-        const timestamp = eventSessions[eventSessions.length - 1]['startTimeUtc'] * 1000;
+        const timestamp = event['startTimeUtc'] * 1000;
         const d = new Date(timestamp);
 
         return d.toDateString() + ', ' + d.toLocaleTimeString()
@@ -73,7 +72,11 @@
                     <img src="{event['country']['picture']}" alt="Flag of {event['country']['name']}">
                 </th>
                 <td>{event['name']}</td>
-                <td>{getDate(event)}</td>
+                {#if event['status'] === ''}
+                    <td>{getDate(event)}</td>
+                {:else}
+                    <td>{event['status']}</td>
+                {/if}
             </tr>
         {/each}
         </tbody>

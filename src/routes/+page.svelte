@@ -15,6 +15,7 @@
 
 <SeriesSelection
         bind:currentSeries
+        data={data}
 />
 <Timer
         nextEvent={data[currentSeries].nextEvent}

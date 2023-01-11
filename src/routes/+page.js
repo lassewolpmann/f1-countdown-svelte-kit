@@ -23,12 +23,6 @@ export async function load({fetch}) {
         let nextEventSessions = nextEvent['sessions'];
         let lastEventSessions = lastEvent['sessions'];
 
-        if (nextEventSessions.length === 0 || lastEventSessions.length === 0){
-            throw error(404, {
-                message: "We don't know enough about the next season yet. Please come back closer to the start of the season."
-            });
-        }
-
         data[series] = {
             allEvents: allEvents,
             nextEvents: nextEvents,
