@@ -9,7 +9,9 @@
     let currentSession, currentEventSessions;
     $: {
         currentEventSessions = data[currentSeries].nextEventSessions;
-        currentSession = currentEventSessions[currentEventSessions.length - 1]['uuid'];
+        if (currentEventSessions.length !== 0) {
+            currentSession = currentEventSessions[currentEventSessions.length - 1]['uuid'];
+        }
     }
 </script>
 
@@ -19,6 +21,7 @@
 />
 <Timer
         nextEvent={data[currentSeries].nextEvent}
+        lastEvent={data[currentSeries].lastEvent}
         nextEventSessions={data[currentSeries].nextEventSessions}
         lastEventSessions={data[currentSeries].lastEventSessions}
         currentSession={currentSession}

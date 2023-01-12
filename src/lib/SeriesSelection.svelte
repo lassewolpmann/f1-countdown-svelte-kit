@@ -17,7 +17,6 @@
 
     function checkDisabled(series) {
         const nextEvent = data[series]['nextEvent']
-        console.log(nextEvent)
         return nextEvent['sessions'].length === 0
     }
 </script>

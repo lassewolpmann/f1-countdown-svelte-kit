@@ -1,5 +1,4 @@
 /** @type {import('./$types').PageLoad} */
-import { error } from '@sveltejs/kit';
 
 export async function load({fetch}) {
     let data = {
@@ -83,7 +82,7 @@ async function getAllEvents({fetch}, uuid) {
 
 function getNextEvents(allEvents) {
     const timestamp = new Date().getTime();
-    // const timestamp = new Date('2022-01-01 15:00:00Z').getTime();
+    // const timestamp = new Date('2023-04-30 15:00:00Z').getTime();
 
     let nextEvents = allEvents.filter((event) => {
         const raceEndTimeUtc = event['endTimeUtc'] * 1000
