@@ -2,7 +2,8 @@
     export let nextEvents;
 
     function getDate(event) {
-        const timestamp = event['startTimeUtc'] * 1000;
+        const eventSessions = event['sessions'];
+        const timestamp = eventSessions[eventSessions.length - 1]['startTimeUtc'] * 1000;
         const d = new Date(timestamp);
 
         return d.toDateString() + ', ' + d.toLocaleTimeString()
