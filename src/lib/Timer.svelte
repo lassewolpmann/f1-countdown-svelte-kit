@@ -103,14 +103,17 @@
     {#if nextEvent['status'] !== ''}
         <h1>{nextEvent['status']}</h1>
     {:else}
-        <div class="timer-elements" data-nosnippet>
-            <TimerElement timeValue={days} timeValuePct={daysPct} timeUnit="days" strokeColor="rgb(234, 53, 19)"/>
-            <TimerElement timeValue={hours} timeValuePct={hoursPct} timeUnit="hours" strokeColor="rgb(244, 200, 68)"/>
-            <TimerElement timeValue={minutes} timeValuePct={minutesPct} timeUnit="minutes" strokeColor="rgb(232, 232, 228)"/>
-            <TimerElement timeValue={seconds} timeValuePct={secondsPct} timeUnit="seconds" strokeColor="rgb(57, 97, 164)"/>
-        </div>
+        {#if nextSessionTimestamp !== 0}
+            <div class="timer-elements" data-nosnippet>
+                <TimerElement timeValue={days} timeValuePct={daysPct} timeUnit="days" strokeColor="rgb(234, 53, 19)"/>
+                <TimerElement timeValue={hours} timeValuePct={hoursPct} timeUnit="hours" strokeColor="rgb(244, 200, 68)"/>
+                <TimerElement timeValue={minutes} timeValuePct={minutesPct} timeUnit="minutes" strokeColor="rgb(232, 232, 228)"/>
+                <TimerElement timeValue={seconds} timeValuePct={secondsPct} timeUnit="seconds" strokeColor="rgb(57, 97, 164)"/>
+            </div>
 
-        <SessionDate timestamp={nextSessionTimestamp}/>
-
+            <SessionDate timestamp={nextSessionTimestamp}/>
+        {:else}
+            <h1 style="margin: 50px 0">Session data not available.</h1>
+        {/if}
     {/if}
 </div>
