@@ -17,7 +17,7 @@
 
     function checkDisabled(series) {
         const nextEvent = data[series]['nextEvent']
-        return nextEvent['sessions'].length === 0
+        return nextEvent['sessions'].length !== 0
     }
 </script>
 
@@ -63,7 +63,13 @@
 
 <svelte:window bind:innerWidth />
 <div class="series-selection">
-    <button disabled="{checkDisabled('F1')}" class="{currentSeries === 'F1' ? 'selected' : ''}" on:click={() => currentSeries = 'F1'}>{f1Text}</button>
-    <button disabled="{checkDisabled('F2')}" class="{currentSeries === 'F2' ? 'selected' : ''}" on:click={() => currentSeries = 'F2'}>{f2Text}</button>
-    <button disabled="{checkDisabled('F3')}" class="{currentSeries === 'F3' ? 'selected' : ''}" on:click={() => currentSeries = 'F3'}>{f3Text}</button>
+    {#if checkDisabled('F1')}
+        <button class="{currentSeries === 'F1' ? 'selected' : ''}" on:click={() => currentSeries = 'F1'}>{f1Text}</button>
+    {/if}
+    {#if checkDisabled('F2')}
+        <button class="{currentSeries === 'F2' ? 'selected' : ''}" on:click={() => currentSeries = 'F2'}>{f2Text}</button>
+    {/if}
+    {#if checkDisabled('F3')}
+        <button class="{currentSeries === 'F3' ? 'selected' : ''}" on:click={() => currentSeries = 'F3'}>{f3Text}</button>
+    {/if}
 </div>
