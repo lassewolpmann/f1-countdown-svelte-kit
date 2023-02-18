@@ -178,6 +178,6 @@
 
     <button on:click={() => generateCalendarFile(nextEvents)}>
         <span class="material-symbols-outlined">event</span>
-        <span>Save as iCal file</span>
+        <span>Save to your Calendar</span>
     </button>
 </div>
