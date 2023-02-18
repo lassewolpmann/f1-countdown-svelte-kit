@@ -1,5 +1,6 @@
 <script>
     export let nextEvents;
+    import saveAs from 'file-saver';
 
     function getDate(event) {
         const eventSessions = event['sessions'];
@@ -76,7 +77,8 @@
         const url = calendarFile.join('\n');
 
         let blob = new Blob([url], {type: 'text/calendar;charset=utf-8' });
-        window.open(encodeURI('data:text/calendar;charset=utf8,' + blob));
+
+        saveAs(blob, 'schedule.ics');
     }
 </script>
 
