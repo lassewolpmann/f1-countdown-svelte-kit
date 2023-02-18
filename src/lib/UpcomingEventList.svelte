@@ -177,7 +177,7 @@
     </table>
 
     <button on:click={() => generateCalendarFile(nextEvents)}>
-        <span class="material-symbols-outlined">event</span>
-        <span>save to your Calendar</span>
+        <span>Save to your Calendar</span>
+        <span class="material-symbols-outlined" style="padding-left: 5px">event</span>
     </button>
 </div>
