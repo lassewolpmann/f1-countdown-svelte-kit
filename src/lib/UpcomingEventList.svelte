@@ -37,10 +37,7 @@
             if (nextEvents[i]['sessions'].length > 0) {
                 // loop through every session
                 for (let j = 0; j < nextEvents[i]['sessions'].length; j++) {
-                    if (nextEvents[i]['sessions'][j]['shortCode'] !== 'Q1' &&
-                        nextEvents[i]['sessions'][j]['shortCode'] !== 'Q2' &&
-                        nextEvents[i]['sessions'][j]['shortCode'] !== 'Q3' &&
-                        nextEvents[i]['sessions'][j]['startTimeUtc'] !== null)
+                    if (nextEvents[i]['sessions'][j]['startTimeUtc'] !== null)
                     {
                         calendarFile.push('BEGIN:VEVENT');
                         calendarFile.push('UID:' + nextEvents[i]['sessions'][j]['uuid']);
