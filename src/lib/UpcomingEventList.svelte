@@ -4,10 +4,14 @@
 
     function getDate(event) {
         const eventSessions = event['sessions'];
-        const timestamp = eventSessions[eventSessions.length - 1]['startTimeUtc'] * 1000;
-        const d = new Date(timestamp);
+        if (eventSessions.length > 0) {
+            const timestamp = eventSessions[eventSessions.length - 1]['startTimeUtc'] * 1000;
+            const d = new Date(timestamp);
 
-        return d.toDateString() + ', ' + d.toLocaleTimeString()
+            return d.toDateString() + ', ' + d.toLocaleTimeString()
+        } else {
+            return "TBD"
+        }
     }
 
     const padDate = date => date < 10 ? "0" + date.toString() : date.toString();
