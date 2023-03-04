@@ -141,7 +141,7 @@
             <td class="name">{event['name']}</td>
             <td class="date">
                 {#if event['status'] === ''}
-                    {getDate(nextEvents[0])}
+                    {getDate(event)}
                 {:else}
                     {event['status']}
                 {/if}
