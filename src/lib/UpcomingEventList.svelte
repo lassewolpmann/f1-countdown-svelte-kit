@@ -2,7 +2,7 @@
     export let nextEvents;
     import saveAs from 'file-saver';
 
-    function getDate(event) {
+    const getDate = (event) => {
         const eventSessions = event['sessions'];
         if (eventSessions.length > 0) {
             const timestamp = eventSessions[eventSessions.length - 1]['startTimeUtc'] * 1000;
@@ -14,9 +14,9 @@
         }
     }
 
-    const padDate = date => date < 10 ? "0" + date.toString() : date.toString();
+    const padDate = (date) => date < 10 ? "0" + date.toString() : date.toString();
 
-    function createTimestamp(date) {
+    const createTimestamp = (date) => {
         const UTCYear = date.getUTCFullYear().toString();
         const UTCMonth = padDate(date.getUTCMonth() + 1);
         const UTCDay = padDate(date.getUTCDate());
@@ -26,7 +26,7 @@
         return UTCYear + UTCMonth + UTCDay + 'T' + UTCHour + UTCMinutes + UTCSeconds + 'Z'
     }
 
-    function generateCalendarFile() {
+    const generateCalendarFile = () => {
         // create iCalendar Object according to RFC 5545: https://datatracker.ietf.org/doc/html/rfc5545#section-3.4
 
         const creationTimestamp = createTimestamp(new Date());
@@ -84,19 +84,12 @@
 </script>
 
 <style>
-    .upcoming-events {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        flex-wrap: wrap;
+    table {
         padding: 15px;
         margin: 20px 0;
-    }
-
-    table {
         font-size: 0.9rem;
         border-collapse: collapse;
+        width: min(90vw, 700px);
     }
 
     table > caption {
@@ -105,6 +98,7 @@
         text-align: left;
         background: rgba(22, 22, 22);
         padding: 15px;
+        position: relative;
     }
 
     table > tbody {
@@ -124,61 +118,35 @@
         border-radius: 10px;
     }
 
-    table > tbody > tr > td, th {
+    .name, .date, .flag {
         text-align: left;
         padding: 15px;
     }
 
-    table > tbody > tr > th > img {
+    .flag > img {
         display: flex;
         width: 30px;
         height: auto;
     }
-
-    button {
-        margin: 10px;
-        font-family: 'Poppins', sans-serif;
-        font-weight: bold;
-        font-size: 1.1rem;
-        color: grey;
-        cursor: pointer;
-        background: #222;
-        padding: 10px 15px;
-        border: none;
-        border-radius: 5px;
-        transition: all 0.2s ease;
-
-        display: flex;
-    }
-
-    button:hover {
-        background: #444;
-        color: white;
-    }
 </style>
 
-<div class="upcoming-events">
-    <table>
-        <caption>Upcoming Grands Prix</caption>
-        <tbody>
-        {#each nextEvents as event}
-            <tr>
-                <th>
-                    <img src="{event['country']['picture']}" alt="Flag of {event['country']['name']}">
-                </th>
-                <td>{event['name']}</td>
+<table>
+    <caption>Upcoming Grands Prix</caption>
+    <tbody>
+    {#each nextEvents as event}
+        <tr>
+            <th class="flag">
+                <img src="{event['country']['picture']}" alt="Flag of {event['country']['name']}">
+            </th>
+            <td class="name">{event['name']}</td>
+            <td class="date">
                 {#if event['status'] === ''}
-                    <td>{getDate(event)}</td>
+                    {getDate(nextEvents[0])}
                 {:else}
-                    <td>{event['status']}</td>
+                    {event['status']}
                 {/if}
-            </tr>
-        {/each}
-        </tbody>
-    </table>
-
-    <button on:click={() => generateCalendarFile(nextEvents)}>
-        <span>Save to your Calendar</span>
-        <span class="material-symbols-outlined" style="padding-left: 5px">event</span>
-    </button>
-</div>
+            </td>
+        </tr>
+    {/each}
+    </tbody>
+</table>
