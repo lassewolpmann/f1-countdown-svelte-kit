@@ -1,41 +1,20 @@
 /** @type {import('./$types').PageLoad} */
 
 export async function load({fetch}) {
-    let data = {
-        F1: {
-            uuid: 'a33f8b4a-2b22-41ce-8e7d-0aea08f0e176'
-        },
-        F2: {
-            uuid: 'a217f31e-70a6-40d1-9848-6aa2239bfb01'
-        },
-        F3: {
-            uuid: '08ad7230-eb99-43e3-b158-405b49e994c6'
-        }
-    }
-
-    for (let i = 0; i < Object.keys(data).length; i++) {
-        const series = Object.keys(data)[i];
-        const allEvents = await getAllEvents({fetch}, data[series]['uuid']);
-        const nextEvents = getNextEvents(allEvents);
-        const nextEvent = nextEvents[0];
-        const lastEvent = getLastEvent(allEvents, nextEvents);
-        let nextEventSessions = nextEvent['sessions'];
-        let lastEventSessions = lastEvent['sessions'];
-
-        data[series] = {
-            allEvents: allEvents,
-            nextEvents: nextEvents,
-            nextEvent: nextEvent,
-            lastEvent: lastEvent,
-            nextEventSessions: nextEventSessions,
-            lastEventSessions: lastEventSessions
-        }
-    }
+    const allEvents = await getAllEvents({fetch}, 'a33f8b4a-2b22-41ce-8e7d-0aea08f0e176');
+    const nextEvents = getNextEvents(allEvents);
+    const nextEvent = nextEvents[0];
+    const lastEvent = getLastEvent(allEvents, nextEvents);
+    let nextEventSessions = nextEvent['sessions'];
+    let lastEventSessions = lastEvent['sessions'];
 
     return {
-        F1: data.F1,
-        F2: data.F2,
-        F3: data.F3
+        allEvents: allEvents,
+        nextEvents: nextEvents,
+        nextEvent: nextEvent,
+        lastEvent: lastEvent,
+        nextEventSessions: nextEventSessions,
+        lastEventSessions: lastEventSessions
     }
 }
 
@@ -77,6 +56,10 @@ async function getAllEvents({fetch}, uuid) {
 
     const seasonScheduleData = await seasonScheduleResponse.json()
 
+    for (let i = 0; i < seasonScheduleData['events'].length; i++) {
+        seasonScheduleData['events'][i]['sessions'] = filterSessions(seasonScheduleData['events'][i])
+    }
+
     return seasonScheduleData['events']
 }
 
@@ -103,4 +86,22 @@ function getLastEvent(allEvents, nextEvents) {
     } else {
         return allEvents[allEvents.length - nextEvents.length - 1]
     }
+}
+
+const filterSessions = (event) => {
+    const sessions = event['sessions'];
+
+    let filteredSessions = sessions.filter((session) => {
+        return session['shortCode'] !== 'Q' && session['shortCode'] !== 'Q2' && session['shortCode'] !== 'Q3'
+    })
+
+    for (let i = 0; i < filteredSessions.length; i++) {
+        if (filteredSessions[i]['shortCode'] === 'Q1') {
+            filteredSessions[i]['shortCode'] = 'Q';
+            filteredSessions[i]['shortName'] = 'Qualifying';
+            filteredSessions[i]['name'] = 'Qualifying';
+        }
+    }
+
+    return filteredSessions;
 }

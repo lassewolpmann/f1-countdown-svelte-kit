@@ -21,7 +21,7 @@
 
     let timerEl, svgEl, countdownCircleEl, fillCircleEl;
     $: {
-        if (timerEl !== undefined && svgEl !== undefined && countdownCircleEl !== undefined && fillCircleEl !== undefined) {
+        if (timerEl && svgEl && countdownCircleEl && fillCircleEl) {
             diameter = diameter + 'px';
             strokeWidth = strokeWidth + 'px';
 

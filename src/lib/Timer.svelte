@@ -74,7 +74,6 @@
         justify-content: center;
         flex-wrap: wrap;
         padding: 15px;
-        border-top: 2px solid rgba(36, 36, 36);
         border-bottom: 2px solid rgba(36, 36, 36);
         position: relative;
     }

@@ -2,14 +2,6 @@
     export let nextEventSessions;
     export let currentSession;
 
-    $: if (nextEventSessions.filter((session) => session.name === 'Race').length > 1) {
-        nextEventSessions[nextEventSessions.length - 2].shortName = 'Race 1';
-        nextEventSessions[nextEventSessions.length - 2].shortCode = 'Race 1';
-
-        nextEventSessions[nextEventSessions.length - 1].shortName = 'Race 2';
-        nextEventSessions[nextEventSessions.length - 1].shortCode = 'Race 2';
-    }
-
     let innerWidth = 0;
 </script>
 
@@ -52,24 +44,12 @@
 <svelte:window bind:innerWidth />
 <div class="session-selection" data-nosnippet>
     {#each nextEventSessions as session}
-        {#if innerWidth >= 768}
-            {#if session['shortCode'] !== 'Q1' && session['shortCode'] !== 'Q2' && session['shortCode'] !== 'Q3'}
-                <button
-                        class="{currentSession === session['uuid'] ? 'selected' : ''}"
-                        on:click={() => currentSession = session['uuid']}
-                >
-                    {session['shortName']}
-                </button>
+        <button class="{currentSession === session['uuid'] ? 'selected' : ''}" on:click={() => currentSession = session['uuid']}>
+            {#if innerWidth >= 768}
+                {session['shortName']}
+            {:else}
+                {session['shortCode']}
             {/if}
-        {:else}
-            {#if session['shortCode'] !== 'Q1' && session['shortCode'] !== 'Q2' && session['shortCode'] !== 'Q3'}
-                <button
-                        class="{currentSession === session['uuid'] ? 'selected' : ''}"
-                        on:click={() => currentSession = session['uuid']}
-                >
-                    {session['shortCode']}
-                </button>
-            {/if}
-        {/if}
+        </button>
     {/each}
 </div>
