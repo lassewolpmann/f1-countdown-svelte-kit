@@ -68,8 +68,8 @@ function getNextEvents(allEvents) {
     // const timestamp = new Date('2023-04-30 15:00:00Z').getTime();
 
     let nextEvents = allEvents.filter((event) => {
-        const raceEndTimeUtc = event['startTimeUtc'] * 1000
-        return raceEndTimeUtc > timestamp
+        const eventEndTimeUtc = event['endTimeUtc'] * 1000
+        return eventEndTimeUtc > timestamp
     })
 
     if (nextEvents.length === 0) {
