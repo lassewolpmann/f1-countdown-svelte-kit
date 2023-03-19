@@ -22,6 +22,9 @@
                 return sessions[i]['uuid']
             }
         }
+
+        // If no session is in the future, return the last session of current event
+        return sessions[sessions.length - 1]['uuid']
     }
 </script>
 
