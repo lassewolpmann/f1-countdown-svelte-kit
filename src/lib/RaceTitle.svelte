@@ -4,6 +4,12 @@
 
     const sessionNameList = nextEventSessions.map(session => session['shortCode'])
     const sessionNames = sessionNameList.join(', ')
+
+    const parseDate = (timestamp) => {
+        const d = new Date(timestamp);
+
+        return d.toDateString() + ', ' + d.toLocaleTimeString()
+    }
 </script>
 
 <style>
@@ -36,4 +42,5 @@
 <div class="race-title" data-nosnippet>
     <span class="race-name">{data['name']}</span>
     <span class="circuit-name">{data['venue']['name']}</span>
+    <!-- <span>{parseDate(data['startTimeUtc'] * 1000)} - {parseDate(data['endTimeUtc'] * 1000)}</span> -->
 </div>
