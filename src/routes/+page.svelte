@@ -1,5 +1,6 @@
 <script>
-    import Timer from "$lib/Timer.svelte";
+    import Footer from "$lib/Footer.svelte";
+import Timer from "$lib/Timer.svelte";
     import UpcomingEventList from "$lib/UpcomingEventList.svelte";
 
     export let data;
@@ -36,3 +37,4 @@
         currentSession={currentSession}
 />
 <UpcomingEventList nextEvents={data.nextEvents} />
+<Footer />
