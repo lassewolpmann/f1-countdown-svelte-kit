@@ -10,13 +10,9 @@
 
 <style>
     .time {
+        color: #aaa;
         text-align: center;
-        background: rgba(36, 36, 36);
-        padding: 15px 50px;
-        border: none;
-        border-radius: 5px;
-        color: gray;
-        font-size: 0.9rem;
+        font-size: 1rem;
         margin: 20px 0;
     }
 </style>
