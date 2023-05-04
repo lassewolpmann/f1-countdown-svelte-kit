@@ -7,23 +7,27 @@
     let innerWidth = 0;
     let diameter, strokeWidth, radius, dashArray;
 
-    $: if (innerWidth >= 768) {
-        diameter = 270;
-        strokeWidth = 12;
-        radius = diameter / 2 - 6;
-    } else {
-        diameter = 125;
-        strokeWidth = 6;
-        radius = diameter / 2 - 3;
+    $: {
+        if (innerWidth >= 768) {
+            diameter = 270;
+            strokeWidth = 12;
+        } else {
+            diameter = 125;
+            strokeWidth = 6;
+        }
+
+        radius = diameter / 2 - (strokeWidth / 2);
     }
 
+    // 2*pi*r = circumference of circle
     $: dashArray =  2 * Math.PI * radius;
 
     let timerEl, svgEl, countdownCircleEl, fillCircleEl;
     $: {
+        // Make sure all elements exist
         if (timerEl && svgEl && countdownCircleEl && fillCircleEl) {
-            diameter = diameter + 'px';
-            strokeWidth = strokeWidth + 'px';
+            diameter += 'px';
+            strokeWidth += 'px';
 
             timerEl.style.width = diameter;
             timerEl.style.height = diameter;
@@ -43,7 +47,6 @@
 
 <style>
     .timer {
-        margin: 10px 20px;
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -58,7 +61,7 @@
     }
 
     .text {
-        color: #aaa;
+        color: var(--secondary-text-color);
         font-size: 1.3rem;
     }
 

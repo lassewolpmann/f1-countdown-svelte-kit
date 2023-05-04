@@ -14,24 +14,21 @@
 
 <style>
     .race-title {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        margin: 20px 0;
-        z-index: 1;
+        text-align: center;
     }
 
-    .race-name {
-        font-weight: 600;
+    h1, h2 {
+        margin: 5px 0;
+    }
+
+    h1 {
         font-size: 2.5rem;
-        text-align: center;
     }
 
-    .circuit-name {
-        color: gray;
+    h2 {
+        color: var(--secondary-text-color);
         font-size: 1.3rem;
-        text-align: center;
+        font-weight: 400;
     }
 </style>
 
@@ -40,7 +37,6 @@
 </svelte:head>
 
 <div class="race-title" data-nosnippet>
-    <span class="race-name">{data['name']}</span>
-    <span class="circuit-name">{data['venue']['name']}</span>
-    <!-- <span>{parseDate(data['startTimeUtc'] * 1000)} - {parseDate(data['endTimeUtc'] * 1000)}</span> -->
+    <h1>{data['name']}</h1>
+    <h2>{data['venue']['name']}</h2>
 </div>

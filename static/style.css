@@ -2,19 +2,24 @@
     box-sizing: border-box;
 }
 
-html, body {
+html {
     margin: 0;
+    font-family: 'Poppins', sans-serif;
+    background: #111;
+
+    --border: 2px solid rgba(36, 36, 36);
+    --main-text-color: #eee;
+    --secondary-text-color: #868686;
+
+    --button-inactive-color: #222;
+    --button-active-color: #d00069;
+    --button-hover-color: #444;
+
+    --table-row-primary-color: rgb(29, 29, 29);
+    --table-row-secondary-color: rgb(22, 22, 22);
 }
 
-.app {
+body {
     margin: 0;
-    width: 100%;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    background: #111;
-    color: white;
-    font-family: 'Poppins', sans-serif;
+    color: var(--main-text-color);
 }

@@ -1,6 +1,6 @@
 <script>
     import Footer from "$lib/Footer.svelte";
-import Timer from "$lib/Timer.svelte";
+    import Timer from "$lib/Timer.svelte";
     import UpcomingEventList from "$lib/UpcomingEventList.svelte";
 
     export let data;
@@ -28,13 +28,38 @@ import Timer from "$lib/Timer.svelte";
         return sessions[sessions.length - 1]['uuid']
     }
 </script>
+<style>
+    main, footer {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
 
-<Timer
-        nextEvent={data.nextEvent}
-        lastEvent={data.lastEvent}
-        nextEventSessions={data.nextEventSessions}
-        lastEventSessions={data.lastEventSessions}
-        currentSession={currentSession}
-/>
-<UpcomingEventList nextEvents={data.nextEvents} />
-<Footer />
+    main {
+        flex-direction: column;
+    }
+
+    footer {
+        border-top: var(--border);
+        padding: 20px;
+        flex-direction: row;
+        gap: 50px;
+    }
+</style>
+
+<header>
+
+</header>
+<main>
+    <Timer
+            nextEvent={data.nextEvent}
+            lastEvent={data.lastEvent}
+            nextEventSessions={data.nextEventSessions}
+            lastEventSessions={data.lastEventSessions}
+            currentSession={currentSession}
+    />
+    <UpcomingEventList nextEvents={data.nextEvents} />
+</main>
+<footer>
+    <Footer />
+</footer>

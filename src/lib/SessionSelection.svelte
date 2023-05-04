@@ -12,32 +12,31 @@
         align-items: center;
         justify-content: center;
         flex-wrap: wrap;
-        margin: 20px 0;
-        z-index: 1;
+        gap: 20px;
+        margin: 30px 0;
     }
 
     button {
-        margin: 10px;
-        font-family: 'Poppins', sans-serif;
+        font-family: inherit;
         font-weight: bold;
         font-size: 1.1rem;
-        color: grey;
+        color: var(--secondary-text-color);
         cursor: pointer;
-        background: #222;
+        background: var(--button-inactive-color);
         padding: 10px 15px;
         border: none;
         border-radius: 5px;
-        transition: all 0.2s ease;
+        transition: background 0.2s ease;
     }
 
     button:hover {
-        background: #444;
-        color: white;
+        background: var(--button-hover-color);
+        color: var(--main-text-color);
     }
 
     button.selected {
-        background: rgb(234, 53, 19);
-        color: white;
+        background: var(--button-active-color);
+        color: var(--main-text-color);
     }
 </style>
 
