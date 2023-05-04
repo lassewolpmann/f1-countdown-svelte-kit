@@ -90,22 +90,17 @@
 
     .collapse button {
         cursor: pointer;
-        background-color: var(--button-inactive-color);
+        background: none;
 
         color: var(--main-text-color);
         border: none;
         font-size: 1rem;
 
-        border-radius: 5px;
-        transition: background-color 0.2s ease;
-    }
-
-    .collapse button i {
-        padding: 5px 3px;
+        transition: color 0.2s ease;
     }
 
     .collapse button:hover {
-        background: var(--button-hover-color);
+        color: var(--button-hover-color);
     }
 </style>
 
