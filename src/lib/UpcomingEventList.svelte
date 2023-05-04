@@ -105,6 +105,12 @@
     .collapse button:hover {
         background: var(--button-hover-color);
     }
+
+    @media only screen and (max-width: 768px) {
+        .flag img {
+            display: none;
+        }
+    }
 </style>
 
 <table>
