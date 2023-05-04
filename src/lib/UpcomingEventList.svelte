@@ -32,7 +32,6 @@
 <style>
     /* General table settings */
     table {
-        padding: 15px;
         margin: 20px 0;
         font-size: 0.9rem;
         border-collapse: collapse;
@@ -61,17 +60,19 @@
     }
 
     /* General settings for table data */
+    .flag, .collapse {
+        padding: 0 5px;
+        text-align: center;
+        vertical-align: center;
+    }
+
     .flag img {
-        width: min(80%, 40px);
+        width: 35px;
         height: auto;
     }
 
-    .flag, .collapse {
-        width: 10%;
-    }
-
     .name, .date, .location, .time, .session-name {
-        width: 40%;
+        width: 35%;
     }
 
     .name, .date, .session-name {
@@ -85,10 +86,6 @@
 
     .session-name {
         text-align: right;
-    }
-
-    .collapse {
-        text-align: center;
     }
 
     .collapse button {
