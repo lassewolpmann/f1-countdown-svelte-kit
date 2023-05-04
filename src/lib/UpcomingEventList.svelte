@@ -94,22 +94,18 @@
 
         color: var(--main-text-color);
         border: none;
-        font-size: 0.9rem;
+        font-size: 1rem;
 
         border-radius: 5px;
         transition: background-color 0.2s ease;
-        width: 30px;
-        height: 30px;
+    }
+
+    .collapse button i {
+        padding: 5px 3px;
     }
 
     .collapse button:hover {
         background: var(--button-hover-color);
-    }
-
-    @media only screen and (max-width: 768px) {
-        .flag img {
-            display: none;
-        }
     }
 </style>
 
