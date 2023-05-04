@@ -1,5 +1,11 @@
 <script>
+    import { blur } from 'svelte/transition';
+
     export let nextEvents;
+
+    for (let i = 0; i < nextEvents.length; i++) {
+        nextEvents[i].sessionsTableVisible = false;
+    }
 
     let events = [];
 
@@ -8,166 +14,142 @@
         if (eventSessions.length > 0) {
             return parseDate(eventSessions[eventSessions.length - 1]['startTimeUtc'] * 1000)
         } else {
-            return "TBD"
+            return ["TBD", ""]
         }
     }
 
     const parseDate = (timestamp) => {
         const d = new Date(timestamp);
 
-        return d.toDateString() + ', ' + d.toLocaleTimeString()
+        return [d.toDateString(), d.toLocaleTimeString()]
     }
 
-    const collapseSessions = (index) => events[index].classList.toggle('collapsed');
+    const collapseSessions = (index) => {
+        nextEvents[index].sessionsTableVisible = !nextEvents[index].sessionsTableVisible;
+    }
 </script>
 
 <style>
     /* General table settings */
     table {
-        padding: 15px;
         margin: 20px 0;
         font-size: 0.9rem;
         border-collapse: collapse;
-        width: min(90vw, 700px);
+        width: min(90vw, 800px);
     }
 
     table caption {
-        font-weight: 600;
+        font-weight: bold;
         font-size: 1rem;
         text-align: left;
-        background: rgba(29, 29, 29);
+        background: var(--table-row-primary-color);
         padding: 15px;
     }
 
     /* Making every second row a different color */
-    .event tr {
-        background: rgba(22, 22, 22);
+    thead tr {
+        background-color: var(--table-row-primary-color);
     }
 
-    .event tr:nth-child(2n+1) {
-        background: rgba(29, 29, 29);
+    tbody tr {
+        background-color: var(--table-row-secondary-color);
+    }
+
+    tbody tr:nth-child(4n),  tbody tr:nth-child(4n - 1){
+        background-color: var(--table-row-primary-color);
     }
 
     /* General settings for table data */
-    .name, .date, .flag {
-        text-align: left;
-        padding: 15px;
+    .flag, .collapse {
+        padding: 0 5px;
+        text-align: center;
+        vertical-align: center;
     }
 
     .flag img {
-        display: flex;
-        width: 30px;
+        width: 35px;
         height: auto;
     }
 
-    .flag {
-        width: 10%;
+    .name, .date, .location, .time, .session-name {
+        width: 35%;
     }
 
-    .name {
-        width: 40%;
+    .name, .date, .session-name {
+        padding: 15px 15px 5px 15px;
     }
 
-    .date {
-        width: 40%;
+    .location, .time {
+        padding: 5px 15px 15px 15px;
+        color: var(--secondary-text-color);
     }
 
-    .collapse {
-        width: 10%;
-        text-align: center;
-    }
-
-    /* Collapsible sessions */
-    .event.collapsed .session {
-        display: none;
-    }
-
-    .event.collapsed .bar.horizontal {
-        opacity: 1;
-    }
-
-    .event.collapsed .bar.vertical {
-        transform: rotate(90deg);
-    }
-
-    .session {
-        display: table-row;
-        transition: all 0.2s ease;
+    .session-name {
+        text-align: right;
     }
 
     .collapse button {
-        font-family: 'Poppins', sans-serif;
-        font-weight: bold;
-        font-size: 1.1rem;
-        color: grey;
         cursor: pointer;
-        background: #222;
-        padding: 5px 10px;
+        background: none;
+
+        color: var(--main-text-color);
         border: none;
-        border-radius: 5px;
-        transition: all 0.2s ease;
-        width: 25px;
-        height: 25px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
+        font-size: 1rem;
+
+        transition: color 0.2s ease;
     }
 
     .collapse button:hover {
-        background: #444;
-        color: white;
-    }
-
-    /* plus/minus symbol for button */
-    .bar {
-        width: 10px;
-        height: 2px;
-        content: '';
-        background: white;
-        display: block;
-        position: absolute;
-    }
-
-    .bar.horizontal {
-        opacity: 0;
-        transition: all 0.5s ease;
-    }
-
-    .bar.vertical {
-        transform: rotate(180deg);
-        transition: all 0.5s ease;
+        color: var(--button-hover-color);
     }
 </style>
 
 <table>
     <caption>Upcoming Grands Prix</caption>
     {#each nextEvents as event, i}
-        <table bind:this={events[i]} class="event collapsed">
+        <table bind:this={events[i]} class="event">
+            <thead>
             <tr>
-                <th class="flag">
+                <th class="flag" rowspan="2">
                     <img src="{event['country']['picture']}" alt="Flag of {event['country']['name']}">
                 </th>
                 <td class="name">{event['name']}</td>
                 <td class="date">
                     {#if event['status'] === ''}
-                        {getDate(event)}
+                        {getDate(event)[0]}
                     {:else}
                         {event['status']}
                     {/if}
                 </td>
-                <td class="collapse"><button on:click={() => collapseSessions(i)}>
-                    <span class="bar horizontal"></span>
-                    <span class="bar vertical"></span>
-                </button></td>
+                <td class="collapse" rowspan="2">
+                    <button on:click={() => collapseSessions(i)}>
+                        {#if nextEvents[i].sessionsTableVisible}
+                            <i class="fa-solid fa-minus"></i>
+                        {:else}
+                            <i class="fa-solid fa-plus"></i>
+                        {/if}
+                    </button>
+                </td>
             </tr>
-            {#each event['sessions'] as session}
-                <tr class="session">
-                    <th class="flag"></th>
-                    <td class="name">{session['name']}</td>
-                    <td class="date">{parseDate(session['startTimeUtc'] * 1000)}</td>
-                    <td></td>
-                </tr>
-            {/each}
+            <tr>
+                <td class="location">{event['venue']['name']}</td>
+                <td class="time">{getDate(event)[1]}</td>
+            </tr>
+            </thead>
+            {#if nextEvents[i].sessionsTableVisible}
+                <tbody class="sessions" transition:blur>
+                {#each event['sessions'] as session}
+                    <tr>
+                        <td class="session-name" colspan="2">{session['name']}</td>
+                        <td class="date" colspan="2">{parseDate(session['startTimeUtc'] * 1000)[0]}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="2"></td>
+                        <td class="time" colspan="2">{parseDate(session['startTimeUtc'] * 1000)[1]}</td>
+                    </tr>
+                {/each}
+                </tbody>
+            {/if}
         </table>
     {/each}
 </table>

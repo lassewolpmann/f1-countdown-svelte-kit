@@ -1,5 +1,4 @@
 <script>
-    import SessionDate from "$lib/SessionDate.svelte";
     import TimerElement from "$lib/TimerElement.svelte";
     import SessionSelection from "$lib/SessionSelection.svelte";
     import RaceTitle from "$lib/RaceTitle.svelte";
@@ -17,12 +16,15 @@
     let delta, daysDelta;
     $: {
         if (nextEventSessions.length === 0) {
+            // If the next event doesn't have any session information, take the event timestamp
             nextSessionTimestamp = nextEvent['startTimeUtc'] * 1000;
             lastSessionTimestamp = lastEventSessions[lastEventSessions.length - 1]['startTimeUtc'] * 1000;
         } else if (lastEventSessions.length === 0) {
+            // If the last event doesn't have any session information, take the event timestamp
             nextSessionTimestamp = nextEventSessions[currentSessionIndex]['startTimeUtc'] * 1000;
             lastSessionTimestamp = lastEvent['startTimeUtc'] * 1000;
         } else {
+            // If both next and last event have session information, take timestamp from specific session index
             nextSessionTimestamp = nextEventSessions[currentSessionIndex]['startTimeUtc'] * 1000;
             lastSessionTimestamp = lastEventSessions[currentSessionIndex]['startTimeUtc'] * 1000;
         }
@@ -67,24 +69,22 @@
 </script>
 
 <style>
-    .timer {
+    .timer, .timer-elements {
         display: flex;
-        flex-direction: column;
         align-items: center;
         justify-content: center;
         flex-wrap: wrap;
-        padding: 15px;
-        border-bottom: 2px solid rgba(36, 36, 36);
-        position: relative;
+    }
+
+    .timer {
+        flex-direction: column;
+        padding: 30px 0 50px 0;
+        border-bottom: var(--border);
     }
 
     .timer-elements {
-        display: flex;
         flex-direction: row;
-        align-items: center;
-        justify-content: center;
-        flex-wrap: wrap;
-        margin: 20px 0;
+        gap: 50px;
     }
 </style>
 
@@ -109,10 +109,8 @@
                 <TimerElement timeValue={minutes} timeValuePct={minutesPct} timeUnit="minutes" strokeColor="rgb(232, 232, 228)"/>
                 <TimerElement timeValue={seconds} timeValuePct={secondsPct} timeUnit="seconds" strokeColor="rgb(57, 97, 164)"/>
             </div>
-
-            <SessionDate timestamp={nextSessionTimestamp}/>
         {:else}
-            <h1 style="margin: 50px 0">Session data not available.</h1>
+            <h1>Session data not available.</h1>
         {/if}
     {/if}
 </div>

@@ -10,7 +10,7 @@
 
 <style>
     .time {
-        color: #aaa;
+        color: var(--secondary-text-color);
         text-align: center;
         font-size: 1rem;
         margin: 20px 0;
