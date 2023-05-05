@@ -1,9 +1,10 @@
 <script>
-    export let data;
-    export let nextEventSessions;
+    export let nextEvent;
+    export let nextEventSessionNames;
 
-    const sessionNameList = nextEventSessions.map(session => session['shortCode'])
-    const sessionNames = sessionNameList.join(', ')
+    const sessionNames = nextEventSessionNames.join(', ')
+
+    let eventName = nextEvent['name'] + ' Grand Prix';
 
     const parseDate = (timestamp) => {
         const d = new Date(timestamp);
@@ -33,10 +34,9 @@
 </style>
 
 <svelte:head>
-    <meta name="description" content="Countdown to the {new Date().getFullYear()} Formula 1 {data['name']} {sessionNames} at {data['venue']['name']}">
+    <meta name="description" content="Countdown to the {new Date().getFullYear()} Formula 1 {eventName} {sessionNames}">
 </svelte:head>
 
 <div class="race-title" data-nosnippet>
-    <h1>{data['name']}</h1>
-    <h2>{data['venue']['name']}</h2>
+    <h1>{eventName}</h1>
 </div>

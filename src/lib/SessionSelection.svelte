@@ -1,6 +1,6 @@
 <script>
-    export let nextEventSessions;
-    export let currentSession;
+    export let nextEventSessionNames;
+    export let currentSessionIndex;
 
     let innerWidth = 0;
 </script>
@@ -42,13 +42,9 @@
 
 <svelte:window bind:innerWidth />
 <div class="session-selection" data-nosnippet>
-    {#each nextEventSessions as session}
-        <button class="{currentSession === session['uuid'] ? 'selected' : ''}" on:click={() => currentSession = session['uuid']}>
-            {#if innerWidth >= 768}
-                {session['shortName']}
-            {:else}
-                {session['shortCode']}
-            {/if}
+    {#each nextEventSessionNames as sessionName}
+        <button class="{sessionName === nextEventSessionNames[currentSessionIndex] ? 'selected' : ''}" on:click={() => currentSessionIndex = nextEventSessionNames.indexOf(sessionName)}>
+            {sessionName.toUpperCase()}
         </button>
     {/each}
 </div>
