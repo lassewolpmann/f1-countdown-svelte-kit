@@ -32,5 +32,5 @@
     <i class="fa-brands fa-github"></i>
     <a href="https://github.com/lassewolpmann/f1-countdown-svelte-kit" target="_blank">Project</a>
     <a href="https://github.com/lassewolpmann/f1-countdown-svelte-kit/issues" target="_blank">Issues</a>
-    <a href="https://github.com/sportstimes/f1" target="_blank">Data source</a>
+    <a href="https://github.com/sportstimes/f1/blob/main/_db/f1/2023.json" target="_blank">Data source</a>
 </div>
