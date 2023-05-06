@@ -42,8 +42,6 @@
         const latitude = event['latitude'];
         const longitude = event['longitude'];
 
-        console.log(baseURL + latitude + ',' + longitude);
-
         return baseURL + latitude + ',' + longitude
     }
 </script>
@@ -54,7 +52,7 @@
         margin: 20px 0;
         font-size: 0.9rem;
         border-collapse: collapse;
-        width: min(90vw, 1000px);
+        width: min(90vw, 850px);
     }
 
     table caption {
@@ -79,24 +77,34 @@
         background-color: var(--table-row-primary-color);
     }
 
-    /* General settings for table data */
-    .collapse {
-        padding: 15px 5px;
-        text-align: center;
-        vertical-align: center;
-    }
 
-    .name, .session-name {
-        width: 50%;
-    }
-
-    .date {
-        width: 20%;
+    /* Table cells settings */
+    .name, .session-name, .date {
+        width: 45%;
     }
 
     .name, .session-name, .date {
-        padding: 15px 20px;
+        padding: 15px;
         text-align: left;
+    }
+
+    .time {
+        color: var(--secondary-text-color);
+    }
+
+    /* Collapse button settings */
+    .location {
+        width: 5%;
+    }
+
+    .collapse {
+        width: 5%;
+    }
+
+    .location, .collapse {
+        padding: 15px;
+        text-align: center;
+        vertical-align: center;
     }
 
     .collapse button {
@@ -118,7 +126,6 @@
         color: inherit;
         text-decoration: inherit;
         transition: color 0.2s ease;
-        padding-right: 10px;
     }
 
     a:hover {
@@ -132,12 +139,14 @@
         <table bind:this={events[i]} class="event">
             <thead>
             <tr>
-                <th class="name"><a href="{getLocationURL(event)}" target="_blank"><i class="fa-solid fa-location-dot"></i></a>{parseName(event['name'])}</th>
+                <th class="location"><a href="{getLocationURL(event)}" target="_blank"><i class="fa-solid fa-location-dot"></i></a></th>
+                <th class="name">{parseName(event['name'])}</th>
                 {#if !nextEvents[i].sessionsTableVisible}
-                    <td class="date">{parseDate(getLastSession(event))}</td>
-                    <td class="date">{parseTime(getLastSession(event))}</td>
+                    <td class="date">
+                        <span class="day">{parseDate(getLastSession(event))}</span>
+                        <span class="time">{parseTime(getLastSession(event))}</span>
+                    </td>
                 {:else}
-                    <td class="date"></td>
                     <td class="date"></td>
                 {/if}
                 <td class="collapse">
@@ -155,9 +164,11 @@
                 <tbody class="sessions" transition:blur>
                 {#each Object.keys(event['sessions']) as session}
                     <tr>
-                        <td class="session-name">{session.toUpperCase()}</td>
-                        <td class="date">{parseDate(event['sessions'][session])}</td>
-                        <td class="date" colspan="2">{parseTime(event['sessions'][session])}</td>
+                        <td class="session-name" colspan="2">{session.toUpperCase()}</td>
+                        <td class="date" colspan="2">
+                            <span class="day">{parseDate(event['sessions'][session])}</span>
+                            <span class="time">{parseTime(event['sessions'][session])}</span>
+                        </td>
                     </tr>
                 {/each}
                 </tbody>

@@ -76,7 +76,7 @@
     .timer-elements {
         flex-direction: row;
         gap: 50px;
-        margin: 20px 50px 40px 50px;
+        margin: 20px 20px 40px 20px;
     }
 </style>
 
