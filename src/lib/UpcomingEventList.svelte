@@ -9,23 +9,42 @@
 
     let events = [];
 
-    const getDate = (event) => {
-        const eventSessions = event['sessions'];
-        if (eventSessions.length > 0) {
-            return parseDate(eventSessions[eventSessions.length - 1]['startTimeUtc'] * 1000)
+    const collapseSessions = (index) => {
+        nextEvents[index].sessionsTableVisible = !nextEvents[index].sessionsTableVisible;
+    }
+
+    const parseName = (name) => {
+        if (!name.includes("Grand Prix")) {
+            return name + " Grand Prix"
         } else {
-            return ["TBD", ""]
+            return name
         }
     }
 
-    const parseDate = (timestamp) => {
-        const d = new Date(timestamp);
-
-        return [d.toDateString(), d.toLocaleTimeString()]
+    const parseDate = (date) => {
+        return new Date(date).toDateString()
     }
 
-    const collapseSessions = (index) => {
-        nextEvents[index].sessionsTableVisible = !nextEvents[index].sessionsTableVisible;
+    const parseTime = (date) => {
+        return new Date(date).toLocaleTimeString()
+    }
+
+    const getLastSession = (event) => {
+        const allSessions = event['sessions'];
+        const sessionNames = Object.keys(allSessions);
+        const lastSessionName = sessionNames[sessionNames.length - 1]
+
+        return allSessions[lastSessionName]
+    }
+
+    const getLocationURL = (event) => {
+        const baseURL = 'https://www.google.com/maps/place/';
+        const latitude = event['latitude'];
+        const longitude = event['longitude'];
+
+        console.log(baseURL + latitude + ',' + longitude);
+
+        return baseURL + latitude + ',' + longitude
     }
 </script>
 
@@ -35,7 +54,7 @@
         margin: 20px 0;
         font-size: 0.9rem;
         border-collapse: collapse;
-        width: min(90vw, 800px);
+        width: min(90vw, 1000px);
     }
 
     table caption {
@@ -44,6 +63,7 @@
         text-align: left;
         background: var(--table-row-primary-color);
         padding: 15px;
+        margin: 20px 0 0 0;
     }
 
     /* Making every second row a different color */
@@ -55,37 +75,28 @@
         background-color: var(--table-row-secondary-color);
     }
 
-    tbody tr:nth-child(4n),  tbody tr:nth-child(4n - 1){
+    tbody tr:nth-child(2n) {
         background-color: var(--table-row-primary-color);
     }
 
     /* General settings for table data */
-    .flag, .collapse {
-        padding: 0 5px;
+    .collapse {
+        padding: 15px 5px;
         text-align: center;
         vertical-align: center;
     }
 
-    .flag img {
-        width: 35px;
-        height: auto;
+    .name, .session-name {
+        width: 50%;
     }
 
-    .name, .date, .location, .time, .session-name {
-        width: 35%;
+    .date {
+        width: 20%;
     }
 
-    .name, .date, .session-name {
-        padding: 15px 15px 5px 15px;
-    }
-
-    .location, .time {
-        padding: 5px 15px 15px 15px;
-        color: var(--secondary-text-color);
-    }
-
-    .session-name {
-        text-align: right;
+    .name, .session-name, .date {
+        padding: 15px 20px;
+        text-align: left;
     }
 
     .collapse button {
@@ -102,26 +113,34 @@
     .collapse button:hover {
         color: var(--button-hover-color);
     }
+
+    a {
+        color: inherit;
+        text-decoration: inherit;
+        transition: color 0.2s ease;
+        padding-right: 10px;
+    }
+
+    a:hover {
+        color: var(--button-hover-color);
+    }
 </style>
 
-<table>
+<table class="upcoming">
     <caption>Upcoming Grands Prix</caption>
     {#each nextEvents as event, i}
         <table bind:this={events[i]} class="event">
             <thead>
             <tr>
-                <th class="flag" rowspan="2">
-                    <img src="{event['country']['picture']}" alt="Flag of {event['country']['name']}">
-                </th>
-                <td class="name">{event['name']}</td>
-                <td class="date">
-                    {#if event['status'] === ''}
-                        {getDate(event)[0]}
-                    {:else}
-                        {event['status']}
-                    {/if}
-                </td>
-                <td class="collapse" rowspan="2">
+                <th class="name"><a href="{getLocationURL(event)}" target="_blank"><i class="fa-solid fa-location-dot"></i></a>{parseName(event['name'])}</th>
+                {#if !nextEvents[i].sessionsTableVisible}
+                    <td class="date">{parseDate(getLastSession(event))}</td>
+                    <td class="date">{parseTime(getLastSession(event))}</td>
+                {:else}
+                    <td class="date"></td>
+                    <td class="date"></td>
+                {/if}
+                <td class="collapse">
                     <button on:click={() => collapseSessions(i)}>
                         {#if nextEvents[i].sessionsTableVisible}
                             <i class="fa-solid fa-minus"></i>
@@ -131,21 +150,14 @@
                     </button>
                 </td>
             </tr>
-            <tr>
-                <td class="location">{event['venue']['name']}</td>
-                <td class="time">{getDate(event)[1]}</td>
-            </tr>
             </thead>
             {#if nextEvents[i].sessionsTableVisible}
                 <tbody class="sessions" transition:blur>
-                {#each event['sessions'] as session}
+                {#each Object.keys(event['sessions']) as session}
                     <tr>
-                        <td class="session-name" colspan="2">{session['name']}</td>
-                        <td class="date" colspan="2">{parseDate(session['startTimeUtc'] * 1000)[0]}</td>
-                    </tr>
-                    <tr>
-                        <td colspan="2"></td>
-                        <td class="time" colspan="2">{parseDate(session['startTimeUtc'] * 1000)[1]}</td>
+                        <td class="session-name">{session.toUpperCase()}</td>
+                        <td class="date">{parseDate(event['sessions'][session])}</td>
+                        <td class="date" colspan="2">{parseTime(event['sessions'][session])}</td>
                     </tr>
                 {/each}
                 </tbody>

@@ -1,32 +1,32 @@
-<script>
-    import Footer from "$lib/Footer.svelte";
-    import Timer from "$lib/Timer.svelte";
-    import UpcomingEventList from "$lib/UpcomingEventList.svelte";
+<script lang="ts">
+    import Footer from "../lib/Footer.svelte";
+    import Timer from "../lib/Timer.svelte";
+    import UpcomingEventList from "../lib/UpcomingEventList.svelte";
 
     export let data;
 
-    let currentSession, currentEventSessions;
-    $: {
-        currentEventSessions = data.nextEventSessions;
-        if (currentEventSessions.length !== 0) {
-            currentSession = getNextSession(currentEventSessions);
-        }
-    }
-
-    const getNextSession = (sessions) => {
+    const getCurrentSessionIndex = (sessions) => {
+        const sessionNames = Object.keys(sessions);
         const timestamp = new Date().getTime();
 
-        for (let i = 0; i < sessions.length; i++) {
-            if (sessions[i]['startTimeUtc'] * 1000 > timestamp) {
-                // return first session UUID that is in the future
-                // this makes the default active button the next session instead of always defaulting to the race
-                return sessions[i]['uuid']
+        let currentSessionName;
+
+        // Set current session name to last entry as default
+        currentSessionName = sessionNames[sessionNames.length - 1]
+
+        for (let i = 0; i < sessionNames.length; i++) {
+            const sessionTimestamp = new Date(sessions[sessionNames[i]]).getTime();
+
+            if (sessionTimestamp > timestamp) {
+                currentSessionName = sessionNames[i]
+                break;
             }
         }
 
-        // If no session is in the future, return the last session of current event
-        return sessions[sessions.length - 1]['uuid']
+        return sessionNames.indexOf(currentSessionName);
     }
+
+    let currentSessionIndex = getCurrentSessionIndex(data['nextEventSessions']);
 </script>
 <style>
     main, footer {
@@ -52,13 +52,13 @@
 </header>
 <main>
     <Timer
-            nextEvent={data.nextEvent}
-            lastEvent={data.lastEvent}
-            nextEventSessions={data.nextEventSessions}
-            lastEventSessions={data.lastEventSessions}
-            currentSession={currentSession}
+            nextEvent={data['nextEvent']}
+            nextEventSessions={data['nextEventSessions']}
+            previousEventSessions={data['previousEventSessions']}
+            currentSessionIndex={currentSessionIndex}
     />
-    <UpcomingEventList nextEvents={data.nextEvents} />
+
+    <UpcomingEventList nextEvents={data['nextEvents']} />
 </main>
 <footer>
     <Footer />

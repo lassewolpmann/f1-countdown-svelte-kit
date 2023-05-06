@@ -4,33 +4,25 @@
     import RaceTitle from "$lib/RaceTitle.svelte";
 
     export let nextEvent;
-    export let lastEvent;
     export let nextEventSessions;
-    export let lastEventSessions;
-    export let currentSession;
+    export let previousEventSessions;
+    export let currentSessionIndex;
 
-    let currentSessionIndex;
-    $: currentSessionIndex = nextEventSessions.findIndex(session => session['uuid'] === currentSession);
+    let nextEventSessionNames = Object.keys(nextEventSessions);
+    let previousEventSessionNames = Object.keys(previousEventSessions);
 
-    let nextSessionTimestamp, lastSessionTimestamp;
+    let nextSessionTime, nextSessionTimestamp, previousSessionTime, previousSessionTimestamp;
     let delta, daysDelta;
-    $: {
-        if (nextEventSessions.length === 0) {
-            // If the next event doesn't have any session information, take the event timestamp
-            nextSessionTimestamp = nextEvent['startTimeUtc'] * 1000;
-            lastSessionTimestamp = lastEventSessions[lastEventSessions.length - 1]['startTimeUtc'] * 1000;
-        } else if (lastEventSessions.length === 0) {
-            // If the last event doesn't have any session information, take the event timestamp
-            nextSessionTimestamp = nextEventSessions[currentSessionIndex]['startTimeUtc'] * 1000;
-            lastSessionTimestamp = lastEvent['startTimeUtc'] * 1000;
-        } else {
-            // If both next and last event have session information, take timestamp from specific session index
-            nextSessionTimestamp = nextEventSessions[currentSessionIndex]['startTimeUtc'] * 1000;
-            lastSessionTimestamp = lastEventSessions[currentSessionIndex]['startTimeUtc'] * 1000;
-        }
 
-        delta = calculateDelta(currentSessionIndex, nextSessionTimestamp);
-        daysDelta = calculateDaysDelta(currentSessionIndex, nextSessionTimestamp, lastSessionTimestamp);
+    $: {
+        nextSessionTime = nextEventSessions[nextEventSessionNames[currentSessionIndex]];
+        previousSessionTime = previousEventSessions[previousEventSessionNames[currentSessionIndex]];
+
+        nextSessionTimestamp = new Date(nextSessionTime).getTime();
+        previousSessionTimestamp = new Date(previousSessionTime).getTime();
+
+        delta = calculateDelta(nextSessionTimestamp);
+        daysDelta = calculateDaysDelta(nextSessionTimestamp, previousSessionTimestamp);
     }
 
     let days, hours, minutes, seconds, daysPct, hoursPct, minutesPct, secondsPct;
@@ -45,7 +37,7 @@
         secondsPct = (delta % 86400 % 3600 % 60) / 60;
     }
 
-    function calculateDelta(currentSessionIndex, nextSessionTimestamp) {
+    function calculateDelta(nextSessionTimestamp) {
         let deltaValue = Math.floor((nextSessionTimestamp - new Date().getTime()) / 1000);
 
         if (Math.floor((nextSessionTimestamp - new Date().getTime()) / 1000) <= 0) {
@@ -55,8 +47,8 @@
         return deltaValue
     }
 
-    function calculateDaysDelta(currentSessionIndex, nextSessionTimestamp, lastSessionTimestamp) {
-        const deltaBetweenRaces = Math.floor((nextSessionTimestamp - lastSessionTimestamp) / 1000)
+    function calculateDaysDelta(nextSessionTimestamp, previousSessionTimestamp) {
+        const deltaBetweenRaces = Math.floor((nextSessionTimestamp - previousSessionTimestamp) / 1000)
 
         return Math.floor(deltaBetweenRaces / 86400)
     }
@@ -78,39 +70,31 @@
 
     .timer {
         flex-direction: column;
-        padding: 30px 0 50px 0;
         border-bottom: var(--border);
     }
 
     .timer-elements {
         flex-direction: row;
         gap: 50px;
+        margin: 20px 50px 40px 50px;
     }
 </style>
 
 <div class="timer">
     <RaceTitle
-            data={nextEvent}
-            nextEventSessions={nextEventSessions}
+            nextEvent={nextEvent}
+            nextEventSessionNames={nextEventSessionNames}
     />
 
     <SessionSelection
-            nextEventSessions={nextEventSessions}
-            bind:currentSession={currentSession}
+            nextEventSessionNames={nextEventSessionNames}
+            bind:currentSessionIndex={currentSessionIndex}
     />
 
-    {#if nextEvent['status'] !== ''}
-        <h1>{nextEvent['status']}</h1>
-    {:else}
-        {#if nextSessionTimestamp !== 0}
-            <div class="timer-elements" data-nosnippet>
-                <TimerElement timeValue={days} timeValuePct={daysPct} timeUnit="days" strokeColor="rgb(234, 53, 19)"/>
-                <TimerElement timeValue={hours} timeValuePct={hoursPct} timeUnit="hours" strokeColor="rgb(244, 200, 68)"/>
-                <TimerElement timeValue={minutes} timeValuePct={minutesPct} timeUnit="minutes" strokeColor="rgb(232, 232, 228)"/>
-                <TimerElement timeValue={seconds} timeValuePct={secondsPct} timeUnit="seconds" strokeColor="rgb(57, 97, 164)"/>
-            </div>
-        {:else}
-            <h1>Session data not available.</h1>
-        {/if}
-    {/if}
+    <div class="timer-elements" data-nosnippet>
+        <TimerElement timeValue={days} timeValuePct={daysPct} timeUnit="days" strokeColor="rgb(234, 53, 19)"/>
+        <TimerElement timeValue={hours} timeValuePct={hoursPct} timeUnit="hours" strokeColor="rgb(244, 200, 68)"/>
+        <TimerElement timeValue={minutes} timeValuePct={minutesPct} timeUnit="minutes" strokeColor="rgb(232, 232, 228)"/>
+        <TimerElement timeValue={seconds} timeValuePct={secondsPct} timeUnit="seconds" strokeColor="rgb(57, 97, 164)"/>
+    </div>
 </div>
