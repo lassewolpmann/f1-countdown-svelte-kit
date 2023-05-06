@@ -28,6 +28,24 @@
     const parseTime = (date) => {
         return new Date(date).toLocaleTimeString()
     }
+
+    const getLastSession = (event) => {
+        const allSessions = event['sessions'];
+        const sessionNames = Object.keys(allSessions);
+        const lastSessionName = sessionNames[sessionNames.length - 1]
+
+        return allSessions[lastSessionName]
+    }
+
+    const getLocationURL = (event) => {
+        const baseURL = 'https://www.google.com/maps/place/';
+        const latitude = event['latitude'];
+        const longitude = event['longitude'];
+
+        console.log(baseURL + latitude + ',' + longitude);
+
+        return baseURL + latitude + ',' + longitude
+    }
 </script>
 
 <style>
@@ -36,7 +54,7 @@
         margin: 20px 0;
         font-size: 0.9rem;
         border-collapse: collapse;
-        width: min(90vw, 800px);
+        width: min(90vw, 1000px);
     }
 
     table caption {
@@ -45,6 +63,7 @@
         text-align: left;
         background: var(--table-row-primary-color);
         padding: 15px;
+        margin: 20px 0 0 0;
     }
 
     /* Making every second row a different color */
@@ -94,6 +113,17 @@
     .collapse button:hover {
         color: var(--button-hover-color);
     }
+
+    a {
+        color: inherit;
+        text-decoration: inherit;
+        transition: color 0.2s ease;
+        padding-right: 10px;
+    }
+
+    a:hover {
+        color: var(--button-hover-color);
+    }
 </style>
 
 <table class="upcoming">
@@ -102,10 +132,10 @@
         <table bind:this={events[i]} class="event">
             <thead>
             <tr>
-                <th class="name">{parseName(event['name'])}</th>
+                <th class="name"><a href="{getLocationURL(event)}" target="_blank"><i class="fa-solid fa-location-dot"></i></a>{parseName(event['name'])}</th>
                 {#if !nextEvents[i].sessionsTableVisible}
-                    <td class="date">{parseDate(event['sessions'][Object.keys(event['sessions'])[Object.keys(event['sessions']).length - 1]])}</td>
-                    <td class="date">{parseTime(event['sessions'][Object.keys(event['sessions'])[Object.keys(event['sessions']).length - 1]])}</td>
+                    <td class="date">{parseDate(getLastSession(event))}</td>
+                    <td class="date">{parseTime(getLastSession(event))}</td>
                 {:else}
                     <td class="date"></td>
                     <td class="date"></td>

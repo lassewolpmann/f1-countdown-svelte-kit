@@ -13,7 +13,7 @@
         justify-content: center;
         flex-wrap: wrap;
         gap: 20px;
-        margin: 30px 0;
+        margin: 40px 50px 20px 50px;
     }
 
     button {

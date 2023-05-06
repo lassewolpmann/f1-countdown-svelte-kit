@@ -53,7 +53,6 @@
 <main>
     <Timer
             nextEvent={data['nextEvent']}
-            previousEvent={data['previousEvent']}
             nextEventSessions={data['nextEventSessions']}
             previousEventSessions={data['previousEventSessions']}
             currentSessionIndex={currentSessionIndex}

@@ -4,7 +4,6 @@
     import RaceTitle from "$lib/RaceTitle.svelte";
 
     export let nextEvent;
-    export let previousEvent;
     export let nextEventSessions;
     export let previousEventSessions;
     export let currentSessionIndex;
@@ -71,14 +70,13 @@
 
     .timer {
         flex-direction: column;
-        padding: 30px 0 50px 0;
         border-bottom: var(--border);
     }
 
     .timer-elements {
         flex-direction: row;
-        margin: 30px 0 0 0;
         gap: 50px;
+        margin: 20px 50px 40px 50px;
     }
 </style>
 

@@ -4,32 +4,33 @@
 
     const sessionNames = nextEventSessionNames.join(', ')
 
-    let eventName = nextEvent['name'] + ' Grand Prix';
+    const parseName = (name) => {
+        if (!name.includes("Grand Prix")) {
+            return name + " Grand Prix"
+        } else {
+            return name
+        }
+    }
 
     const parseDate = (timestamp) => {
         const d = new Date(timestamp);
 
         return d.toDateString() + ', ' + d.toLocaleTimeString()
     }
+
+    let eventName = parseName(nextEvent['name'])
 </script>
 
 <style>
     .race-title {
         text-align: center;
+        border-bottom: var(--border);
+        padding: 20px 50px;
     }
 
-    h1, h2 {
-        margin: 5px 0;
-    }
-
-    h1 {
-        font-size: 2.5rem;
-    }
-
-    h2 {
-        color: var(--secondary-text-color);
-        font-size: 1.3rem;
-        font-weight: 400;
+    .event-name {
+        font-size: 3rem;
+        font-weight: bold;
     }
 </style>
 
@@ -38,5 +39,5 @@
 </svelte:head>
 
 <div class="race-title" data-nosnippet>
-    <h1>{eventName}</h1>
+    <span class="event-name">{eventName}</span>
 </div>

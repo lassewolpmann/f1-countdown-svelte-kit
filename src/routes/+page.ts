@@ -43,7 +43,7 @@ async function getAllEvents(url: URL) {
 
 function getNextEvents(allEvents: Array<Event>): Event[] {
     const timestamp: number = new Date().getTime();
-    // const timestamp = new Date('2023-04-30 15:00:00Z').getTime();
+    // const timestamp = new Date('2023-07-01 19:35:00Z').getTime();
 
     let nextEvents: Array<Event> = allEvents.filter((event: Event): boolean => {
         const eventSessions: object = event['sessions'];
