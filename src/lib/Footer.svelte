@@ -17,20 +17,29 @@
         padding-bottom: 5px;
     }
 
-    .github {
+    .github, .copyright, .author {
         display: flex;
         flex-direction: column;
         align-items: flex-start;
         justify-content: center;
     }
+
+    @media only screen and (max-width: 600px) {
+        .github, .copyright, .author {
+            font-size: 0.6rem;
+        }
+    }
 </style>
 
-<div>
-    Made with <i class="fa-solid fa-heart"></i><br>by Lasse Wolpmann
+<div class="author">
+    <span>Made with <i class="fa-solid fa-heart"></i></span>
+    <span>by Lasse Wolpmann</span>
 </div>
 <div class="github">
-    <i class="fa-brands fa-github"></i>
-    <a href="https://github.com/lassewolpmann/f1-countdown-svelte-kit" target="_blank">Project</a>
-    <a href="https://github.com/lassewolpmann/f1-countdown-svelte-kit/issues" target="_blank">Issues</a>
-    <a href="https://github.com/sportstimes/f1/blob/main/_db/f1/2023.json" target="_blank">Data source</a>
+    <a href="https://github.com/lassewolpmann/f1-countdown-svelte-kit" target="_blank"><i class="fa-brands fa-github"></i> Project</a>
+    <a href="https://github.com/lassewolpmann/f1-countdown-svelte-kit/issues" target="_blank"><i class="fa-brands fa-github"></i> Issues</a>
+</div>
+<div class="copyright">
+    Data provided by <a href="https://github.com/sportstimes/f1" target="_blank"><i class="fa-brands fa-github"></i> sportstimes</a>
+    <a href="https://github.com/sportstimes/f1/blob/main/LICENSE" target="_blank"><i class="fa-solid fa-scale-balanced"></i> License</a>
 </div>
