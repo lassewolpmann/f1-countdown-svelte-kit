@@ -11,29 +11,44 @@ interface Event {
     sessions: Array<any>;
 }
 
-export async function load() {
-    const apiURL: URL = new URL('https://raw.githubusercontent.com/sportstimes/f1/main/_db/f1/2023.json');
-
-    const allEvents: Array<Event> = await getAllEvents(apiURL);
-    const nextEvents: Array<Event> = getNextEvents(allEvents);
-
-    const nextEvent: Event = nextEvents[0];
-    const previousEvent: Event = getPreviousEvent(allEvents, nextEvents);
-
-    const nextEventSessions: Array<any> = nextEvent['sessions'];
-    const previousEventSessions: Array<any> = previousEvent['sessions'];
-
-    return {
-        allEvents: allEvents,
-        nextEvents: nextEvents,
-        nextEvent: nextEvent,
-        previousEvent: previousEvent,
-        nextEventSessions: nextEventSessions,
-        previousEventSessions: previousEventSessions
-    }
+interface SeriesData {
+    allEvents: Array<Event>,
+    nextEvents: Array<Event>,
+    nextEvent: Event,
+    previousEvent: Event,
+    nextEventSessions: Array<any>,
+    previousEventSessions: Array<any>
 }
 
-async function getAllEvents(url: URL) {
+// @ts-ignore
+export const load = (async ({ fetch }) => {
+    const data: { [key: string]: SeriesData } = {}
+
+    const seriesList: string[] = ['f1', 'f2', 'f3'];
+    const currentYear: number = new Date().getFullYear();
+
+    for (const series of seriesList) {
+        const apiURL: URL = new URL(`https://raw.githubusercontent.com/sportstimes/f1/main/_db/${series}/${currentYear}.json`);
+
+        const allEvents: Array<Event> = await getAllEvents(apiURL, fetch);
+        const nextEvents: Array<Event> = getNextEvents(allEvents);
+
+        data[series] = {} as SeriesData;
+        data[series].allEvents = allEvents;
+        data[series].nextEvents = nextEvents;
+        data[series].nextEvent = nextEvents[0];
+        data[series].previousEvent = getPreviousEvent(allEvents, nextEvents);
+        data[series].nextEventSessions = nextEvents[0]['sessions'];
+        data[series].previousEventSessions = getPreviousEvent(allEvents, nextEvents)['sessions'];
+    }
+
+    return {
+        seriesList: seriesList,
+        seriesData: data
+    }
+});
+
+async function getAllEvents(url: URL, fetch: any) {
     const res: Response = await fetch(url);
 
     const allEvents = await res.json();

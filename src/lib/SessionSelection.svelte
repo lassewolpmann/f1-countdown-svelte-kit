@@ -2,7 +2,11 @@
     export let nextEventSessionNames;
     export let currentSessionIndex;
 
-    let innerWidth = 0;
+    $: {
+        if (currentSessionIndex > nextEventSessionNames.length - 1) {
+            currentSessionIndex = nextEventSessionNames.length - 1;
+        }
+    }
 </script>
 
 <style>
@@ -40,7 +44,6 @@
     }
 </style>
 
-<svelte:window bind:innerWidth />
 <div class="session-selection" data-nosnippet>
     {#each nextEventSessionNames as sessionName}
         <button class="{sessionName === nextEventSessionNames[currentSessionIndex] ? 'selected' : ''}" on:click={() => currentSessionIndex = nextEventSessionNames.indexOf(sessionName)}>

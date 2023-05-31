@@ -2,8 +2,12 @@
     import Footer from "../lib/Footer.svelte";
     import Timer from "../lib/Timer.svelte";
     import UpcomingEventList from "../lib/UpcomingEventList.svelte";
+    import SeriesSelection from "../lib/SeriesSelection.svelte";
 
     export let data;
+
+    let currentSeries, currentSessionIndex, currentSeriesData;
+    let nextEvent, nextEventSessions, previousEventSessions, nextEvents;
 
     const getCurrentSessionIndex = (sessions) => {
         const sessionNames = Object.keys(sessions);
@@ -14,6 +18,7 @@
         // Set current session name to last entry as default
         currentSessionName = sessionNames[sessionNames.length - 1]
 
+        // Loop through all sessions and select the one nearest to the current date
         for (let i = 0; i < sessionNames.length; i++) {
             const sessionTimestamp = new Date(sessions[sessionNames[i]]).getTime();
 
@@ -26,7 +31,17 @@
         return sessionNames.indexOf(currentSessionName);
     }
 
-    let currentSessionIndex = getCurrentSessionIndex(data['nextEventSessions']);
+    currentSeries = data['seriesList'][0];
+
+    $: {
+        currentSeriesData = data['seriesData'][currentSeries];
+        currentSessionIndex = getCurrentSessionIndex(currentSeriesData['nextEventSessions']);
+
+        nextEvent = currentSeriesData['nextEvent'];
+        nextEventSessions = currentSeriesData['nextEventSessions'];
+        previousEventSessions = currentSeriesData['previousEventSessions'];
+        nextEvents = currentSeriesData['nextEvents'];
+    }
 </script>
 <style>
     main, footer {
@@ -51,14 +66,15 @@
 
 </header>
 <main>
+    <SeriesSelection seriesList={data.seriesList} bind:currentSeries={currentSeries} />
     <Timer
-            nextEvent={data['nextEvent']}
-            nextEventSessions={data['nextEventSessions']}
-            previousEventSessions={data['previousEventSessions']}
+            nextEvent={nextEvent}
+            nextEventSessions={nextEventSessions}
+            previousEventSessions={previousEventSessions}
             currentSessionIndex={currentSessionIndex}
     />
 
-    <UpcomingEventList nextEvents={data['nextEvents']} />
+    <UpcomingEventList nextEvents={nextEvents} />
 </main>
 <footer>
     <Footer />
