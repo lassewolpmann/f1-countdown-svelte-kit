@@ -12,12 +12,8 @@ interface Event {
 }
 
 interface SeriesData {
-    allEvents: Array<Event>,
     nextEvents: Array<Event>,
-    nextEvent: Event,
-    previousEvent: Event,
-    nextEventSessions: Array<any>,
-    previousEventSessions: Array<any>
+    previousEvent: Event
 }
 
 // @ts-ignore
@@ -34,12 +30,8 @@ export const load = (async ({ fetch }) => {
         const nextEvents: Array<Event> = getNextEvents(allEvents);
 
         data[series] = {} as SeriesData;
-        data[series].allEvents = allEvents;
         data[series].nextEvents = nextEvents;
-        data[series].nextEvent = nextEvents[0];
         data[series].previousEvent = getPreviousEvent(allEvents, nextEvents);
-        data[series].nextEventSessions = nextEvents[0]['sessions'];
-        data[series].previousEventSessions = getPreviousEvent(allEvents, nextEvents)['sessions'];
     }
 
     return {

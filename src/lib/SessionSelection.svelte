@@ -45,8 +45,8 @@
 </style>
 
 <div class="session-selection" data-nosnippet>
-    {#each nextEventSessionNames as sessionName}
-        <button class="{sessionName === nextEventSessionNames[currentSessionIndex] ? 'selected' : ''}" on:click={() => currentSessionIndex = nextEventSessionNames.indexOf(sessionName)}>
+    {#each nextEventSessionNames as sessionName, sessionIndex}
+        <button class="{sessionName === nextEventSessionNames[currentSessionIndex] ? 'selected' : ''}" on:click={() => currentSessionIndex = sessionIndex}>
             {sessionName.toUpperCase()}
         </button>
     {/each}

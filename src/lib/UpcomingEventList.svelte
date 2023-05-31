@@ -2,6 +2,7 @@
     import { blur } from 'svelte/transition';
 
     export let nextEvents;
+    export let currentEventIndex;
 
     for (let i = 0; i < nextEvents.length; i++) {
         nextEvents[i].sessionsTableVisible = false;
@@ -80,7 +81,7 @@
 
     /* Table cells settings */
     .name, .session-name, .date {
-        width: 45%;
+        width: 42.5%;
     }
 
     .name, .session-name, .date {
@@ -88,23 +89,30 @@
         text-align: left;
     }
 
+    .name {
+        color: var(--secondary-text-color);
+        font-weight: bold;
+        transition: color 0.2s ease;
+    }
+
+    .name.current {
+        color: var(--main-text-color);
+    }
+
     .time {
         color: var(--secondary-text-color);
     }
 
     /* Collapse button settings */
-    .location {
+    .location, .collapse, .select {
         width: 5%;
-    }
-
-    .collapse {
-        width: 5%;
-    }
-
-    .location, .collapse {
         padding: 15px;
         text-align: center;
         vertical-align: center;
+    }
+
+    .select > i {
+        cursor: pointer;
     }
 
     .collapse button {
@@ -122,13 +130,13 @@
         color: var(--button-hover-color);
     }
 
-    a {
+    a, .select > i {
         color: inherit;
         text-decoration: inherit;
         transition: color 0.2s ease;
     }
 
-    a:hover {
+    a:hover, .select > i:hover {
         color: var(--button-hover-color);
     }
 </style>
@@ -140,7 +148,8 @@
             <thead>
             <tr>
                 <th class="location"><a href="{getLocationURL(event)}" target="_blank"><i class="fa-solid fa-location-dot"></i></a></th>
-                <th class="name">{parseName(event['name'])}</th>
+                <td class="select"><i class="fa-solid fa-clock" on:click={() => currentEventIndex = i}></i></td>
+                <td class="name {i === currentEventIndex ? 'current' : ''}">{parseName(event['name'])}</td>
                 {#if !nextEvents[i].sessionsTableVisible}
                     <td class="date">
                         <span class="day">{parseDate(getLastSession(event))}</span>
@@ -164,8 +173,8 @@
                 <tbody class="sessions" transition:blur>
                 {#each Object.keys(event['sessions']) as session}
                     <tr>
-                        <td class="session-name" colspan="2">{session.toUpperCase()}</td>
-                        <td class="date" colspan="2">
+                        <td class="session-name" colspan="3">{session.toUpperCase()}</td>
+                        <td class="date" colspan="3">
                             <span class="day">{parseDate(event['sessions'][session])}</span>
                             <span class="time">{parseTime(event['sessions'][session])}</span>
                         </td>

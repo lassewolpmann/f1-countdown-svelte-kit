@@ -51,7 +51,6 @@
 
         position: relative;
         overflow: hidden;
-        width: max-content;
     }
 
     .all-series {
@@ -100,7 +99,7 @@
     }
 </style>
 <div class="series-selection">
-    <button on:click={decreaseSeriesIndex} class="{currentSeriesIndex === 0 ? 'inactive' : ''}"><i class="fa-solid fa-arrow-left"></i></button>
+    <button on:click={decreaseSeriesIndex}><i class="fa-solid fa-arrow-left"></i></button>
     <div class="all-series" bind:this={seriesContentEl}>
         {#each seriesList as series}
             <span class="series {series === currentSeries ? 'selected' : ''}">{series.toUpperCase()}</span>
