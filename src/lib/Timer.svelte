@@ -8,8 +8,12 @@
     export let previousEventSessions;
     export let currentSessionIndex;
 
-    let nextEventSessionNames = Object.keys(nextEventSessions);
-    let previousEventSessionNames = Object.keys(previousEventSessions);
+    let nextEventSessionNames, previousEventSessionNames;
+
+    $: {
+        nextEventSessionNames = Object.keys(nextEventSessions);
+        previousEventSessionNames = Object.keys(previousEventSessions);
+    }
 
     let nextSessionTime, nextSessionTimestamp, previousSessionTime, previousSessionTimestamp;
     let delta, daysDelta;
