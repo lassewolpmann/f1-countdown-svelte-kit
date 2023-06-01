@@ -2,6 +2,7 @@
     import { blur } from 'svelte/transition';
 
     export let nextEvents;
+    export let currentEventIndex;
 
     for (let i = 0; i < nextEvents.length; i++) {
         nextEvents[i].sessionsTableVisible = false;
@@ -32,7 +33,7 @@
     const getLastSession = (event) => {
         const allSessions = event['sessions'];
         const sessionNames = Object.keys(allSessions);
-        const lastSessionName = sessionNames[sessionNames.length - 1]
+        const lastSessionName = sessionNames.at(-1);
 
         return allSessions[lastSessionName]
     }
@@ -61,7 +62,11 @@
         text-align: left;
         background: var(--table-row-primary-color);
         padding: 15px;
-        margin: 20px 0 0 0;
+        margin-top: 20px;
+    }
+
+    table button {
+        padding: 5px 10px;
     }
 
     /* Making every second row a different color */
@@ -81,11 +86,12 @@
     /* Table cells settings */
     .name, .session-name, .date {
         width: 45%;
-    }
-
-    .name, .session-name, .date {
         padding: 15px;
         text-align: left;
+    }
+
+    .name {
+        font-weight: bold;
     }
 
     .time {
@@ -93,43 +99,11 @@
     }
 
     /* Collapse button settings */
-    .location {
-        width: 5%;
-    }
-
-    .collapse {
-        width: 5%;
-    }
-
     .location, .collapse {
+        width: 5%;
         padding: 15px;
         text-align: center;
         vertical-align: center;
-    }
-
-    .collapse button {
-        cursor: pointer;
-        background: none;
-
-        color: var(--main-text-color);
-        border: none;
-        font-size: 1rem;
-
-        transition: color 0.2s ease;
-    }
-
-    .collapse button:hover {
-        color: var(--button-hover-color);
-    }
-
-    a {
-        color: inherit;
-        text-decoration: inherit;
-        transition: color 0.2s ease;
-    }
-
-    a:hover {
-        color: var(--button-hover-color);
     }
 </style>
 
@@ -139,11 +113,15 @@
         <table bind:this={events[i]} class="event">
             <thead>
             <tr>
-                <th class="location"><a href="{getLocationURL(event)}" target="_blank"><i class="fa-solid fa-location-dot"></i></a></th>
-                <th class="name">{parseName(event['name'])}</th>
+                <th class="location">
+                    <a href="{getLocationURL(event)}" target="_blank">
+                        <button><i class="fa-solid fa-location-dot"></i></button>
+                    </a>
+                </th>
+                <td class="name {i === currentEventIndex ? 'current' : ''}">{parseName(event['name'])}</td>
                 {#if !nextEvents[i].sessionsTableVisible}
                     <td class="date">
-                        <span class="day">{parseDate(getLastSession(event))}</span>
+                        <span class="day">{parseDate(getLastSession(event))}</span><br>
                         <span class="time">{parseTime(getLastSession(event))}</span>
                     </td>
                 {:else}

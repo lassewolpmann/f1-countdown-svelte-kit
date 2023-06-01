@@ -1,8 +1,6 @@
 <script>
-    export let nextEvent;
-    export let nextEventSessionNames;
-
-    const sessionNames = nextEventSessionNames.join(', ')
+    export let nextEvents;
+    export let currentEventIndex;
 
     const parseName = (name) => {
         if (!name.includes("Grand Prix")) {
@@ -12,25 +10,24 @@
         }
     }
 
-    const parseDate = (timestamp) => {
-        const d = new Date(timestamp);
-
-        return d.toDateString() + ', ' + d.toLocaleTimeString()
-    }
-
-    let eventName = parseName(nextEvent['name'])
+    let eventName, sessionNames;
+    $: sessionNames = Object.keys(nextEvents[currentEventIndex]['sessions']).join(', ');
+    $: eventName = parseName(nextEvents[currentEventIndex]['name']);
 </script>
 
 <style>
     .race-title {
         text-align: center;
-        border-bottom: var(--border);
-        padding: 20px 50px;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
 
     .event-name {
         font-size: 3rem;
         font-weight: bold;
+        margin-inline: 15px;
     }
 </style>
 
