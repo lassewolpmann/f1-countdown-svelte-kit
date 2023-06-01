@@ -45,13 +45,13 @@
 
     .timer {
         flex-direction: column;
-        border-bottom: var(--border);
+        margin: 20px 0;
     }
 
     .timer-elements {
         flex-direction: row;
         gap: 50px;
-        margin: 20px 20px 40px 20px;
+        margin: 20px;
     }
 </style>
 

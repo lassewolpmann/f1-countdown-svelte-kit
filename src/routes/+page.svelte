@@ -3,6 +3,7 @@
     import Timer from "../lib/Timer.svelte";
     import UpcomingEventList from "../lib/UpcomingEventList.svelte";
     import SeriesSelection from "../lib/SeriesSelection.svelte";
+    import Border from "../lib/Border.svelte";
 
     export let data;
 
@@ -24,7 +25,6 @@
     }
 
     footer {
-        border-top: var(--border);
         padding: 20px;
         flex-direction: row;
         gap: 50px;
@@ -36,8 +36,11 @@
 </header>
 <main>
     <SeriesSelection seriesList={data.seriesList} bind:currentSeries={currentSeries} />
+    <Border />
     <Timer currentSeriesData={currentSeriesData} currentEventIndex={currentEventIndex} />
-    <UpcomingEventList nextEvents={currentSeriesData['nextEvents']} bind:currentEventIndex={currentEventIndex} />
+    <Border />
+    <UpcomingEventList nextEvents={currentSeriesData['nextEvents']} currentEventIndex={currentEventIndex} />
+    <Border />
 </main>
 <footer>
     <Footer />

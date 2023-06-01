@@ -13,7 +13,7 @@ interface Event {
 
 interface SeriesData {
     nextEvents: Array<Event>,
-    previousEvent: Event
+    previousEvent: Event | undefined
 }
 
 // @ts-ignore
@@ -50,21 +50,19 @@ async function getAllEvents(url: URL, fetch: any) {
 
 function getNextEvents(allEvents: Array<Event>): Event[] {
     const timestamp: number = new Date().getTime();
-    // const timestamp = new Date('2023-07-01 19:35:00Z').getTime();
 
     let nextEvents: Array<Event> = allEvents.filter((event: Event): boolean => {
         const eventSessions: object = event['sessions'];
         const eventSessionTimestamps: string[] = Object.values(eventSessions);
 
-        const raceEndTime: string = eventSessionTimestamps[eventSessionTimestamps.length - 1];
-        const raceEndTimestamp = new Date(raceEndTime).getTime();
+        const raceEndTime: string | undefined = eventSessionTimestamps.at(-1);
 
-        return raceEndTimestamp > timestamp
+        return raceEndTime !== undefined ? new Date(raceEndTime).getTime() > timestamp : false
     })
 
-    // If current event is last event of season
-    if (nextEvents.length === 0) {
-        nextEvents = [allEvents[allEvents.length - 1]]
+
+    if (nextEvents.length === 0) { // @ts-ignore
+        nextEvents = [allEvents.at(-1)];
     }
 
     return nextEvents
@@ -72,10 +70,6 @@ function getNextEvents(allEvents: Array<Event>): Event[] {
 
 
 function getPreviousEvent(allEvents: Array<Event>, nextEvents: Array<Event>): Event {
-    if (allEvents.length === nextEvents.length) {
-        // If current event is first event of season
-        return allEvents[0]
-    } else {
-        return allEvents[allEvents.length - nextEvents.length - 1]
-    }
+    // @ts-ignore
+    return allEvents.length === nextEvents.length ? allEvents.at(0) : allEvents.at(-1);
 }
