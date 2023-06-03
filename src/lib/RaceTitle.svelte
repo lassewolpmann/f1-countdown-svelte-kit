@@ -1,6 +1,5 @@
 <script>
     export let nextEvents;
-    export let currentEventIndex;
 
     const parseName = (name) => {
         if (!name.includes("Grand Prix")) {
@@ -11,8 +10,8 @@
     }
 
     let eventName, sessionNames;
-    $: sessionNames = Object.keys(nextEvents[currentEventIndex]['sessions']).join(', ');
-    $: eventName = parseName(nextEvents[currentEventIndex]['name']);
+    $: sessionNames = Object.keys(nextEvents[0]['sessions']).join(', ');
+    $: eventName = parseName(nextEvents[0]['name']);
 </script>
 
 <style>

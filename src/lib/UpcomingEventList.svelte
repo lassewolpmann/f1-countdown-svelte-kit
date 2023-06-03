@@ -2,7 +2,6 @@
     import { blur } from 'svelte/transition';
 
     export let nextEvents;
-    export let currentEventIndex;
 
     for (let i = 0; i < nextEvents.length; i++) {
         nextEvents[i].sessionsTableVisible = false;
@@ -118,7 +117,7 @@
                         <button><i class="fa-solid fa-location-dot"></i></button>
                     </a>
                 </th>
-                <td class="name {i === currentEventIndex ? 'current' : ''}">{parseName(event['name'])}</td>
+                <td class="name">{parseName(event['name'])}</td>
                 {#if !nextEvents[i].sessionsTableVisible}
                     <td class="date">
                         <span class="day">{parseDate(getLastSession(event))}</span><br>
