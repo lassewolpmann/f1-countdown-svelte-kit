@@ -7,7 +7,7 @@
 
     export let data;
 
-    let currentSeries, currentSeriesData, currentEventIndex = 0;
+    let currentSeries, currentSeriesData;
 
     currentSeries = data['seriesList'][0];
 
@@ -37,9 +37,9 @@
 <main>
     <SeriesSelection seriesList={data.seriesList} bind:currentSeries={currentSeries} />
     <Border />
-    <Timer currentSeriesData={currentSeriesData} currentEventIndex={currentEventIndex} />
+    <Timer currentSeriesData={currentSeriesData} />
     <Border />
-    <UpcomingEventList nextEvents={currentSeriesData['nextEvents']} currentEventIndex={currentEventIndex} />
+    <UpcomingEventList nextEvents={currentSeriesData['nextEvents']} />
     <Border />
 </main>
 <footer>

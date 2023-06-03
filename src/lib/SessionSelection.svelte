@@ -1,11 +1,14 @@
 <script>
-    export let nextEventSessionNames;
+    import { findCurrentSessionIndex } from "$lib/functions/findCurrentSessionIndex.ts";
+
+    export let nextEventSessions;
     export let currentSessionIndex;
 
+    let nextEventSessionNames;
+
     $: {
-        if (currentSessionIndex > nextEventSessionNames.length - 1) {
-            currentSessionIndex = nextEventSessionNames.length - 1;
-        }
+        nextEventSessionNames = Object.keys(nextEventSessions);
+        currentSessionIndex = findCurrentSessionIndex(nextEventSessions);
     }
 </script>
 

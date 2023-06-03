@@ -4,32 +4,27 @@
     import RaceTitle from "$lib/RaceTitle.svelte";
 
     import { calculateDelta } from "$lib/functions/calculateDelta.ts";
+    import { deltaToDays, deltaToHours, deltaToMinutes, deltaToSeconds, daysToPercent, hoursToPercent, minutesToPercent, secondsToPercent } from "$lib/functions/deltaToTimeConversion.ts";
 
     export let currentSeriesData;
-    export let currentEventIndex;
 
-    let nextEvents, previousEvent, nextEvent, nextEventSessions, previousEventSessions, deltaValues;
+    let nextEvents, nextEvent, nextEventSessions;
+    let delta;
     let currentSessionIndex = 0;
     let deltaCounter;
 
     $: {
         nextEvents = currentSeriesData['nextEvents'];
-        previousEvent = currentSeriesData['previousEvent']
-
-        if (currentEventIndex > nextEvents.length - 1) {
-            currentEventIndex = nextEvents.length - 1;
-        }
-
-        nextEvent = nextEvents[currentEventIndex];
+        nextEvent = nextEvents[0];
         nextEventSessions = nextEvent['sessions'];
-        previousEventSessions = previousEvent['sessions'];
+    }
 
-        deltaValues = calculateDelta(nextEventSessions, previousEventSessions, currentSessionIndex);
-
+    $: {
         clearInterval(deltaCounter);
+        delta = calculateDelta(nextEventSessions, currentSessionIndex);
         deltaCounter = setInterval(() => {
-            if (deltaValues.delta > 0) {
-                deltaValues.delta -= 1;
+            if (delta > 0) {
+                delta -= 1;
             }
         }, 1000);
     }
@@ -58,18 +53,17 @@
 <div class="timer">
     <RaceTitle
             nextEvents={nextEvents}
-            currentEventIndex={currentEventIndex}
     />
 
     <SessionSelection
-            nextEventSessionNames={Object.keys(nextEventSessions)}
+            nextEventSessions={nextEventSessions}
             bind:currentSessionIndex={currentSessionIndex}
     />
 
     <div class="timer-elements" data-nosnippet>
-        <TimerElement timeValue={deltaValues.days} timeValuePct={deltaValues.daysPct} timeUnit="days" strokeColor="rgb(234, 53, 19)"/>
-        <TimerElement timeValue={deltaValues.hours} timeValuePct={deltaValues.hoursPct} timeUnit="hours" strokeColor="rgb(244, 200, 68)"/>
-        <TimerElement timeValue={deltaValues.minutes} timeValuePct={deltaValues.minutesPct} timeUnit="minutes" strokeColor="rgb(232, 232, 228)"/>
-        <TimerElement timeValue={deltaValues.seconds} timeValuePct={deltaValues.secondsPct} timeUnit="seconds" strokeColor="rgb(57, 97, 164)"/>
+        <TimerElement timeValue={deltaToDays(delta)} timeValuePct={daysToPercent(delta)} timeUnit="days" strokeColor="rgb(234, 53, 19)"/>
+        <TimerElement timeValue={deltaToHours(delta)} timeValuePct={hoursToPercent(delta)} timeUnit="hours" strokeColor="rgb(244, 200, 68)"/>
+        <TimerElement timeValue={deltaToMinutes(delta)} timeValuePct={minutesToPercent(delta)} timeUnit="minutes" strokeColor="rgb(232, 232, 228)"/>
+        <TimerElement timeValue={deltaToSeconds(delta)} timeValuePct={secondsToPercent(delta)} timeUnit="seconds" strokeColor="rgb(57, 97, 164)"/>
     </div>
 </div>
