@@ -30,10 +30,6 @@
     }
 </style>
 
-<svelte:head>
-    <meta name="description" content="Countdown to the {new Date().getFullYear()} Formula 1 {eventName} {sessionNames}">
-</svelte:head>
-
 <div class="race-title" data-nosnippet>
     <span class="event-name">{eventName}</span>
 </div>
