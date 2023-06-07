@@ -4,6 +4,7 @@
     import UpcomingEventList from "../lib/UpcomingEventList.svelte";
     import SeriesSelection from "../lib/SeriesSelection.svelte";
     import Border from "../lib/Border.svelte";
+    import MetaDescription from "../lib/MetaDescription.svelte";
 
     export let data;
 
@@ -31,9 +32,8 @@
     }
 </style>
 
-<header>
+<MetaDescription seriesData={data['seriesData']} seriesList={data.seriesList} />
 
-</header>
 <main>
     <SeriesSelection seriesList={data.seriesList} bind:currentSeries={currentSeries} />
     <Border />
