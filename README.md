@@ -1,7 +1,9 @@
 # f1-countdown.com
 
 Source code for f1-countdown.com, a website created for F1 Fans to keep track of the schedule and never miss a race again.  
-Hosted by Vercel.
+Hosted by Vercel.  
+Production build: https://f1-countdown-svelte-kit.vercel.app  
+Development build: https://f1-countdown-svelte-kit-git-development-lassewolpmann.vercel.app/
 
 # Running Locally
 
