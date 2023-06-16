@@ -1,3 +1,5 @@
+import { PUBLIC_OPEN_WEATHER_API_KEY } from '$env/static/public';
+
 interface Forecast {
     clouds: object,     // Cloudiness in %
     dt: number,         // Timestamp
@@ -12,7 +14,7 @@ interface Forecast {
 }
 
 export const callOpenWeatherApi = async (lat: number, lon: number, sessionDate: string) => {
-    const apiKey: string = 'bed46005bff7d73b44ae36e6f99be191';
+    const apiKey: string = PUBLIC_OPEN_WEATHER_API_KEY;
     const apiUrl: string = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${apiKey}`;
 
     const res = await fetch(apiUrl);
