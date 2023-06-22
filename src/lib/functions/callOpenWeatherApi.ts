@@ -14,6 +14,9 @@ interface Forecast {
 }
 
 export const callOpenWeatherApi = async (lat: number, lon: number, sessionDate: string) => {
+    // TODO: Add rate limiting for API calls
+    // Current limits: 3,000 calls/minute and 100,000,000 calls/month
+
     const sessionTimestamp = new Date(sessionDate).getTime();
     const currentTimestamp = new Date().getTime();
     const deltaSessionToCurrent = sessionTimestamp - currentTimestamp;
