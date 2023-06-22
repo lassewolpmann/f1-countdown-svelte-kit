@@ -30,6 +30,14 @@
         flex-direction: row;
         gap: 50px;
     }
+
+    @media only screen and (max-width: 600px) {
+        footer {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 20px;
+        }
+    }
 </style>
 
 <MetaDescription seriesData={data['seriesData']} seriesList={data.seriesList} />

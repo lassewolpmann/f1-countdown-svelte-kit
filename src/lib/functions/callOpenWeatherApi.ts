@@ -14,8 +14,25 @@ interface Forecast {
 }
 
 export const callOpenWeatherApi = async (lat: number, lon: number, sessionDate: string) => {
+    const sessionTimestamp = new Date(sessionDate).getTime();
+    const currentTimestamp = new Date().getTime();
+    const deltaSessionToCurrent = sessionTimestamp - currentTimestamp;
+    const fourDaysInSeconds = 4 * 24 * 60 * 60 * 1000;
+
     const apiKey: string = PUBLIC_OPEN_WEATHER_API_KEY;
-    const apiUrl: string = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${apiKey}`;
+
+    const forecastAccuracy: string = deltaSessionToCurrent > fourDaysInSeconds ? 'daily' : 'hourly';
+
+    const apiUrl: URL = new URL(`https://pro.openweathermap.org/data/2.5/forecast/${forecastAccuracy}`);
+    apiUrl.searchParams.append('lat', lat.toString());
+    apiUrl.searchParams.append('lon', lon.toString());
+    apiUrl.searchParams.append('appid', apiKey);
+    apiUrl.searchParams.append('units', 'metric');
+    apiUrl.searchParams.append('mode', 'json');
+
+    if (deltaSessionToCurrent > fourDaysInSeconds) {
+        apiUrl.searchParams.append('cnt', '16');
+    }
 
     const res = await fetch(apiUrl);
 
@@ -26,9 +43,10 @@ export const callOpenWeatherApi = async (lat: number, lon: number, sessionDate: 
 }
 
 export const getSessionDateForecast = (allForecast: Forecast[], sessionDate: string) => {
-    const sessionTimestamp = new Date(sessionDate).getTime() / 1000;
+    const sessionTimestamp = new Date(sessionDate).getTime();
+
     return allForecast.filter((forecast: Forecast) => {
-        const forecastTimestamp = forecast.dt;
+        const forecastTimestamp = forecast.dt * 1000;
 
         return forecastTimestamp > sessionTimestamp
     }).at(0)

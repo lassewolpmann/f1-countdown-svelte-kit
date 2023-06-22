@@ -22,9 +22,13 @@
     $: if (weatherForecast) {
         sessionForecast = getSessionDateForecast(weatherForecast, currentSessionDate);
 
-        if (sessionForecast) {
+        // Only give weather forecast to sessions that are in the future
+        // TODO: Implement Historical Weather API calls
+        if (sessionForecast && new Date(currentSessionDate).getTime() > new Date().getTime()) {
             const sessionForecastIcon = sessionForecast['weather'][0]['icon'];
             sessionForecastIconUrl = `https://openweathermap.org/img/wn/${sessionForecastIcon}.png`;
+        } else {
+            sessionForecast = null;
         }
     }
 </script>
