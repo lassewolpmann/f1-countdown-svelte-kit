@@ -51,6 +51,7 @@ export const callOpenWeatherApi = async (lat: number, lon: number, sessionDate: 
 }
 
 export const getSessionDateForecast = (allForecast: Forecast[], sessionDate: string) => {
+    // TODO: Check for date in a better way, the current method is not very accurate
     const sessionTimestamp = new Date(sessionDate).getTime();
 
     return allForecast.filter((forecast: Forecast) => {
