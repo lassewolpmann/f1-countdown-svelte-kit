@@ -39,6 +39,7 @@
     <h1>Project links</h1>
     <a href="https://github.com/lassewolpmann/f1-countdown-svelte-kit" target="_blank"><i class="fa-brands fa-github"></i> Code</a>
     <a href="https://github.com/lassewolpmann/f1-countdown-svelte-kit/issues" target="_blank"><i class="fa-brands fa-github"></i> Issues</a>
+    <a href="https://github.com/lassewolpmann/f1-countdown-svelte-kit/blob/main/LICENSE.md" target="_blank"><i class="fa-solid fa-scale-balanced"></i> License</a>
 </div>
 <div>
     <h1>Session data</h1>
