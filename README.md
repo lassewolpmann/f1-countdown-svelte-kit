@@ -16,6 +16,9 @@ cd f1-countdown-svelte-kit/
 # install dependencies
 npm install (or pnpm install` or yarn`)
 
+# Create .env file for OpenWeatherMap API
+PUBLIC_OPEN_WEATHER_API_KEY=your API key
+
 # start development server
 npm run dev
 ```

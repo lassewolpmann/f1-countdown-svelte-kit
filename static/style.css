@@ -36,7 +36,11 @@ button {
     border-radius: 5px;
     transition: background 0.2s ease;
 
+    /* Necessary for switching between F1, F2, and F3*/
     z-index: 1;
+
+    /* Disable zoom on double-tap */
+    touch-action: manipulation;
 }
 
 button:hover {

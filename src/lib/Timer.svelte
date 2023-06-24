@@ -2,6 +2,7 @@
     import TimerElement from "$lib/TimerElement.svelte";
     import SessionSelection from "$lib/SessionSelection.svelte";
     import RaceTitle from "$lib/RaceTitle.svelte";
+    import WeatherForecast from "$lib/WeatherForecast.svelte";
 
     import { calculateDelta } from "$lib/functions/calculateDelta.ts";
     import { deltaToDays, deltaToHours, deltaToMinutes, deltaToSeconds, daysToPercent, hoursToPercent, minutesToPercent, secondsToPercent } from "$lib/functions/deltaToTimeConversion.ts";
@@ -66,4 +67,10 @@
         <TimerElement timeValue={deltaToMinutes(delta)} timeValuePct={minutesToPercent(delta)} timeUnit="minutes" strokeColor="rgb(232, 232, 228)"/>
         <TimerElement timeValue={deltaToSeconds(delta)} timeValuePct={secondsToPercent(delta)} timeUnit="seconds" strokeColor="rgb(57, 97, 164)"/>
     </div>
+
+    <WeatherForecast
+            nextEvents={nextEvents}
+            nextEventSessions={nextEventSessions}
+            currentSessionIndex={currentSessionIndex}
+    />
 </div>

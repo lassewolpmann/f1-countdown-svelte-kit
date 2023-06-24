@@ -6,6 +6,11 @@
     import Border from "../lib/Border.svelte";
     import MetaDescription from "../lib/MetaDescription.svelte";
 
+    import { dev } from '$app/environment';
+    import { inject } from '@vercel/analytics';
+
+    inject({ mode: dev ? 'development' : 'production' });
+
     export let data;
 
     let currentSeries, currentSeriesData;
@@ -29,6 +34,14 @@
         padding: 20px;
         flex-direction: row;
         gap: 50px;
+    }
+
+    @media only screen and (max-width: 600px) {
+        footer {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 20px;
+        }
     }
 </style>
 
