@@ -7,12 +7,11 @@
 
     let sessionForecast, sessionForecastIconUrl;
 
-    $: if (weatherForecast) {
+    $: {
         const currentSessionName = Object.keys(nextEventSessions).at(currentSessionIndex);
         const currentSessionDate = nextEventSessions[currentSessionName];
-        const currentSessionForecast = weatherForecast[currentSessionIndex];
 
-        sessionForecast = getSessionDateForecast(currentSessionForecast, currentSessionDate);
+        sessionForecast = getSessionDateForecast(weatherForecast, currentSessionDate);
 
         // Only give weather forecast to sessions that are in the future
         // TODO: Implement Historical Weather API calls
