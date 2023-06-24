@@ -1,10 +1,10 @@
-<script lang="ts">
-    import Footer from "../lib/Footer.svelte";
-    import Timer from "../lib/Timer.svelte";
-    import UpcomingEventList from "../lib/UpcomingEventList.svelte";
-    import SeriesSelection from "../lib/SeriesSelection.svelte";
-    import Border from "../lib/Border.svelte";
-    import MetaDescription from "../lib/MetaDescription.svelte";
+<script>
+    import Footer from "$lib/Footer.svelte";
+    import Timer from "$lib/Timer.svelte";
+    import UpcomingEventList from "$lib/UpcomingEventList.svelte";
+    import SeriesSelection from "$lib/SeriesSelection.svelte";
+    import Border from "$lib/Border.svelte";
+    import MetaDescription from "$lib/MetaDescription.svelte";
 
     import { dev } from '$app/environment';
     import { inject } from '@vercel/analytics';
@@ -16,7 +16,6 @@
     let currentSeries, currentSeriesData;
 
     currentSeries = data['seriesList'][0];
-
     $: currentSeriesData = data['seriesData'][currentSeries];
 </script>
 <style>

@@ -1,4 +1,6 @@
 /** @type {import('./$types').PageLoad} */
+import { getWeatherForecast } from "$lib/functions/WeatherForecast";
+import type { Forecast } from "$lib/functions/WeatherForecast";
 
 interface Event {
     name: string;
@@ -13,11 +15,11 @@ interface Event {
 
 interface SeriesData {
     nextEvents: Array<Event>,
-    previousEvent: Event | undefined
+    previousEvent: Event | undefined,
+    weatherForecast: Array<Forecast>
 }
 
-// @ts-ignore
-export const load = (async ({ fetch }) => {
+export const load = (async ({ fetch }: any) => {
     const data: { [key: string]: SeriesData } = {}
 
     const seriesList: string[] = ['f1', 'f2', 'f3'];
@@ -32,6 +34,17 @@ export const load = (async ({ fetch }) => {
         data[series] = {} as SeriesData;
         data[series].nextEvents = nextEvents;
         data[series].previousEvent = getPreviousEvent(allEvents, nextEvents);
+        data[series].weatherForecast = [];
+
+        const nextEvent: Event = nextEvents[0];
+        const lat: number = nextEvent.latitude;
+        const lon: number = nextEvent.longitude;
+
+        for (const session of Object.keys(nextEvent['sessions'])) {
+            const nextEventSessions = nextEvent['sessions'];
+            const sessionDate: string = nextEventSessions[session];
+            data[series].weatherForecast.push(await getWeatherForecast(lat, lon, sessionDate, fetch));
+        }
     }
 
     return {
