@@ -19,6 +19,6 @@
 	},
 	"type": "module",
 	"dependencies": {
-		"@vercel/postgres": "^0.3.2"
+		"@vercel/analytics": "^1.0.1"
 	}
 }

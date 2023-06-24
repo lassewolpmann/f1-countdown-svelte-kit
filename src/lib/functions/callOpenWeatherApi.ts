@@ -1,5 +1,4 @@
 import { PUBLIC_OPEN_WEATHER_API_KEY } from '$env/static/public';
-import { sql } from "@vercel/postgres";
 
 interface Forecast {
     clouds: object,     // Cloudiness in %
@@ -38,9 +37,14 @@ export const callOpenWeatherApi = async (lat: number, lon: number, sessionDate: 
     apiUrl.searchParams.append('units', 'metric');
     apiUrl.searchParams.append('mode', 'json');
 
+    let cnt;
     if (deltaSessionToCurrent > fourDaysInSeconds) {
-        apiUrl.searchParams.append('cnt', '16');
+        cnt = '16';
+    } else {
+        cnt = '96';
     }
+
+    apiUrl.searchParams.append('cnt', cnt);
 
     const res = await fetch(apiUrl);
 
@@ -51,12 +55,27 @@ export const callOpenWeatherApi = async (lat: number, lon: number, sessionDate: 
 }
 
 export const getSessionDateForecast = (allForecast: Forecast[], sessionDate: string) => {
-    // TODO: Check for date in a better way, the current method is not very accurate
     const sessionTimestamp = new Date(sessionDate).getTime();
 
-    return allForecast.filter((forecast: Forecast) => {
+    const filteredForecast = allForecast.filter((forecast: Forecast) => {
         const forecastTimestamp = forecast.dt * 1000;
 
-        return forecastTimestamp > sessionTimestamp
-    }).at(0)
+        if (allForecast.length === 16) {
+            // Daily forecast has 16 entries
+            const sessionDate = new Date(sessionTimestamp).getDate();
+            const forecastDate = new Date(forecastTimestamp).getDate();
+
+            // Return entry that has the same date as session (date in this context means, day of the month (1-31))
+            return sessionDate === forecastDate
+        } else if (allForecast.length === 96) {
+            // Hourly forecast has 96 entries
+            return sessionTimestamp < forecastTimestamp
+        }
+    })
+
+    if (filteredForecast.length > 0) {
+        return filteredForecast.at(0)
+    } else {
+        return undefined
+    }
 }
