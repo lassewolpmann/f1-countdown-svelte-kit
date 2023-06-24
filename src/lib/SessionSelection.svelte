@@ -1,5 +1,5 @@
 <script>
-    import { findCurrentSessionIndex } from "$lib/functions/findCurrentSessionIndex.ts";
+    import { findCurrentSessionIndex } from "$lib/functions/SessionSelection.ts";
 
     export let nextEventSessions;
     export let currentSessionIndex;

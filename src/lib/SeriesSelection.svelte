@@ -1,5 +1,5 @@
-<script lang="ts">
-    import { calculateOffset } from "$lib/functions/calculateOffset";
+<script>
+    import { calculateOffset } from "$lib/functions/SeriesSelection.ts";
 
     export let seriesList;
     export let currentSeries;

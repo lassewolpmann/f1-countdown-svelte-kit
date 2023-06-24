@@ -1,49 +1,16 @@
 <script>
-    import { blur } from 'svelte/transition';
+    import { onMount } from "svelte";
+    import { parseName, parseDate, parseTime, getLocationURL } from "$lib/functions/UpcomingEventList.ts";
 
     export let nextEvents;
 
-    for (let i = 0; i < nextEvents.length; i++) {
-        nextEvents[i].sessionsTableVisible = false;
-    }
-
     let events = [];
 
-    const collapseSessions = (index) => {
-        nextEvents[index].sessionsTableVisible = !nextEvents[index].sessionsTableVisible;
-    }
-
-    const parseName = (name) => {
-        if (!name.includes("Grand Prix")) {
-            return name + " Grand Prix"
-        } else {
-            return name
+    onMount(() => {
+        for (const nextEvent of nextEvents) {
+            nextEvent.sessionsTableVisible = false;
         }
-    }
-
-    const parseDate = (date) => {
-        return new Date(date).toDateString()
-    }
-
-    const parseTime = (date) => {
-        return new Date(date).toLocaleTimeString()
-    }
-
-    const getLastSession = (event) => {
-        const allSessions = event['sessions'];
-        const sessionNames = Object.keys(allSessions);
-        const lastSessionName = sessionNames.at(-1);
-
-        return allSessions[lastSessionName]
-    }
-
-    const getLocationURL = (event) => {
-        const baseURL = 'https://www.google.com/maps/place/';
-        const latitude = event['latitude'];
-        const longitude = event['longitude'];
-
-        return baseURL + latitude + ',' + longitude
-    }
+    })
 </script>
 
 <style>
@@ -104,6 +71,16 @@
         text-align: center;
         vertical-align: center;
     }
+
+    .table-head-row {
+        height: 75px;
+    }
+
+    @media only screen and (max-width: 600px) {
+        .table-head-row {
+            height: 125px;
+        }
+    }
 </style>
 
 <table class="upcoming">
@@ -111,7 +88,7 @@
     {#each nextEvents as event, i}
         <table bind:this={events[i]} class="event">
             <thead>
-            <tr>
+            <tr class="table-head-row">
                 <th class="location">
                     <a href="{getLocationURL(event)}" target="_blank">
                         <button><i class="fa-solid fa-location-dot"></i></button>
@@ -120,14 +97,14 @@
                 <td class="name">{parseName(event['name'])}</td>
                 {#if !nextEvents[i].sessionsTableVisible}
                     <td class="date">
-                        <span class="day">{parseDate(getLastSession(event))}</span><br>
-                        <span class="time">{parseTime(getLastSession(event))}</span>
+                        <span class="day">{parseDate(event.sessions[Object.keys(event.sessions).at(-1)])}</span><br>
+                        <span class="time">{parseTime(event.sessions[Object.keys(event.sessions).at(-1)])}</span>
                     </td>
                 {:else}
                     <td class="date"></td>
                 {/if}
                 <td class="collapse">
-                    <button on:click={() => collapseSessions(i)}>
+                    <button on:click={() => nextEvents[i].sessionsTableVisible = !nextEvents[i].sessionsTableVisible}>
                         {#if nextEvents[i].sessionsTableVisible}
                             <i class="fa-solid fa-minus"></i>
                         {:else}
@@ -138,7 +115,7 @@
             </tr>
             </thead>
             {#if nextEvents[i].sessionsTableVisible}
-                <tbody class="sessions" transition:blur>
+                <tbody class="sessions">
                 {#each Object.keys(event['sessions']) as session}
                     <tr>
                         <td class="session-name" colspan="2">{session.toUpperCase()}</td>

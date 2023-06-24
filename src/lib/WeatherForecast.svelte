@@ -1,25 +1,16 @@
-<script lang="ts">
-    import { callOpenWeatherApi, getSessionDateForecast } from "../lib/functions/callOpenWeatherApi";
-    import { onMount } from "svelte";
+<script>
+    import { getSessionDateForecast } from "$lib/functions/WeatherForecast.ts";
 
-    export let nextEvents;
     export let nextEventSessions;
     export let currentSessionIndex;
+    export let weatherForecast;
 
-    let lat, lon;
-    let weatherForecast;
     let sessionForecast, sessionForecastIconUrl;
-    let currentSessionDate;
 
-    $: lat = nextEvents[0]['latitude'];
-    $: lon = nextEvents[0]['longitude'];
-    $: currentSessionDate = nextEventSessions[Object.keys(nextEventSessions)[currentSessionIndex]]
+    $: {
+        const currentSessionName = Object.keys(nextEventSessions).at(currentSessionIndex);
+        const currentSessionDate = nextEventSessions[currentSessionName];
 
-    onMount(async () => {
-        weatherForecast = await callOpenWeatherApi(lat, lon, currentSessionDate);
-    })
-
-    $: if (weatherForecast) {
         sessionForecast = getSessionDateForecast(weatherForecast, currentSessionDate);
 
         // Only give weather forecast to sessions that are in the future

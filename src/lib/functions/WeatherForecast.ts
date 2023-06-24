@@ -1,6 +1,6 @@
 import { PUBLIC_OPEN_WEATHER_API_KEY } from '$env/static/public';
 
-interface Forecast {
+export interface Forecast {
     clouds: object,     // Cloudiness in %
     dt: number,         // Timestamp
     dt_txt: string,     // Date in Text
@@ -13,7 +13,7 @@ interface Forecast {
     wind: object        // Wind information
 }
 
-export const callOpenWeatherApi = async (lat: number, lon: number, sessionDate: string) => {
+export const getWeatherForecast = async (lat: number, lon: number, sessionDate: string, fetch: any) => {
     // TODO: Add rate limiting for API calls
     // Current limits: 3,000 calls/minute and 100,000,000 calls/month
     // At the current rate of site visits, rate limiting won't be necessary

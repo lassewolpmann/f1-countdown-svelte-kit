@@ -4,8 +4,7 @@
     import RaceTitle from "$lib/RaceTitle.svelte";
     import WeatherForecast from "$lib/WeatherForecast.svelte";
 
-    import { calculateDelta } from "$lib/functions/calculateDelta.ts";
-    import { deltaToDays, deltaToHours, deltaToMinutes, deltaToSeconds, daysToPercent, hoursToPercent, minutesToPercent, secondsToPercent } from "$lib/functions/deltaToTimeConversion.ts";
+    import { calculateDelta, deltaToDays, deltaToHours, deltaToMinutes, deltaToSeconds, daysToPercent, hoursToPercent, minutesToPercent, secondsToPercent } from "$lib/functions/Timer.ts";
 
     export let currentSeriesData;
 
@@ -13,11 +12,13 @@
     let delta;
     let currentSessionIndex = 0;
     let deltaCounter;
+    let weatherForecast;
 
     $: {
         nextEvents = currentSeriesData['nextEvents'];
         nextEvent = nextEvents[0];
         nextEventSessions = nextEvent['sessions'];
+        weatherForecast = currentSeriesData['weatherForecast'];
     }
 
     $: {
@@ -69,8 +70,8 @@
     </div>
 
     <WeatherForecast
-            nextEvents={nextEvents}
             nextEventSessions={nextEventSessions}
             currentSessionIndex={currentSessionIndex}
+            weatherForecast={weatherForecast}
     />
 </div>
