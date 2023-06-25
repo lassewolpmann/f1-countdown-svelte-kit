@@ -1,6 +1,4 @@
 <script>
-    import { getSessionDateForecast } from "$lib/functions/WeatherForecast.ts";
-
     export let nextEventSessions;
     export let currentSessionIndex;
     export let weatherForecast;
@@ -11,11 +9,11 @@
         const currentSessionName = Object.keys(nextEventSessions).at(currentSessionIndex);
         const currentSessionDate = nextEventSessions[currentSessionName];
 
-        sessionForecast = getSessionDateForecast(weatherForecast, currentSessionDate);
+        sessionForecast = weatherForecast.at(currentSessionIndex);
 
         // Only give weather forecast to sessions that are in the future
         // TODO: Implement Historical Weather API calls
-        if (new Date(currentSessionDate).getTime() > new Date().getTime()) {
+        if (sessionForecast && new Date(currentSessionDate).getTime() > new Date().getTime()) {
             const sessionForecastIcon = sessionForecast['weather'][0]['icon'];
             sessionForecastIconUrl = `https://openweathermap.org/img/wn/${sessionForecastIcon}.png`;
         } else {
@@ -29,6 +27,14 @@
         align-items: center;
         justify-content: center;
     }
+
+    .weather-animation {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+    }
 </style>
 <div class="weather">
     {#if sessionForecast}
@@ -38,3 +44,4 @@
         <p>NO FORECAST AVAILABLE YET</p>
     {/if}
 </div>
+<div class="weather-animation"></div>
