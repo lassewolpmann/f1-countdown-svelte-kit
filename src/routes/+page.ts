@@ -1,5 +1,5 @@
 /** @type {import('./$types').PageLoad} */
-import { getWeatherForecast } from "$lib/functions/WeatherForecast";
+import { getWeatherForecast, getSessionDateForecast } from "$lib/functions/WeatherForecast";
 import type { Forecast } from "$lib/functions/WeatherForecast";
 
 interface Event {
@@ -16,40 +16,55 @@ interface Event {
 interface SeriesData {
     nextEvents: Array<Event>,
     previousEvent: Event | undefined,
-    weatherForecast: Forecast
+    weatherForecast: Array<Forecast>
 }
 
 export const load = (async ({ fetch }: any) => {
     const data: { [key: string]: SeriesData } = {}
 
     const seriesList: string[] = ['f1', 'f2', 'f3'];
-    const currentYear: number = new Date().getFullYear();
 
     for (const series of seriesList) {
-        const apiURL: URL = new URL(`https://raw.githubusercontent.com/sportstimes/f1/main/_db/${series}/${currentYear}.json`);
-
-        const allEvents: Array<Event> = await getAllEvents(apiURL, fetch);
+        const allEvents: Array<Event> = await getAllEvents(series, fetch);
         const nextEvents: Array<Event> = getNextEvents(allEvents);
 
         data[series] = {} as SeriesData;
         data[series].nextEvents = nextEvents;
         data[series].previousEvent = getPreviousEvent(allEvents, nextEvents);
 
-        const nextEvent: Event = nextEvents[0];
+        // Weather Forecast
+        data[series].weatherForecast = [];
+
+        let nextEvent: Event | undefined = nextEvents.at(0);
+        if (!nextEvent) nextEvent = {} as Event;
+
         const lat: number = nextEvent.latitude;
         const lon: number = nextEvent.longitude;
+
+        const eventDailyForecast = await getWeatherForecast(lat, lon, 'daily', fetch);
+        const eventHourlyForecast = await getWeatherForecast(lat, lon, 'hourly', fetch);
 
         const nextEventSessions: { [key: string]: any } = nextEvent['sessions'];
         const nextEventSessionNames: string[] = Object.keys(nextEvent['sessions']);
 
-        const firstSessionName = nextEventSessionNames.at(0);
-        let firstSessionDate;
+        for (const sessionName of nextEventSessionNames) {
+            const sessionDate = nextEventSessions[sessionName];
 
-        if (firstSessionName) {
-            firstSessionDate = nextEventSessions[firstSessionName];
+            const sessionTimestamp = new Date(sessionDate).getTime();
+            const currentTimestamp = new Date().getTime();
+            const deltaSessionToCurrent = sessionTimestamp - currentTimestamp;
+            const fourDaysInSeconds = 4 * 24 * 60 * 60 * 1000;
+
+            let sessionForecast;
+
+            if (deltaSessionToCurrent < fourDaysInSeconds) {
+                sessionForecast = getSessionDateForecast(eventHourlyForecast, sessionDate);
+            } else {
+                sessionForecast = getSessionDateForecast(eventDailyForecast, sessionDate);
+            }
+
+            if (sessionForecast) data[series].weatherForecast.push(sessionForecast);
         }
-
-        data[series].weatherForecast = await getWeatherForecast(lat, lon, firstSessionDate, fetch)
     }
 
     return {
@@ -58,8 +73,11 @@ export const load = (async ({ fetch }: any) => {
     }
 });
 
-async function getAllEvents(url: URL, fetch: any) {
-    const res: Response = await fetch(url);
+async function getAllEvents(series: string, fetch: any) {
+    const currentYear: number = new Date().getFullYear();
+
+    const apiURL: URL = new URL(`https://raw.githubusercontent.com/sportstimes/f1/main/_db/${series}/${currentYear}.json`);
+    const res: Response = await fetch(apiURL);
 
     const allEvents = await res.json();
 
@@ -75,19 +93,28 @@ function getNextEvents(allEvents: Array<Event>): Event[] {
 
         const raceEndTime: string | undefined = eventSessionTimestamps.at(-1);
 
-        return raceEndTime !== undefined ? new Date(raceEndTime).getTime() > timestamp : false
+        return raceEndTime ? new Date(raceEndTime).getTime() > timestamp : false
     })
 
-
-    if (nextEvents.length === 0) { // @ts-ignore
-        nextEvents = [allEvents.at(-1)];
+    if (nextEvents.length === 0) {
+        const lastEvent: Event | undefined = allEvents.at(-1);
+        if (lastEvent) nextEvents = [lastEvent];
     }
 
     return nextEvents
 }
 
-
 function getPreviousEvent(allEvents: Array<Event>, nextEvents: Array<Event>): Event {
-    // @ts-ignore
-    return allEvents.length === nextEvents.length ? allEvents.at(0) : allEvents.at(-1);
+    let previousEvent;
+
+    if (allEvents.length === nextEvents.length) {
+        previousEvent = allEvents.at(-1);
+    } else {
+        const previousEventIndex = allEvents.length - nextEvents.length - 1;
+        previousEvent = allEvents.at(previousEventIndex);
+    }
+
+    if (!previousEvent) previousEvent = {} as Event
+
+    return previousEvent
 }

@@ -13,22 +13,15 @@ export interface Forecast {
     wind: object        // Wind information
 }
 
-export const getWeatherForecast = async (lat: number, lon: number, sessionDate: string, fetch: any) => {
+export const getWeatherForecast = async (lat: number, lon: number, forecastAccuracy: string, fetch: any) => {
     // TODO: Add rate limiting for API calls
     // Current limits: 3,000 calls/minute and 100,000,000 calls/month
     // At the current rate of site visits, rate limiting won't be necessary
     // It's still a good idea to implement it sooner than later
 
-    // TODO: Create Postgres database and store site calls
-
-    const sessionTimestamp = new Date(sessionDate).getTime();
-    const currentTimestamp = new Date().getTime();
-    const deltaSessionToCurrent = sessionTimestamp - currentTimestamp;
-    const fourDaysInSeconds = 4 * 24 * 60 * 60 * 1000;
-
     const apiKey: string = PUBLIC_OPEN_WEATHER_API_KEY;
 
-    const forecastAccuracy: string = deltaSessionToCurrent > fourDaysInSeconds ? 'daily' : 'hourly';
+    // const forecastAccuracy: string = deltaSessionToCurrent > fourDaysInSeconds ? 'daily' : 'hourly';
 
     const apiUrl: URL = new URL(`https://pro.openweathermap.org/data/2.5/forecast/${forecastAccuracy}`);
     apiUrl.searchParams.append('lat', lat.toString());
@@ -37,13 +30,7 @@ export const getWeatherForecast = async (lat: number, lon: number, sessionDate: 
     apiUrl.searchParams.append('units', 'metric');
     apiUrl.searchParams.append('mode', 'json');
 
-    let cnt;
-    if (deltaSessionToCurrent > fourDaysInSeconds) {
-        cnt = '16';
-    } else {
-        cnt = '96';
-    }
-
+    const cnt = forecastAccuracy === 'daily' ? '16' : '96';
     apiUrl.searchParams.append('cnt', cnt);
 
     const res = await fetch(apiUrl);
