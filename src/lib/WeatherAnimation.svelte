@@ -5,6 +5,8 @@
     let rainDropCount, cloudCoverage;
     let rainDropArray;
 
+    // TODO: Fix animation for mobile screens
+
     $: {
         const sessionForecast = weatherForecast[currentSessionIndex];
 
