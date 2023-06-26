@@ -27,14 +27,6 @@
         align-items: center;
         justify-content: center;
     }
-
-    .weather-animation {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-    }
 </style>
 <div class="weather">
     {#if sessionForecast}
@@ -44,4 +36,3 @@
         <p>NO FORECAST AVAILABLE YET</p>
     {/if}
 </div>
-<div class="weather-animation"></div>
