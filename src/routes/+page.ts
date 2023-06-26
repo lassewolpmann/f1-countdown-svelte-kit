@@ -53,7 +53,9 @@ export const load = (async ({ fetch }: any) => {
             const sessionTimestamp = new Date(sessionDate).getTime();
             const currentTimestamp = new Date().getTime();
             const deltaSessionToCurrent = sessionTimestamp - currentTimestamp;
-            const fourDaysInSeconds = 4 * 24 * 60 * 60 * 1000;
+
+            // Need to subtract one hour to account for weather forecast accuracy
+            const fourDaysInSeconds = (4 * 24 * 60 * 60 * 1000) - (60 *  60 * 1000);
 
             let sessionForecast;
 

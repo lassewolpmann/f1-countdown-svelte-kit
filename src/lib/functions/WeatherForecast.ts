@@ -60,6 +60,8 @@ export const getSessionDateForecast = (allForecast: Forecast[], sessionDate: str
         }
     })
 
+    console.log(filteredForecast);
+
     if (filteredForecast.length > 0) {
         return filteredForecast.at(0)
     } else {
