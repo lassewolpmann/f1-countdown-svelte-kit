@@ -56,7 +56,7 @@ export const getSessionDateForecast = (allForecast: Forecast[], sessionDate: str
             return sessionDate === forecastDate
         } else if (allForecast.length === 96) {
             // Hourly forecast has 96 entries
-            return sessionTimestamp < forecastTimestamp
+            return sessionTimestamp <= forecastTimestamp
         }
     })
 
