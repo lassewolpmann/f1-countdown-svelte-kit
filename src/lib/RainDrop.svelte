@@ -1,21 +1,26 @@
 <script>
-    import { onMount } from "svelte";
+    import { onDestroy, onMount } from "svelte";
     let rainDrop;
+    let animationTimeout;
 
     onMount(() => {
         const randTop = Math.random() * 10;
         const randLeft = Math.random() * 100;
-        const randAnimationDelay = Math.random();
+        const randAnimationDelay = Math.random() * 5;
 
         if (rainDrop) {
             rainDrop.style.top = `${randTop}%`;
             rainDrop.style.left = `${randLeft}%`;
-            rainDrop.style.animationDuration = `${randAnimationDelay}s`;
+            rainDrop.style.animationDelay = `${randAnimationDelay}s`;
 
-            setTimeout(() => {
+            animationTimeout = setTimeout(() => {
                 rainDrop.style.visibility = 'visible';
-            }, 250);
+            }, randAnimationDelay * 1000);
         }
+    })
+
+    onDestroy(() => {
+        clearTimeout(animationTimeout);
     })
 </script>
 <style>
@@ -23,7 +28,6 @@
         position: absolute;
         top: 0;
         left: 0;
-        z-index: -1;
 
         width: 2px;
         height: 30px;
@@ -31,20 +35,20 @@
 
         animation-name: rainDropFalling;
         animation-iteration-count: infinite;
+        animation-duration: 1s;
 
         visibility: hidden;
     }
 
     @keyframes rainDropFalling {
         0% {
-            transform: translateY(0vh);
+            top: 0;
             opacity: 0;
-        } 10% {
+        } 20% {
             opacity: 1;
-        } 75% {
-            opacity: 0;
         } to {
-            transform: translateY(100vh);
+            top: 100%;
+            opacity: 0;
         }
     }
 </style>

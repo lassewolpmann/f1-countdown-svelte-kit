@@ -1,49 +1,39 @@
 <script>
     import RainDrop from "$lib/RainDrop.svelte";
+
     export let weatherForecast, currentSessionIndex;
 
-    let rainDropCount, cloudCoverage;
-    let rainDropArray;
-
-    // TODO: Fix animation for mobile screens
+    let rainDropCount, rainDropArray;
 
     $: {
         const sessionForecast = weatherForecast[currentSessionIndex];
 
         if (sessionForecast) {
-            rainDropCount = sessionForecast['pop'] * 100;
-            cloudCoverage = typeof(sessionForecast['clouds']) === 'object' ? sessionForecast['clouds']['all'] : sessionForecast['clouds']
-
             rainDropArray = []
 
-            for (let i = 0; i < rainDropCount; i++) {
+            for (let i = 0; i < sessionForecast['pop'] * 100; i++) {
                 rainDropArray.push(RainDrop);
             }
         }
     }
 </script>
 <style>
-    .weather-animation {
+    .rain {
         position: absolute;
-        z-index: 0;
         width: 100%;
         height: 100%;
         overflow: hidden;
     }
-
-    .rain, .clouds {
-        position: absolute;
-        width: 100%;
-        height: 100%;
-    }
-
-
 </style>
-<div class="weather-animation">
-    <div class="rain">
-        {#each rainDropArray as rainDrop}
-            <svelte:component this={rainDrop} />
-        {/each}
-    </div>
-    <div class="clouds"></div>
+<div class="rain">
+    {#each rainDropArray as rainDrop}
+        <svelte:component this={rainDrop} />
+    {/each}
 </div>
+<!--
+<div class="clouds">
+    {#each cloudArray as cloud}
+        <svelte:component this={cloud} />
+    {/each}
+</div>
+-->
