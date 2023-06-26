@@ -3,6 +3,7 @@
     import SessionSelection from "$lib/SessionSelection.svelte";
     import RaceTitle from "$lib/RaceTitle.svelte";
     import WeatherForecast from "$lib/WeatherForecast.svelte";
+    import WeatherAnimation from "$lib/WeatherAnimation.svelte";
 
     import { calculateDelta, deltaToDays, deltaToHours, deltaToMinutes, deltaToSeconds, daysToPercent, hoursToPercent, minutesToPercent, secondsToPercent } from "$lib/functions/Timer.ts";
 
@@ -42,7 +43,9 @@
 
     .timer {
         flex-direction: column;
-        margin: 20px 0;
+        width: 100%;
+        padding: 20px 0;
+        position: relative;
     }
 
     .timer-elements {
@@ -74,4 +77,6 @@
             currentSessionIndex={currentSessionIndex}
             weatherForecast={weatherForecast}
     />
+
+    <WeatherAnimation weatherForecast={weatherForecast} currentSessionIndex={currentSessionIndex} />
 </div>
