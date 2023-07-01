@@ -22,7 +22,7 @@
             sessionForecastIconUrl = `https://openweathermap.org/img/wn/${sessionForecastIcon}.png`;
 
             weatherDescription = sessionForecast['weather'][0]['description'].toUpperCase();
-            riskOfRain = sessionForecast['pop'] * 100;
+            riskOfRain = Math.floor(sessionForecast['pop'] * 100);
         } else {
             sessionForecast = undefined;
         }
