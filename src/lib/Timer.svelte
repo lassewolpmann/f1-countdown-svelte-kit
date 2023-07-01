@@ -78,5 +78,9 @@
             weatherForecast={weatherForecast}
     />
 
-    <WeatherAnimation weatherForecast={weatherForecast} currentSessionIndex={currentSessionIndex} />
+    <WeatherAnimation
+            weatherForecast={weatherForecast}
+            currentSessionIndex={currentSessionIndex}
+            nextEventSessions={nextEventSessions}
+    />
 </div>

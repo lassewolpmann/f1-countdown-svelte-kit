@@ -3,7 +3,8 @@
     export let currentSessionIndex;
     export let weatherForecast;
 
-    let sessionForecast, sessionForecastIconUrl;
+    let sessionForecast, sessionForecastIconUrl, sessionInPast;
+    let weatherDescription, riskOfRain;
 
     $: {
         const currentSessionName = Object.keys(nextEventSessions).at(currentSessionIndex);
@@ -13,9 +14,15 @@
 
         // Only give weather forecast to sessions that are in the future
         // TODO: Implement Historical Weather API calls
-        if (sessionForecast && new Date(currentSessionDate).getTime() > new Date().getTime()) {
+        // TODO: Delete
+        if (sessionForecast) {
+            sessionInPast = new Date(currentSessionDate).getTime() <= new Date().getTime();
+
             const sessionForecastIcon = sessionForecast['weather'][0]['icon'];
             sessionForecastIconUrl = `https://openweathermap.org/img/wn/${sessionForecastIcon}.png`;
+
+            weatherDescription = sessionForecast['weather'][0]['description'].toUpperCase();
+            riskOfRain = sessionForecast['pop'] * 100;
         } else {
             sessionForecast = undefined;
         }
@@ -26,13 +33,23 @@
         display: flex;
         align-items: center;
         justify-content: center;
+        flex-direction: column;
+    }
+
+    .weather > span {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: row;
     }
 </style>
 <div class="weather">
-    {#if sessionForecast}
-        <p>{sessionForecast['weather'][0]['description'].toUpperCase()}</p>
-        <img src="{sessionForecastIconUrl}" alt="{sessionForecast['weather'][0]['main']}">
-    {:else}
-        <p>NO FORECAST AVAILABLE YET</p>
+    {#if sessionForecast && !sessionInPast}
+        <span>{weatherDescription} <img src="{sessionForecastIconUrl}" alt="{sessionForecast['weather'][0]['main']}"></span>
+        {#if riskOfRain > 0}
+            <span>RISK OF RAIN: {riskOfRain}%</span>
+        {/if}
+    {:else if !sessionForecast}
+        <p>NO FORECAST AVAILABLE</p>
     {/if}
 </div>
