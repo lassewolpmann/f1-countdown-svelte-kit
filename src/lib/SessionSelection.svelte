@@ -10,6 +10,8 @@
         nextEventSessionNames = Object.keys(nextEventSessions);
         currentSessionIndex = findCurrentSessionIndex(nextEventSessions);
     }
+
+    // TODO: Make button disabled and indicate that session is in the past somehow
 </script>
 
 <style>

@@ -14,7 +14,6 @@
 
         // Only give weather forecast to sessions that are in the future
         // TODO: Implement Historical Weather API calls
-        // TODO: Delete
         if (sessionForecast) {
             sessionInPast = new Date(currentSessionDate).getTime() <= new Date().getTime();
 
