@@ -1,6 +1,6 @@
 <script>
     import TimerElement from "$lib/components/Timer/TimerElement.svelte";
-    import SessionSelection from "$lib/components/SessionSelection/SessionSelection.svelte";
+    import SessionSelection from "$lib/components/SessionSelection.svelte";
     import RaceTitle from "$lib/components/RaceTitle.svelte";
     import WeatherForecast from "$lib/components/Weather/WeatherForecast.svelte";
 
@@ -51,6 +51,12 @@
         flex-direction: row;
         gap: 50px;
         margin: 20px;
+    }
+
+    @media only screen and (max-width: 768px) {
+        .timer-elements {
+            gap: 25px;
+        }
     }
 </style>
 

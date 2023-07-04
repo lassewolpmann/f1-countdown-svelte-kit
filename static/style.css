@@ -27,7 +27,7 @@ body {
 button {
     font-family: inherit;
     font-weight: bold;
-    font-size: 1.2rem;
+    font-size: 20px;
     color: var(--secondary-text-color);
     cursor: pointer;
     background: var(--button-inactive-color);
@@ -48,11 +48,6 @@ button:hover {
     color: var(--main-text-color);
 }
 
-button.selected {
-    background: var(--button-active-color);
-    color: var(--main-text-color);
-}
-
 button:disabled {
     text-decoration: line-through;
 }
@@ -61,4 +56,10 @@ button:disabled:hover {
     cursor: default;
     background: var(--button-inactive-color);
     color: var(--secondary-text-color);
+}
+
+@media only screen and (max-width: 768px) {
+    button {
+        font-size: 18px;
+    }
 }

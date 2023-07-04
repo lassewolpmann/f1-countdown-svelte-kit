@@ -8,11 +8,11 @@
     let diameter, strokeWidth, radius, dashArray;
 
     $: {
-        if (innerWidth >= 768) {
+        if (innerWidth >= 769) {
             diameter = 270;
             strokeWidth = 12;
         } else {
-            diameter = 125;
+            diameter = 135;
             strokeWidth = 6;
         }
 
@@ -57,12 +57,12 @@
 
     .time {
         font-weight: 600;
-        font-size: 3.7rem;
+        font-size: 60px;
     }
 
     .text {
         color: var(--secondary-text-color);
-        font-size: 1.3rem;
+        font-size: 20px;
     }
 
     svg {
@@ -84,11 +84,11 @@
 
     @media only screen and (max-width: 768px) {
         .time {
-            font-size: 2.3rem;
+            font-size: 36px;
         }
 
         .text {
-            font-size: 1rem;
+            font-size: 16px;
         }
     }
 </style>
