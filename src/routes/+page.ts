@@ -46,8 +46,8 @@ export const load = (async ({ fetch }: any) => {
         // @ts-ignore
         const nextEventLastSessionDate = nextEventSessions[nextEventLastSessionName];
 
-        const nextEventLastSessionTimestamp = new Date(nextEventLastSessionDate).getTime();
-        const fourDaysInMs = 4 * 24 * 60 * 60 * 1000;
+        const nextEventLastSessionTimestamp: number = new Date(nextEventLastSessionDate).getTime();
+        const fourDaysInMs: number = 4 * 24 * 60 * 60 * 1000;
 
         let forecast;
 

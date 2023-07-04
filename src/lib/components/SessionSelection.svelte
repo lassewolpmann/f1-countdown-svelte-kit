@@ -39,7 +39,7 @@
 
     .all-sessions {
         transition: transform 0.3s ease;
-        width: 220px;
+        width: 280px;
 
         display: flex;
         flex-direction: row;
@@ -75,7 +75,7 @@
         }
 
         .all-sessions {
-            width: 180px;
+            width: 200px;
         }
     }
 </style>
