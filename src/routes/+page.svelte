@@ -1,10 +1,10 @@
 <script>
-    import Footer from "$lib/Footer.svelte";
-    import Timer from "$lib/Timer.svelte";
-    import UpcomingEventList from "$lib/UpcomingEventList.svelte";
-    import SeriesSelection from "$lib/SeriesSelection.svelte";
-    import Border from "$lib/Border.svelte";
-    import MetaDescription from "$lib/MetaDescription.svelte";
+    import Footer from "$lib/components/Footer.svelte";
+    import Timer from "$lib/components/Timer/Timer.svelte";
+    import UpcomingEventList from "$lib/components/UpcomingEventList.svelte";
+    import SeriesSelection from "$lib/components/SeriesSelection.svelte";
+    import Border from "$lib/components/Border.svelte";
+    import MetaDescription from "$lib/components/MetaDescription.svelte";
 
     import { dev } from '$app/environment';
     import { inject } from '@vercel/analytics';

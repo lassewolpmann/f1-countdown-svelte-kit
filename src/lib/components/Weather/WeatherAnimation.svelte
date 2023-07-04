@@ -1,5 +1,5 @@
 <script>
-    import RainDrop from "$lib/RainDrop.svelte";
+    import RainDrop from "$lib/components/Weather/RainDrop.svelte";
 
     export let weatherForecast, currentSessionIndex, nextEventSessions;
 
@@ -30,13 +30,6 @@
 </style>
 <div class="rain">
     {#each rainDropArray as rainDrop}
-        <svelte:component this={rainDrop} />
+        <RainDrop />
     {/each}
 </div>
-<!--
-<div class="clouds">
-    {#each cloudArray as cloud}
-        <svelte:component this={cloud} />
-    {/each}
-</div>
--->

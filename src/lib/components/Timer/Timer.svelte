@@ -1,9 +1,8 @@
 <script>
-    import TimerElement from "$lib/TimerElement.svelte";
-    import SessionSelection from "$lib/SessionSelection.svelte";
-    import RaceTitle from "$lib/RaceTitle.svelte";
-    import WeatherForecast from "$lib/WeatherForecast.svelte";
-    import WeatherAnimation from "$lib/WeatherAnimation.svelte";
+    import TimerElement from "$lib/components/Timer/TimerElement.svelte";
+    import SessionSelection from "$lib/components/SessionSelection/SessionSelection.svelte";
+    import RaceTitle from "$lib/components/RaceTitle.svelte";
+    import WeatherForecast from "$lib/components/Weather/WeatherForecast.svelte";
 
     import { calculateDelta, deltaToDays, deltaToHours, deltaToMinutes, deltaToSeconds, daysToPercent, hoursToPercent, minutesToPercent, secondsToPercent } from "$lib/functions/Timer.ts";
 
@@ -76,11 +75,5 @@
             nextEventSessions={nextEventSessions}
             currentSessionIndex={currentSessionIndex}
             weatherForecast={weatherForecast}
-    />
-
-    <WeatherAnimation
-            weatherForecast={weatherForecast}
-            currentSessionIndex={currentSessionIndex}
-            nextEventSessions={nextEventSessions}
     />
 </div>

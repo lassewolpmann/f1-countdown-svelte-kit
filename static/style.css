@@ -52,3 +52,13 @@ button.selected {
     background: var(--button-active-color);
     color: var(--main-text-color);
 }
+
+button:disabled {
+    text-decoration: line-through;
+}
+
+button:disabled:hover {
+    cursor: default;
+    background: var(--button-inactive-color);
+    color: var(--secondary-text-color);
+}
