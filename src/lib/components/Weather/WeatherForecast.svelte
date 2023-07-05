@@ -4,10 +4,11 @@
     import { beforeUpdate } from "svelte";
 
     export let nextEventSessions, currentSessionIndex, weatherForecast;
-    let forecastElementsList, accuracy, currentForecastIndex, nextEventSessionDates, sessionDate, sessionTimestamp;
+    let forecastElementsList;
+    let accuracy, currentForecastIndex, nextEventSessionDates, sessionDate, sessionTimestamp;
     let filteredForecast;
 
-    const range = 2;
+    const range = 4;
 
     beforeUpdate(() => {
         filteredForecast = []
@@ -32,14 +33,13 @@
 <style>
     .widget {
         background: var(--button-inactive-color);
-        border-radius: 15px;
 
-        width: min(90vw, 500px);
+        width: 100%;
 
         padding: 15px;
         margin: 15px 0;
 
-        overflow-x: hidden;
+        overflow: hidden;
 
         display: flex;
         flex-direction: row;
@@ -47,6 +47,16 @@
         justify-content: center;
 
         position: relative;
+    }
+
+    .widget:after {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        height: 100%;
+        width: 100%;
+        content: "";
+        background-image: linear-gradient(90deg, #111, transparent 40%, transparent 60%, #111);
     }
 
     .current-forecast-indicator {

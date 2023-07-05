@@ -27,17 +27,27 @@
         align-items: center;
         justify-content: center;
 
+        font-size: 16px;
+
         margin: 5px 20px;
 
         min-width: 50px;
         max-width: 50px;
 
-        min-height: 125px;
-        max-height: 125px;
+        min-height: 105px;
+        max-height: 105px;
     }
 
     .forecast-element > span {
         white-space: nowrap;
+    }
+
+    @media only screen and (max-width: 768px) {
+        .forecast-element {
+            font-size: 14px;
+            min-height: 95px;
+            max-height: 95px;
+        }
     }
 </style>
 <div class="forecast-element" bind:this={forecastEl}>

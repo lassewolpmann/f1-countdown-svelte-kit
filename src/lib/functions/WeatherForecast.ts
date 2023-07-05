@@ -44,7 +44,14 @@ export const findCurrentForecast = (sessionTimestamp: number, weatherForecast: F
             const sessionMinutes = new Date(sessionTimestamp).getUTCMinutes();
 
             // Always round down the minutes to the last full hour
-            if (sessionMinutes !== 0) sessionTimestamp = sessionTimestamp - (sessionMinutes * 60 * 1000);
+
+            if (sessionMinutes !== 0) {
+                if (sessionMinutes < 30) {
+                    sessionTimestamp = sessionTimestamp - (sessionMinutes * 60 * 1000);
+                } else {
+                    sessionTimestamp = sessionTimestamp + ((60 * 60 * 1000) - (sessionMinutes * 60 * 1000));
+                }
+            }
 
             const forecastTimestamp = forecast.dt * 1000;
 
