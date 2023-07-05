@@ -85,48 +85,50 @@
 
 <table class="upcoming">
     <caption>Upcoming Grands Prix</caption>
-    {#each nextEvents as event, i}
-        <table bind:this={events[i]} class="event">
-            <thead>
-            <tr class="table-head-row">
-                <th class="location">
-                    <a href="{getLocationURL(event)}" target="_blank">
-                        <button><i class="fa-solid fa-location-dot"></i></button>
-                    </a>
-                </th>
-                <td class="name">{parseName(event['name'])}</td>
-                {#if !nextEvents[i].sessionsTableVisible}
-                    <td class="date">
-                        <span class="day">{parseDate(event.sessions[Object.keys(event.sessions).at(-1)])}</span><br>
-                        <span class="time">{parseTime(event.sessions[Object.keys(event.sessions).at(-1)])}</span>
-                    </td>
-                {:else}
-                    <td class="date"></td>
-                {/if}
-                <td class="collapse">
-                    <button on:click={() => nextEvents[i].sessionsTableVisible = !nextEvents[i].sessionsTableVisible}>
-                        {#if nextEvents[i].sessionsTableVisible}
-                            <i class="fa-solid fa-minus"></i>
-                        {:else}
-                            <i class="fa-solid fa-plus"></i>
-                        {/if}
-                    </button>
-                </td>
-            </tr>
-            </thead>
-            {#if nextEvents[i].sessionsTableVisible}
-                <tbody class="sessions">
-                {#each Object.keys(event['sessions']) as session}
-                    <tr>
-                        <td class="session-name" colspan="2">{session.toUpperCase()}</td>
-                        <td class="date" colspan="2">
-                            <span class="day">{parseDate(event['sessions'][session])}</span>
-                            <span class="time">{parseTime(event['sessions'][session])}</span>
+    {#if nextEvents}
+        {#each nextEvents as event, i}
+            <table bind:this={events[i]} class="event">
+                <thead>
+                <tr class="table-head-row">
+                    <th class="location">
+                        <a href="{getLocationURL(event)}" target="_blank">
+                            <button><i class="fa-solid fa-location-dot"></i></button>
+                        </a>
+                    </th>
+                    <td class="name">{parseName(event['name'])}</td>
+                    {#if !nextEvents[i].sessionsTableVisible}
+                        <td class="date">
+                            <span class="day">{parseDate(event.sessions[Object.keys(event.sessions).at(-1)])}</span><br>
+                            <span class="time">{parseTime(event.sessions[Object.keys(event.sessions).at(-1)])}</span>
                         </td>
-                    </tr>
-                {/each}
-                </tbody>
-            {/if}
-        </table>
-    {/each}
+                    {:else}
+                        <td class="date"></td>
+                    {/if}
+                    <td class="collapse">
+                        <button on:click={() => nextEvents[i].sessionsTableVisible = !nextEvents[i].sessionsTableVisible}>
+                            {#if nextEvents[i].sessionsTableVisible}
+                                <i class="fa-solid fa-minus"></i>
+                            {:else}
+                                <i class="fa-solid fa-plus"></i>
+                            {/if}
+                        </button>
+                    </td>
+                </tr>
+                </thead>
+                {#if nextEvents[i].sessionsTableVisible}
+                    <tbody class="sessions">
+                    {#each Object.keys(event['sessions']) as session}
+                        <tr>
+                            <td class="session-name" colspan="2">{session.toUpperCase()}</td>
+                            <td class="date" colspan="2">
+                                <span class="day">{parseDate(event['sessions'][session])}</span>
+                                <span class="time">{parseTime(event['sessions'][session])}</span>
+                            </td>
+                        </tr>
+                    {/each}
+                    </tbody>
+                {/if}
+            </table>
+        {/each}
+    {/if}
 </table>

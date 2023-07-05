@@ -1,6 +1,6 @@
 <script>
     import { calculateOffset } from "$lib/functions/SeriesSelection.ts";
-    import {afterUpdate} from "svelte";
+    import { afterUpdate } from "svelte";
 
     export let seriesList;
     export let currentSeries;

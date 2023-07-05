@@ -1,21 +1,33 @@
 <script>
     import ForecastElement from "$lib/components/Weather/ForecastElement.svelte";
     import { findCurrentForecast } from "$lib/functions/WeatherForecast.ts";
+    import { beforeUpdate } from "svelte";
 
     export let nextEventSessions, currentSessionIndex, weatherForecast;
-    let forecastElementsList, accuracy, offset;
+    let forecastElementsList, accuracy, currentForecastIndex, nextEventSessionDates, sessionDate, sessionTimestamp;
+    let filteredForecast;
 
-    $: {
-        const nextEventSessionDates = Object.values(nextEventSessions);
-        const sessionDate = nextEventSessionDates[currentSessionIndex];
-        const sessionTimestamp = new Date(sessionDate).getTime();
+    const range = 2;
 
-        accuracy  = weatherForecast.length === 96 ? 'hourly': 'daily'
+    beforeUpdate(() => {
+        filteredForecast = []
 
-        if (forecastElementsList && weatherForecast) {
-            offset = findCurrentForecast(forecastElementsList, sessionTimestamp, weatherForecast, accuracy);
+        nextEventSessionDates = Object.values(nextEventSessions);
+        sessionDate = nextEventSessionDates[currentSessionIndex];
+        sessionTimestamp = new Date(sessionDate).getTime();
+
+        accuracy  = weatherForecast.length === 96 ? 'hourly': 'daily';
+
+        currentForecastIndex = findCurrentForecast(sessionTimestamp, weatherForecast, accuracy);
+
+        for (let i = currentForecastIndex - range; i <= currentForecastIndex + range; i++) {
+            if (i < 0) {
+                filteredForecast.push(undefined);
+            } else {
+                filteredForecast.push(weatherForecast.at(i))
+            }
         }
-    }
+    })
 </script>
 <style>
     .widget {
@@ -47,9 +59,9 @@
     }
 </style>
 <div class="widget" bind:this={forecastElementsList}>
-    {#if weatherForecast.length > 0}
-        {#each weatherForecast as forecast}
-            <ForecastElement forecast={forecast} accuracy={accuracy} offset={offset} />
+    {#if filteredForecast}
+        {#each filteredForecast as forecast}
+            <ForecastElement forecast={forecast} accuracy={accuracy} />
         {/each}
     {:else}
         <h2>No forecast</h2>

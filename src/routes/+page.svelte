@@ -8,15 +8,18 @@
 
     import { dev } from '$app/environment';
     import { inject } from '@vercel/analytics';
+    import { beforeUpdate } from "svelte";
 
     inject({ mode: dev ? 'development' : 'production' });
 
     export let data;
 
-    let currentSeries, currentSeriesData;
+    let currentSeries = 'f1', currentSeriesData, nextEvents;
 
-    currentSeries = data['seriesList'][0];
-    $: currentSeriesData = data['seriesData'][currentSeries];
+    beforeUpdate(() => {
+        currentSeriesData = data['seriesData'][currentSeries];
+        nextEvents = currentSeriesData['nextEvents']
+    })
 </script>
 <style>
     main, footer {
@@ -51,7 +54,7 @@
     <Border />
     <Timer currentSeriesData={currentSeriesData} />
     <Border />
-    <UpcomingEventList nextEvents={currentSeriesData['nextEvents']} />
+    <UpcomingEventList nextEvents={nextEvents} />
     <Border />
 </main>
 <footer>

@@ -1,4 +1,4 @@
-import { PUBLIC_OPEN_WEATHER_API_KEY } from '$env/static/public';
+import {PUBLIC_OPEN_WEATHER_API_KEY} from '$env/static/public';
 
 export interface Forecast {
     clouds: object,     // Cloudiness in %
@@ -38,13 +38,7 @@ export const getWeatherForecast = async (lat: number, lon: number, forecastAccur
     }
 }
 
-export const findCurrentForecast = (forecastElementsList: HTMLElement, sessionTimestamp: number, weatherForecast: Forecast[], accuracy: string) => {
-    const childNodes = Array.from(forecastElementsList.childNodes).filter((node: ChildNode) => {
-        const el = node as Element;
-
-        if (el.classList) return el.classList.contains('forecast-element');
-    });
-
+export const findCurrentForecast = (sessionTimestamp: number, weatherForecast: Forecast[], accuracy: string) => {
     const currentWeatherForecast = weatherForecast.filter((forecast: Forecast) => {
         if (accuracy === 'hourly') {
             const sessionMinutes = new Date(sessionTimestamp).getUTCMinutes();
@@ -63,14 +57,5 @@ export const findCurrentForecast = (forecastElementsList: HTMLElement, sessionTi
         }
     }).at(0)
 
-    const currentWeatherForecastIndex = weatherForecast.findIndex((forecast) => forecast === currentWeatherForecast)
-
-    const firstNode = childNodes.at(0) as Element;
-    const currentNode = childNodes.at(currentWeatherForecastIndex) as Element;
-    const lastNode = childNodes.at(-1) as Element;
-
-    const offsetLeft = currentNode.getBoundingClientRect().left - firstNode.getBoundingClientRect().left;
-    const offsetRight = lastNode.getBoundingClientRect().left - currentNode.getBoundingClientRect().left;
-
-    return (offsetRight - offsetLeft) / 2
+    return weatherForecast.findIndex((forecast: Forecast): boolean => forecast === currentWeatherForecast)
 }

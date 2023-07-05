@@ -5,6 +5,7 @@
     import WeatherForecast from "$lib/components/Weather/WeatherForecast.svelte";
 
     import { calculateDelta, deltaToDays, deltaToHours, deltaToMinutes, deltaToSeconds, daysToPercent, hoursToPercent, minutesToPercent, secondsToPercent } from "$lib/functions/Timer.ts";
+    import { beforeUpdate } from "svelte";
 
     export let currentSeriesData;
 
@@ -14,22 +15,18 @@
     let deltaCounter;
     let weatherForecast;
 
-    $: {
+    beforeUpdate(() => {
         nextEvents = currentSeriesData['nextEvents'];
         nextEvent = nextEvents[0];
         nextEventSessions = nextEvent['sessions'];
         weatherForecast = currentSeriesData['weatherForecast'];
-    }
 
-    $: {
         clearInterval(deltaCounter);
         delta = calculateDelta(nextEventSessions, currentSessionIndex);
         deltaCounter = setInterval(() => {
-            if (delta > 0) {
-                delta -= 1;
-            }
+            delta = calculateDelta(nextEventSessions, currentSessionIndex);
         }, 1000);
-    }
+    })
 </script>
 
 <style>
@@ -60,10 +57,12 @@
     }
 </style>
 
+
 <div class="timer">
     <RaceTitle
             nextEvents={nextEvents}
     />
+
 
     <SessionSelection
             nextEventSessions={nextEventSessions}

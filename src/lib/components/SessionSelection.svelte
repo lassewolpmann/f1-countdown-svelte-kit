@@ -1,20 +1,29 @@
 <script>
-    import { findCurrentSessionIndex } from "$lib/functions/SessionSelection.ts";
     import { calculateOffset } from "$lib/functions/SeriesSelection.ts";
-    import { afterUpdate } from "svelte";
+    import { afterUpdate, beforeUpdate, onMount } from "svelte";
 
     export let nextEventSessions, currentSessionIndex;
-    let sessionListEl;
-
-    $: currentSessionIndex = findCurrentSessionIndex(nextEventSessions);
+    let sessionListEl, sessionNames;
 
     const decreaseSessionIndex = () => {
         if (currentSessionIndex > 0) currentSessionIndex--;
     }
 
     const increaseSessionIndex = () => {
-        if (currentSessionIndex < Object.keys(nextEventSessions).length - 1) currentSessionIndex++;
+        if (currentSessionIndex < sessionNames.length - 1) currentSessionIndex++;
     }
+
+    onMount(() => {
+        currentSessionIndex = 0;
+    })
+
+    beforeUpdate(() => {
+        sessionNames = Object.keys(nextEventSessions);
+
+        if (currentSessionIndex > sessionNames.length - 1) {
+            currentSessionIndex = sessionNames.length - 1;
+        }
+    })
 
     afterUpdate(() => {
         const offset = calculateOffset(currentSessionIndex, sessionListEl);
@@ -83,9 +92,11 @@
 <div class="session-selection" data-nosnippet>
     <button on:click={decreaseSessionIndex}><i class="fa-solid fa-arrow-left"></i></button>
     <div class="all-sessions" bind:this={sessionListEl}>
-        {#each Object.keys(nextEventSessions) as sessionName, sessionIndex}
-            <span class="session {sessionIndex === currentSessionIndex ? 'selected' : ''}">{sessionName.toUpperCase()}</span>
-        {/each}
+        {#if sessionNames}
+            {#each sessionNames as sessionName, sessionIndex}
+                <span class="session {sessionIndex === currentSessionIndex ? 'selected' : ''}">{sessionName.toUpperCase()}</span>
+            {/each}
+        {/if}
     </div>
     <button on:click={increaseSessionIndex}><i class="fa-solid fa-arrow-right"></i></button>
 </div>
