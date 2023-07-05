@@ -1,11 +1,11 @@
 <script>
-    import TimerElement from "$lib/TimerElement.svelte";
-    import SessionSelection from "$lib/SessionSelection.svelte";
-    import RaceTitle from "$lib/RaceTitle.svelte";
-    import WeatherForecast from "$lib/WeatherForecast.svelte";
-    import WeatherAnimation from "$lib/WeatherAnimation.svelte";
+    import TimerElement from "$lib/components/Timer/TimerElement.svelte";
+    import SessionSelection from "$lib/components/SessionSelection.svelte";
+    import RaceTitle from "$lib/components/RaceTitle.svelte";
+    import WeatherForecast from "$lib/components/Weather/WeatherForecast.svelte";
 
     import { calculateDelta, deltaToDays, deltaToHours, deltaToMinutes, deltaToSeconds, daysToPercent, hoursToPercent, minutesToPercent, secondsToPercent } from "$lib/functions/Timer.ts";
+    import { beforeUpdate } from "svelte";
 
     export let currentSeriesData;
 
@@ -15,22 +15,18 @@
     let deltaCounter;
     let weatherForecast;
 
-    $: {
+    beforeUpdate(() => {
         nextEvents = currentSeriesData['nextEvents'];
         nextEvent = nextEvents[0];
         nextEventSessions = nextEvent['sessions'];
         weatherForecast = currentSeriesData['weatherForecast'];
-    }
 
-    $: {
         clearInterval(deltaCounter);
         delta = calculateDelta(nextEventSessions, currentSessionIndex);
         deltaCounter = setInterval(() => {
-            if (delta > 0) {
-                delta -= 1;
-            }
+            delta = calculateDelta(nextEventSessions, currentSessionIndex);
         }, 1000);
-    }
+    })
 </script>
 
 <style>
@@ -53,12 +49,20 @@
         gap: 50px;
         margin: 20px;
     }
+
+    @media only screen and (max-width: 768px) {
+        .timer-elements {
+            gap: 25px;
+        }
+    }
 </style>
+
 
 <div class="timer">
     <RaceTitle
             nextEvents={nextEvents}
     />
+
 
     <SessionSelection
             nextEventSessions={nextEventSessions}
@@ -76,11 +80,5 @@
             nextEventSessions={nextEventSessions}
             currentSessionIndex={currentSessionIndex}
             weatherForecast={weatherForecast}
-    />
-
-    <WeatherAnimation
-            weatherForecast={weatherForecast}
-            currentSessionIndex={currentSessionIndex}
-            nextEventSessions={nextEventSessions}
     />
 </div>

@@ -1,4 +1,6 @@
 <script>
+    import { beforeUpdate } from "svelte";
+
     export let timeValue;
     export let timeValuePct;
     export let timeUnit;
@@ -6,29 +8,25 @@
 
     let innerWidth = 0;
     let diameter, strokeWidth, radius, dashArray;
+    let timerEl, svgEl, countdownCircleEl, fillCircleEl;
 
-    $: {
-        if (innerWidth >= 768) {
+    beforeUpdate(() => {
+        if (innerWidth >= 769) {
             diameter = 270;
             strokeWidth = 12;
         } else {
-            diameter = 125;
+            diameter = 135;
             strokeWidth = 6;
         }
 
         radius = diameter / 2 - (strokeWidth / 2);
-    }
+        dashArray =  2 * Math.PI * radius;
 
-    // 2*pi*r = circumference of circle
-    $: dashArray =  2 * Math.PI * radius;
+        radius += 'px';
+        diameter += 'px';
+        strokeWidth += 'px';
 
-    let timerEl, svgEl, countdownCircleEl, fillCircleEl;
-    $: {
-        // Make sure all elements exist
         if (timerEl && svgEl && countdownCircleEl && fillCircleEl) {
-            diameter += 'px';
-            strokeWidth += 'px';
-
             timerEl.style.width = diameter;
             timerEl.style.height = diameter;
 
@@ -39,10 +37,12 @@
             countdownCircleEl.style.strokeWidth = strokeWidth;
             countdownCircleEl.style.strokeDasharray = dashArray;
             countdownCircleEl.style.strokeDashoffset = dashArray - dashArray * timeValuePct;
+            countdownCircleEl.setAttribute('r', radius)
 
             fillCircleEl.style.strokeWidth = strokeWidth;
+            fillCircleEl.setAttribute('r', radius)
         }
-    }
+    })
 </script>
 
 <style>
@@ -51,18 +51,16 @@
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        font-size: 2rem;
-        z-index: 1;
     }
 
     .time {
         font-weight: 600;
-        font-size: 3.7rem;
+        font-size: 60px;
     }
 
     .text {
         color: var(--secondary-text-color);
-        font-size: 1.3rem;
+        font-size: 20px;
     }
 
     svg {
@@ -72,7 +70,7 @@
     svg > .countdown-circle {
         fill: transparent;
         stroke-linecap: round;
-        transform: rotate(-90deg);
+        transform: rotate(270deg);
         transform-origin: center;
         transition: stroke-dashoffset 0.5s ease-in-out;
     }
@@ -84,11 +82,11 @@
 
     @media only screen and (max-width: 768px) {
         .time {
-            font-size: 2.3rem;
+            font-size: 36px;
         }
 
         .text {
-            font-size: 1rem;
+            font-size: 16px;
         }
     }
 </style>
@@ -97,18 +95,18 @@
 <div class="timer" bind:this={timerEl} data-nosnippet>
     <svg bind:this={svgEl}>
         <circle
-                class="countdown-circle"
                 bind:this={countdownCircleEl}
+                class="countdown-circle"
                 cx="50%"
                 cy="50%"
-                r="{radius}px"
+                r="0"
         />
         <circle
-                class="fill-circle"
                 bind:this={fillCircleEl}
+                class="fill-circle"
                 cx="50%"
                 cy="50%"
-                r="{radius}px"
+                r="0"
         />
     </svg>
     <span class="time">{timeValue}</span>

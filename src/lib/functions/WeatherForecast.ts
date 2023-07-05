@@ -1,4 +1,4 @@
-import { PUBLIC_OPEN_WEATHER_API_KEY } from '$env/static/public';
+import {PUBLIC_OPEN_WEATHER_API_KEY} from '$env/static/public';
 
 export interface Forecast {
     clouds: object,     // Cloudiness in %
@@ -18,11 +18,7 @@ export const getWeatherForecast = async (lat: number, lon: number, forecastAccur
     // Current limits: 3,000 calls/minute and 100,000,000 calls/month
     // At the current rate of site visits, rate limiting won't be necessary
     // It's still a good idea to implement it sooner than later
-
     const apiKey: string = PUBLIC_OPEN_WEATHER_API_KEY;
-
-    // const forecastAccuracy: string = deltaSessionToCurrent > fourDaysInSeconds ? 'daily' : 'hourly';
-
     const apiUrl: URL = new URL(`https://pro.openweathermap.org/data/2.5/forecast/${forecastAccuracy}`);
     apiUrl.searchParams.append('lat', lat.toString());
     apiUrl.searchParams.append('lon', lon.toString());
@@ -30,6 +26,7 @@ export const getWeatherForecast = async (lat: number, lon: number, forecastAccur
     apiUrl.searchParams.append('units', 'metric');
     apiUrl.searchParams.append('mode', 'json');
 
+    // Get 16 days for daily forecast and 24 hours for hourly forecast
     const cnt = forecastAccuracy === 'daily' ? '16' : '96';
     apiUrl.searchParams.append('cnt', cnt);
 
@@ -41,28 +38,31 @@ export const getWeatherForecast = async (lat: number, lon: number, forecastAccur
     }
 }
 
-export const getSessionDateForecast = (allForecast: Forecast[], sessionDate: string) => {
-    const sessionTimestamp = new Date(sessionDate).getTime();
+export const findCurrentForecast = (sessionTimestamp: number, weatherForecast: Forecast[], accuracy: string) => {
+    const currentWeatherForecast = weatherForecast.filter((forecast: Forecast) => {
+        if (accuracy === 'hourly') {
+            const sessionMinutes = new Date(sessionTimestamp).getUTCMinutes();
 
-    const filteredForecast = allForecast.filter((forecast: Forecast) => {
-        const forecastTimestamp = forecast.dt * 1000;
+            // Always round down the minutes to the last full hour
 
-        if (allForecast.length === 16) {
-            // Daily forecast has 16 entries
-            const sessionDate = new Date(sessionTimestamp).getDate();
-            const forecastDate = new Date(forecastTimestamp).getDate();
+            if (sessionMinutes !== 0) {
+                if (sessionMinutes < 30) {
+                    sessionTimestamp = sessionTimestamp - (sessionMinutes * 60 * 1000);
+                } else {
+                    sessionTimestamp = sessionTimestamp + ((60 * 60 * 1000) - (sessionMinutes * 60 * 1000));
+                }
+            }
 
-            // Return entry that has the same date as session (date in this context means, day of the month (1-31))
-            return sessionDate === forecastDate
-        } else if (allForecast.length === 96) {
-            // Hourly forecast has 96 entries
-            return sessionTimestamp <= forecastTimestamp
+            const forecastTimestamp = forecast.dt * 1000;
+
+            return forecastTimestamp >= sessionTimestamp
+        } else {
+            const forecastDate = new Date(forecast.dt * 1000).getUTCDate();
+            const sessionDate = new Date(sessionTimestamp).getUTCDate();
+
+            return forecastDate === sessionDate
         }
-    })
+    }).at(0)
 
-    if (filteredForecast.length > 0) {
-        return filteredForecast.at(0)
-    } else {
-        return undefined
-    }
+    return weatherForecast.findIndex((forecast: Forecast): boolean => forecast === currentWeatherForecast)
 }

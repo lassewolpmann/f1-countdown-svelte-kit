@@ -1,5 +1,6 @@
 <script>
     import { calculateOffset } from "$lib/functions/SeriesSelection.ts";
+    import { afterUpdate } from "svelte";
 
     export let seriesList;
     export let currentSeries;
@@ -21,10 +22,10 @@
         }
     }
 
-    $: if (seriesListEl) {
+    afterUpdate(() => {
         const offset = calculateOffset(currentSeriesIndex, seriesListEl);
         seriesListEl.style.transform = `translateX(${offset}px)`;
-    }
+    })
 </script>
 <style>
     .series-selection {
@@ -42,8 +43,13 @@
     }
 
     .all-series {
-        text-align: center;
         transition: transform 0.3s ease;
+        width: 150px;
+
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
     }
 
     .series-selection:after {
@@ -57,13 +63,19 @@
     }
 
     .series.selected {
-        color: var(--main-text-color) !important;
+        color: var(--main-text-color);
         font-weight: bold;
     }
 
     .series {
         margin: 0 10px;
         color: var(--secondary-text-color);
+    }
+
+    @media only screen and (max-width: 768px) {
+        .series-selection {
+            font-size: 24px;
+        }
     }
 </style>
 <div class="series-selection">

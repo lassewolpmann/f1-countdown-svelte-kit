@@ -1,5 +1,5 @@
 /** @type {import('./$types').PageLoad} */
-import { getWeatherForecast, getSessionDateForecast } from "$lib/functions/WeatherForecast";
+import { getWeatherForecast } from "$lib/functions/WeatherForecast";
 import type { Forecast } from "$lib/functions/WeatherForecast";
 
 interface Event {
@@ -10,7 +10,7 @@ interface Event {
     round: number;
     slug: string;
     localeKey: string;
-    sessions: Array<any>;
+    sessions: object;
 }
 
 interface SeriesData {
@@ -33,40 +33,31 @@ export const load = (async ({ fetch }: any) => {
         data[series].previousEvent = getPreviousEvent(allEvents, nextEvents);
 
         // Weather Forecast
-        data[series].weatherForecast = [];
-
         let nextEvent: Event | undefined = nextEvents.at(0);
         if (!nextEvent) nextEvent = {} as Event;
 
         const lat: number = nextEvent.latitude;
         const lon: number = nextEvent.longitude;
 
-        const eventDailyForecast = await getWeatherForecast(lat, lon, 'daily', fetch);
-        const eventHourlyForecast = await getWeatherForecast(lat, lon, 'hourly', fetch);
+        // Check delta to last session to decide which forecast to get
+        const nextEventSessions: object = nextEvent.sessions;
+        const nextEventLastSessionName: string | undefined = Object.keys(nextEventSessions).at(-1);
 
-        const nextEventSessions: { [key: string]: any } = nextEvent['sessions'];
-        const nextEventSessionNames: string[] = Object.keys(nextEvent['sessions']);
+        // @ts-ignore
+        const nextEventLastSessionDate = nextEventSessions[nextEventLastSessionName];
 
-        for (const sessionName of nextEventSessionNames) {
-            const sessionDate = nextEventSessions[sessionName];
+        const nextEventLastSessionTimestamp: number = new Date(nextEventLastSessionDate).getTime();
+        const fourDaysInMs: number = 4 * 24 * 60 * 60 * 1000;
 
-            const sessionTimestamp = new Date(sessionDate).getTime();
-            const currentTimestamp = new Date().getTime();
-            const deltaSessionToCurrent = sessionTimestamp - currentTimestamp;
+        let forecast;
 
-            // Need to subtract one hour to account for weather forecast accuracy
-            const fourDaysInSeconds = (4 * 24 * 60 * 60 * 1000) - (60 *  60 * 1000);
-
-            let sessionForecast;
-
-            if (deltaSessionToCurrent < fourDaysInSeconds) {
-                sessionForecast = getSessionDateForecast(eventHourlyForecast, sessionDate);
-            } else {
-                sessionForecast = getSessionDateForecast(eventDailyForecast, sessionDate);
-            }
-
-            if (sessionForecast) data[series].weatherForecast.push(sessionForecast);
+        if (nextEventLastSessionTimestamp - new Date().getTime() < fourDaysInMs) {
+            forecast = await getWeatherForecast(lat, lon, 'hourly', fetch);
+        } else {
+            forecast = await getWeatherForecast(lat, lon, 'daily', fetch);
         }
+
+        data[series].weatherForecast = forecast;
     }
 
     return {

@@ -1,4 +1,6 @@
 <script>
+    import { beforeUpdate } from "svelte";
+
     export let nextEvents;
 
     const parseName = (name) => {
@@ -10,8 +12,11 @@
     }
 
     let eventName, sessionNames;
-    $: sessionNames = Object.keys(nextEvents[0]['sessions']).join(', ');
-    $: eventName = parseName(nextEvents[0]['name']);
+
+    beforeUpdate(() => {
+        sessionNames = Object.keys(nextEvents[0]['sessions']).join(', ');
+        eventName = parseName(nextEvents[0]['name']);
+    })
 </script>
 
 <style>
@@ -24,9 +29,17 @@
     }
 
     .event-name {
-        font-size: 3rem;
+        font-size: 48px;
         font-weight: bold;
         margin-inline: 15px;
+    }
+
+    @media only screen and (max-width: 768px) {
+        .event-name {
+            font-size: 32px;
+            font-weight: bold;
+            margin-inline: 15px;
+        }
     }
 </style>
 
