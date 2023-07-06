@@ -94,7 +94,7 @@
     <div class="all-sessions" bind:this={sessionListEl}>
         {#if sessionNames}
             {#each sessionNames as sessionName, sessionIndex}
-                <span class="session {sessionIndex === currentSessionIndex ? 'selected' : ''}">{sessionName.toUpperCase()}</span>
+                <span class="session" class:selected={sessionIndex === currentSessionIndex}>{sessionName.toUpperCase()}</span>
             {/each}
         {/if}
     </div>

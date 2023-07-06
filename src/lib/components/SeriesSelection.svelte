@@ -82,7 +82,7 @@
     <button on:click={decreaseSeriesIndex}><i class="fa-solid fa-arrow-left"></i></button>
     <div class="all-series" bind:this={seriesListEl}>
         {#each seriesList as series}
-            <span class="series {series === currentSeries ? 'selected' : ''}">{series.toUpperCase()}</span>
+            <span class="series" class:selected={series === currentSeries}>{series.toUpperCase()}</span>
         {/each}
     </div>
     <button on:click={increaseSeriesIndex}><i class="fa-solid fa-arrow-right"></i></button>
