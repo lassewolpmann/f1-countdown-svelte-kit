@@ -33,7 +33,7 @@
 
 <style>
     .session-selection {
-        margin: 20px 0;
+        margin: 10px 0;
 
         display: flex;
         flex-direction: row;

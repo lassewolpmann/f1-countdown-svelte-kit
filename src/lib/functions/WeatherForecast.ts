@@ -18,6 +18,7 @@ export const getWeatherForecast = async (lat: number, lon: number, forecastAccur
     // Current limits: 3,000 calls/minute and 100,000,000 calls/month
     // At the current rate of site visits, rate limiting won't be necessary
     // It's still a good idea to implement it sooner than later
+
     const apiKey: string = PUBLIC_OPEN_WEATHER_API_KEY;
     const apiUrl: URL = new URL(`https://pro.openweathermap.org/data/2.5/forecast/${forecastAccuracy}`);
     apiUrl.searchParams.append('lat', lat.toString());
@@ -27,7 +28,7 @@ export const getWeatherForecast = async (lat: number, lon: number, forecastAccur
     apiUrl.searchParams.append('mode', 'json');
 
     // Get 16 days for daily forecast and 24 hours for hourly forecast
-    const cnt = forecastAccuracy === 'daily' ? '16' : '96';
+    const cnt: string = forecastAccuracy === 'daily' ? '16' : '96';
     apiUrl.searchParams.append('cnt', cnt);
 
     const res = await fetch(apiUrl);
@@ -39,12 +40,11 @@ export const getWeatherForecast = async (lat: number, lon: number, forecastAccur
 }
 
 export const findCurrentForecast = (sessionTimestamp: number, weatherForecast: Forecast[], accuracy: string) => {
-    const currentWeatherForecast = weatherForecast.filter((forecast: Forecast) => {
+    const currentWeatherForecast: Forecast | undefined = weatherForecast.filter((forecast: Forecast) => {
         if (accuracy === 'hourly') {
-            const sessionMinutes = new Date(sessionTimestamp).getUTCMinutes();
+            const sessionMinutes: number = new Date(sessionTimestamp).getUTCMinutes();
 
-            // Always round down the minutes to the last full hour
-
+            // Round down minutes from 1-29, round up from 30-59
             if (sessionMinutes !== 0) {
                 if (sessionMinutes < 30) {
                     sessionTimestamp = sessionTimestamp - (sessionMinutes * 60 * 1000);
@@ -53,12 +53,12 @@ export const findCurrentForecast = (sessionTimestamp: number, weatherForecast: F
                 }
             }
 
-            const forecastTimestamp = forecast.dt * 1000;
+            const forecastTimestamp: number = forecast.dt * 1000;
 
             return forecastTimestamp >= sessionTimestamp
         } else {
-            const forecastDate = new Date(forecast.dt * 1000).getUTCDate();
-            const sessionDate = new Date(sessionTimestamp).getUTCDate();
+            const forecastDate: number = new Date(forecast.dt * 1000).getUTCDate();
+            const sessionDate: number = new Date(sessionTimestamp).getUTCDate();
 
             return forecastDate === sessionDate
         }

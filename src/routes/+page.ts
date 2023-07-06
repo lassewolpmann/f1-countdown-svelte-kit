@@ -10,13 +10,13 @@ interface Event {
     round: number;
     slug: string;
     localeKey: string;
-    sessions: object;
+    sessions: { [key: string]: string };
 }
 
 interface SeriesData {
     nextEvents: Array<Event>,
     previousEvent: Event | undefined,
-    weatherForecast: Array<Forecast>
+    weatherForecast: Array<Forecast> | undefined
 }
 
 export const load = (async ({ fetch }: any) => {
@@ -40,21 +40,22 @@ export const load = (async ({ fetch }: any) => {
         const lon: number = nextEvent.longitude;
 
         // Check delta to last session to decide which forecast to get
-        const nextEventSessions: object = nextEvent.sessions;
+        let nextEventLastSessionDate: string, nextEventLastSessionTimestamp: number, forecast: Forecast[] | undefined;
+
+        const nextEventSessions: { [key: string]: string } = nextEvent.sessions;
         const nextEventLastSessionName: string | undefined = Object.keys(nextEventSessions).at(-1);
 
-        // @ts-ignore
-        const nextEventLastSessionDate = nextEventSessions[nextEventLastSessionName];
+        if (nextEventLastSessionName) {
+            nextEventLastSessionDate = nextEventSessions[nextEventLastSessionName];
+            nextEventLastSessionTimestamp = new Date(nextEventLastSessionDate).getTime();
 
-        const nextEventLastSessionTimestamp: number = new Date(nextEventLastSessionDate).getTime();
-        const fourDaysInMs: number = 4 * 24 * 60 * 60 * 1000;
+            const fourDaysInMs: number = 4 * 24 * 60 * 60 * 1000;
 
-        let forecast;
-
-        if (nextEventLastSessionTimestamp - new Date().getTime() < fourDaysInMs) {
-            forecast = await getWeatherForecast(lat, lon, 'hourly', fetch);
-        } else {
-            forecast = await getWeatherForecast(lat, lon, 'daily', fetch);
+            if (nextEventLastSessionTimestamp - new Date().getTime() < fourDaysInMs) {
+                forecast = await getWeatherForecast(lat, lon, 'hourly', fetch);
+            } else {
+                forecast = await getWeatherForecast(lat, lon, 'daily', fetch);
+            }
         }
 
         data[series].weatherForecast = forecast;
