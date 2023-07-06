@@ -5,6 +5,7 @@ export const calculateOffset = (currentSeriesIndex: number, elementList: HTMLEle
         return node.nodeType === 1
     })
 
+
     let firstNode = filteredChildNodes.at(0) as Element;
     let currentNode = filteredChildNodes.at(currentSeriesIndex) as Element;
     let lastNode = filteredChildNodes.at(filteredChildNodes.length - 1) as Element;

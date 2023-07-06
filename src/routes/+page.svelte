@@ -5,20 +5,26 @@
     import SeriesSelection from "$lib/components/SeriesSelection.svelte";
     import Border from "$lib/components/Border.svelte";
     import MetaDescription from "$lib/components/MetaDescription.svelte";
+    import RaceTitle from "$lib/components/RaceTitle.svelte";
 
     import { dev } from '$app/environment';
     import { inject } from '@vercel/analytics';
     import { beforeUpdate } from "svelte";
+    import SessionSelection from "$lib/components/SessionSelection.svelte";
+    import WeatherForecast from "$lib/components/Weather/WeatherForecast.svelte";
 
     inject({ mode: dev ? 'development' : 'production' });
 
     export let data;
 
-    let currentSeries = 'f1', currentSeriesData, nextEvents;
+    let currentSeries = 'f1', currentSeriesData, nextEvents, nextEvent, nextEventSessions, weatherForecast, currentSessionIndex = 0;
 
     beforeUpdate(() => {
         currentSeriesData = data['seriesData'][currentSeries];
-        nextEvents = currentSeriesData['nextEvents']
+        nextEvents = currentSeriesData['nextEvents'];
+        nextEvent = nextEvents[0];
+        nextEventSessions = nextEvent['sessions'];
+        weatherForecast = currentSeriesData['weatherForecast'];
     })
 </script>
 <style>
@@ -52,9 +58,13 @@
 <main>
     <SeriesSelection seriesList={data.seriesList} bind:currentSeries={currentSeries} />
     <Border />
-    <Timer currentSeriesData={currentSeriesData} />
+    <RaceTitle {nextEvents} />
+    <SessionSelection {nextEventSessions} bind:currentSessionIndex={currentSessionIndex} />
+    <Timer {nextEventSessions} {currentSessionIndex} />
     <Border />
-    <UpcomingEventList nextEvents={nextEvents} />
+    <WeatherForecast {nextEventSessions} {currentSessionIndex} {weatherForecast} />
+    <Border />
+    <UpcomingEventList {nextEvents} />
     <Border />
 </main>
 <footer>

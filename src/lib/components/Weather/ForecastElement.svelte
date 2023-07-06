@@ -42,11 +42,25 @@
         white-space: nowrap;
     }
 
+    .forecast-element > img {
+        width: 50px;
+        height: 50px;
+    }
+
     @media only screen and (max-width: 768px) {
         .forecast-element {
             font-size: 14px;
+
+            min-width: 40px;
+            max-width: 40px;
+
             min-height: 95px;
             max-height: 95px;
+        }
+
+        .forecast-element > img {
+            width: 35px;
+            height: 35px;
         }
     }
 </style>

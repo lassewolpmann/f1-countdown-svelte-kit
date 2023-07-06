@@ -4,9 +4,10 @@
     import { beforeUpdate } from "svelte";
 
     export let nextEventSessions, currentSessionIndex, weatherForecast;
-    let forecastElementsList;
+
     let accuracy, currentForecastIndex, nextEventSessionDates, sessionDate, sessionTimestamp;
     let filteredForecast;
+    let forecastUndefined = true;
 
     const range = 4;
 
@@ -14,6 +15,7 @@
         filteredForecast = []
 
         nextEventSessionDates = Object.values(nextEventSessions);
+
         sessionDate = nextEventSessionDates[currentSessionIndex];
         sessionTimestamp = new Date(sessionDate).getTime();
 
@@ -25,20 +27,19 @@
             if (i < 0) {
                 filteredForecast.push(undefined);
             } else {
-                filteredForecast.push(weatherForecast.at(i))
+                const forecast = weatherForecast.at(i);
+                filteredForecast.push(forecast);
+                if (forecast) forecastUndefined = false;
             }
         }
     })
 </script>
 <style>
     .widget {
-        background: var(--button-inactive-color);
-
-        width: 100%;
-
         padding: 15px;
         margin: 15px 0;
 
+        max-width: 100vw;
         overflow: hidden;
 
         display: flex;
@@ -56,7 +57,7 @@
         height: 100%;
         width: 100%;
         content: "";
-        background-image: linear-gradient(90deg, #111, transparent 40%, transparent 60%, #111);
+        background-image: linear-gradient(90deg, #111 15%, transparent 25%, transparent 75%, #111 85%);
     }
 
     .current-forecast-indicator {
@@ -67,14 +68,31 @@
         background: rgba(255, 255, 255, 0.1);
         border-radius: 15px;
     }
+
+    @media only screen and (max-width: 480px) {
+        /* Remove gradient background on mobile devices to show as much forecast as possible */
+        .widget:after {
+            background: none;
+        }
+    }
+
+    @media only screen and (max-width: 768px) {
+        .current-forecast-indicator {
+            width: 75px;
+        }
+    }
 </style>
-<div class="widget" bind:this={forecastElementsList}>
+<div class="widget">
     {#if filteredForecast}
-        {#each filteredForecast as forecast}
-            <ForecastElement forecast={forecast} accuracy={accuracy} />
-        {/each}
+        {#if !forecastUndefined}
+            {#each filteredForecast as forecast}
+                <ForecastElement {forecast} {accuracy} />
+            {/each}
+            <div class="current-forecast-indicator"></div>
+        {:else}
+            <h2>No forecast</h2>
+        {/if}
     {:else}
         <h2>No forecast</h2>
     {/if}
-    <div class="current-forecast-indicator"></div>
 </div>
