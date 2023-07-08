@@ -1,6 +1,7 @@
 <script>
     import { calculateOffset } from "$lib/functions/SeriesSelection.ts";
-    import { afterUpdate } from "svelte";
+    import { afterUpdate, beforeUpdate } from "svelte";
+    import { seriesIndex } from "$lib/stores/seriesIndex.ts";
 
     export let seriesList;
     export let currentSeries;
@@ -21,6 +22,10 @@
             currentSeries = seriesList[currentSeriesIndex];
         }
     }
+
+    beforeUpdate(() => {
+        seriesIndex.set(currentSeriesIndex);
+    })
 
     afterUpdate(() => {
         const offset = calculateOffset(currentSeriesIndex, seriesListEl);
