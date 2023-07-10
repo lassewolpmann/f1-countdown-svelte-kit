@@ -17,16 +17,15 @@
     /* General table settings */
     table {
         margin: 20px 0;
-        font-size: 0.9rem;
+        font-size: 14px;
         border-collapse: collapse;
         width: min(90vw, 850px);
     }
 
     table caption {
         font-weight: bold;
-        font-size: 1rem;
+        font-size: 18px;
         text-align: left;
-        background: var(--table-row-primary-color);
         padding: 15px;
         margin-top: 20px;
     }
@@ -107,9 +106,9 @@
                     <td class="collapse">
                         <button on:click={() => nextEvents[i].sessionsTableVisible = !nextEvents[i].sessionsTableVisible}>
                             {#if nextEvents[i].sessionsTableVisible}
-                                <i class="fa-solid fa-minus"></i>
+                                <i class="fa-solid fa-chevron-up"></i>
                             {:else}
-                                <i class="fa-solid fa-plus"></i>
+                                <i class="fa-solid fa-chevron-down"></i>
                             {/if}
                         </button>
                     </td>

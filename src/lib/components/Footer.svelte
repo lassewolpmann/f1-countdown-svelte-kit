@@ -27,8 +27,6 @@
     h1 {
         font-size: 16px;
     }
-
-
 </style>
 
 <div>
@@ -51,5 +49,6 @@
     <a href="https://openweathermap.org/" target="_blank"><i class="fa-solid fa-sun"></i> OpenWeather</a>
 </div>
 <div>
-    <a href="https://www.buymeacoffee.com/f1countdowncom" target="_blank"><img src="https://img.buymeacoffee.com/button-api/?text=Support this project&emoji=🏎️&slug=f1countdowncom&button_colour=222222&font_colour=ffffff&font_family=Poppins&outline_colour=ffffff&coffee_colour=FFDD00" alt="Buy me a coffee"/></a>
+    <h1>Donations</h1>
+    <a href="https://www.buymeacoffee.com/f1countdowncom" target="_blank"><i class="fa-solid fa-mug-hot"></i> buymeacoffee.com</a>
 </div>
