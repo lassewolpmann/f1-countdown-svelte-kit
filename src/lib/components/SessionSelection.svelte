@@ -3,15 +3,23 @@
     import { afterUpdate, beforeUpdate } from "svelte";
     import { currentSessionIndex } from "$lib/stores/currentSessionIndex.ts";
 
+    import va from '@vercel/analytics';
+
     export let nextEventSessions;
     let sessionListEl, sessionNames;
 
     const decreaseSessionIndex = () => {
-        if ($currentSessionIndex > 0) currentSessionIndex.update((index) => index - 1);
+        if ($currentSessionIndex > 0) {
+            va.track('Session changed');
+            currentSessionIndex.update((index) => index - 1);
+        }
     }
 
     const increaseSessionIndex = () => {
-        if ($currentSessionIndex < sessionNames.length - 1) currentSessionIndex.update((index) => index + 1);
+        if ($currentSessionIndex < sessionNames.length - 1) {
+            va.track('Session changed');
+            currentSessionIndex.update((index) => index + 1);
+        }
     }
 
     beforeUpdate(() => {
