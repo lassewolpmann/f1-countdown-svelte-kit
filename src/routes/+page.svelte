@@ -13,13 +13,18 @@
 
     import { dev } from '$app/environment';
     import { inject } from '@vercel/analytics';
-    import { beforeUpdate } from "svelte";
+    import {beforeUpdate, onMount} from "svelte";
 
     inject({ mode: dev ? 'development' : 'production' });
 
     export let data;
 
     let seriesData, seriesList, currentSeriesData, nextEvents, nextEvent, nextEventSessions, weatherForecast;
+
+    onMount(() => {
+        seriesData = data['seriesData'];
+        seriesList = data['seriesList'];
+    })
 
     beforeUpdate(() => {
         seriesData = data['seriesData'];
@@ -57,6 +62,7 @@
     }
 </style>
 
+
 <MetaDescription {seriesData} {seriesList} />
 
 <main>
@@ -74,3 +80,4 @@
 <footer>
     <Footer />
 </footer>
+
