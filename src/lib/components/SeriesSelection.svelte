@@ -3,6 +3,8 @@
     import { afterUpdate } from "svelte";
     import { currentSeries } from "$lib/stores/currentSeries.ts";
 
+    import va from '@vercel/analytics';
+
     export let seriesList;
 
     let currentSeriesIndex = 0;
@@ -10,6 +12,7 @@
 
     const decreaseSeriesIndex = () => {
         if (currentSeriesIndex > 0) {
+            va.track('Series changed');
             currentSeriesIndex--;
             currentSeries.set(seriesList[currentSeriesIndex]);
         }
@@ -17,6 +20,7 @@
 
     const increaseSeriesIndex = () => {
         if (currentSeriesIndex < seriesList.length - 1) {
+            va.track('Series changed');
             currentSeriesIndex++;
             currentSeries.set(seriesList[currentSeriesIndex]);
         }
