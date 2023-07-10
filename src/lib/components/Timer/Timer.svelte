@@ -1,18 +1,19 @@
 <script>
     import TimerElement from "$lib/components/Timer/TimerElement.svelte";
+    import { currentSessionIndex } from "$lib/stores/currentSessionIndex.ts";
 
     import { calculateDelta, deltaToDays, deltaToHours, deltaToMinutes, deltaToSeconds, daysToPercent, hoursToPercent, minutesToPercent, secondsToPercent } from "$lib/functions/Timer.ts";
     import { beforeUpdate, onDestroy } from "svelte";
 
-    export let nextEventSessions, currentSessionIndex;
+    export let nextEventSessions;
 
     let delta, deltaCounter;
 
     beforeUpdate(() => {
         clearInterval(deltaCounter);
-        delta = calculateDelta(nextEventSessions, currentSessionIndex);
+        delta = calculateDelta(nextEventSessions, $currentSessionIndex);
         deltaCounter = setInterval(() => {
-            delta = calculateDelta(nextEventSessions, currentSessionIndex);
+            delta = calculateDelta(nextEventSessions, $currentSessionIndex);
         }, 1000);
     })
 

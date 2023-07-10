@@ -1,32 +1,29 @@
 <script>
     import { calculateOffset } from "$lib/functions/SeriesSelection.ts";
-    import { afterUpdate, beforeUpdate, onMount } from "svelte";
+    import { afterUpdate, beforeUpdate } from "svelte";
+    import { currentSessionIndex } from "$lib/stores/currentSessionIndex.ts";
 
-    export let nextEventSessions, currentSessionIndex;
+    export let nextEventSessions;
     let sessionListEl, sessionNames;
 
     const decreaseSessionIndex = () => {
-        if (currentSessionIndex > 0) currentSessionIndex--;
+        if ($currentSessionIndex > 0) currentSessionIndex.update((index) => index - 1);
     }
 
     const increaseSessionIndex = () => {
-        if (currentSessionIndex < sessionNames.length - 1) currentSessionIndex++;
+        if ($currentSessionIndex < sessionNames.length - 1) currentSessionIndex.update((index) => index + 1);
     }
-
-    onMount(() => {
-        currentSessionIndex = 0;
-    })
 
     beforeUpdate(() => {
         sessionNames = Object.keys(nextEventSessions);
 
-        if (currentSessionIndex > sessionNames.length - 1) {
-            currentSessionIndex = sessionNames.length - 1;
+        if ($currentSessionIndex > sessionNames.length - 1) {
+            currentSessionIndex.set(sessionNames.length - 1);
         }
     })
 
     afterUpdate(() => {
-        const offset = calculateOffset(currentSessionIndex, sessionListEl);
+        const offset = calculateOffset($currentSessionIndex, sessionListEl);
         sessionListEl.style.transform = `translateX(${offset}px)`;
     })
 </script>
@@ -94,7 +91,7 @@
     <div class="all-sessions" bind:this={sessionListEl}>
         {#if sessionNames}
             {#each sessionNames as sessionName, sessionIndex}
-                <span class="session" class:selected={sessionIndex === currentSessionIndex}>{sessionName.toUpperCase()}</span>
+                <span class="session" class:selected={sessionIndex === $currentSessionIndex}>{sessionName.toUpperCase()}</span>
             {/each}
         {/if}
     </div>

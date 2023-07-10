@@ -2,8 +2,9 @@
     import ForecastElement from "$lib/components/Weather/ForecastElement.svelte";
     import { findCurrentForecast } from "$lib/functions/WeatherForecast.ts";
     import { beforeUpdate } from "svelte";
+    import { currentSessionIndex } from "$lib/stores/currentSessionIndex.ts";
 
-    export let nextEventSessions, currentSessionIndex, weatherForecast;
+    export let nextEventSessions, weatherForecast;
 
     let accuracy, currentForecastIndex, nextEventSessionDates, sessionDate, sessionTimestamp;
     let filteredForecast;
@@ -16,7 +17,7 @@
 
         nextEventSessionDates = Object.values(nextEventSessions);
 
-        sessionDate = nextEventSessionDates[currentSessionIndex];
+        sessionDate = nextEventSessionDates[$currentSessionIndex];
         sessionTimestamp = new Date(sessionDate).getTime();
 
         accuracy  = weatherForecast.length === 96 ? 'hourly': 'daily';

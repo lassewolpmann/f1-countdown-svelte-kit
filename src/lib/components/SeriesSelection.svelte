@@ -1,10 +1,9 @@
 <script>
     import { calculateOffset } from "$lib/functions/SeriesSelection.ts";
-    import { afterUpdate, beforeUpdate } from "svelte";
-    import { seriesIndex } from "$lib/stores/seriesIndex.ts";
+    import { afterUpdate } from "svelte";
+    import { currentSeries } from "$lib/stores/currentSeries.ts";
 
     export let seriesList;
-    export let currentSeries;
 
     let currentSeriesIndex = 0;
     let seriesListEl;
@@ -12,20 +11,16 @@
     const decreaseSeriesIndex = () => {
         if (currentSeriesIndex > 0) {
             currentSeriesIndex--;
-            currentSeries = seriesList[currentSeriesIndex];
+            currentSeries.set(seriesList[currentSeriesIndex]);
         }
     }
 
     const increaseSeriesIndex = () => {
         if (currentSeriesIndex < seriesList.length - 1) {
             currentSeriesIndex++;
-            currentSeries = seriesList[currentSeriesIndex];
+            currentSeries.set(seriesList[currentSeriesIndex]);
         }
     }
-
-    beforeUpdate(() => {
-        seriesIndex.set(currentSeriesIndex);
-    })
 
     afterUpdate(() => {
         const offset = calculateOffset(currentSeriesIndex, seriesListEl);
@@ -87,7 +82,7 @@
     <button on:click={decreaseSeriesIndex}><i class="fa-solid fa-arrow-left"></i></button>
     <div class="all-series" bind:this={seriesListEl}>
         {#each seriesList as series}
-            <span class="series" class:selected={series === currentSeries}>{series.toUpperCase()}</span>
+            <span class="series" class:selected={series === $currentSeries}>{series.toUpperCase()}</span>
         {/each}
     </div>
     <button on:click={increaseSeriesIndex}><i class="fa-solid fa-arrow-right"></i></button>
