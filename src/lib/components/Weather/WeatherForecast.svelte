@@ -1,39 +1,11 @@
 <script>
     import ForecastElement from "$lib/components/Weather/ForecastElement.svelte";
-    import { findCurrentForecast } from "$lib/functions/WeatherForecast.ts";
-    import { beforeUpdate } from "svelte";
     import { currentSessionIndex } from "$lib/stores/currentSessionIndex.ts";
 
-    export let nextEventSessions, weatherForecast;
+    export let weatherForecast;
 
-    let accuracy, currentForecastIndex, nextEventSessionDates, sessionDate, sessionTimestamp;
-    let filteredForecast;
-    let forecastUndefined = true;
-
-    const range = 4;
-
-    beforeUpdate(() => {
-        filteredForecast = []
-
-        nextEventSessionDates = Object.values(nextEventSessions);
-
-        sessionDate = nextEventSessionDates[$currentSessionIndex];
-        sessionTimestamp = new Date(sessionDate).getTime();
-
-        accuracy  = weatherForecast.length === 96 ? 'hourly': 'daily';
-
-        currentForecastIndex = findCurrentForecast(sessionTimestamp, weatherForecast, accuracy);
-
-        for (let i = currentForecastIndex - range; i <= currentForecastIndex + range; i++) {
-            if (i < 0) {
-                filteredForecast.push(undefined);
-            } else {
-                const forecast = weatherForecast.at(i);
-                filteredForecast.push(forecast);
-                if (forecast) forecastUndefined = false;
-            }
-        }
-    })
+    let accuracy;
+    $: if (weatherForecast) accuracy = weatherForecast[$currentSessionIndex].length === 96 ? 'hourly': 'daily';
 </script>
 <style>
     .widget {
@@ -84,15 +56,11 @@
     }
 </style>
 <div class="widget">
-    {#if filteredForecast}
-        {#if !forecastUndefined}
-            {#each filteredForecast as forecast}
-                <ForecastElement {forecast} {accuracy} />
-            {/each}
-            <div class="current-forecast-indicator"></div>
-        {:else}
-            <h2>No forecast</h2>
-        {/if}
+    {#if weatherForecast}
+        {#each weatherForecast[$currentSessionIndex] as forecast}
+            <ForecastElement {forecast} {accuracy} />
+        {/each}
+        <div class="current-forecast-indicator"></div>
     {:else}
         <h2>No forecast</h2>
     {/if}

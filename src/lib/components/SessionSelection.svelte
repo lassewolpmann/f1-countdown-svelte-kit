@@ -2,10 +2,10 @@
     import { calculateOffset } from "$lib/functions/SeriesSelection.ts";
     import { afterUpdate, beforeUpdate } from "svelte";
     import { currentSessionIndex } from "$lib/stores/currentSessionIndex.ts";
-
     import va from '@vercel/analytics';
 
     export let nextEventSessions;
+
     let sessionListEl, sessionNames;
 
     const decreaseSessionIndex = () => {
@@ -16,12 +16,13 @@
     }
 
     const increaseSessionIndex = () => {
-        if ($currentSessionIndex < sessionNames.length - 1) {
+        if ($currentSessionIndex < Object.keys(nextEventSessions).length - 1) {
             va.track('Session changed');
             currentSessionIndex.update((index) => index + 1);
         }
     }
 
+    // Prevent index being bigger than the last valid index of array
     beforeUpdate(() => {
         sessionNames = Object.keys(nextEventSessions);
 
@@ -97,11 +98,9 @@
 <div class="session-selection" data-nosnippet>
     <button on:click={decreaseSessionIndex}><i class="fa-solid fa-arrow-left"></i></button>
     <div class="all-sessions" bind:this={sessionListEl}>
-        {#if sessionNames}
-            {#each sessionNames as sessionName, sessionIndex}
-                <span class="session" class:selected={sessionIndex === $currentSessionIndex}>{sessionName.toUpperCase()}</span>
-            {/each}
-        {/if}
+        {#each Object.keys(nextEventSessions) as sessionName, sessionIndex}
+            <span class="session" class:selected={sessionIndex === $currentSessionIndex}>{sessionName.toUpperCase()}</span>
+        {/each}
     </div>
     <button on:click={increaseSessionIndex}><i class="fa-solid fa-arrow-right"></i></button>
 </div>

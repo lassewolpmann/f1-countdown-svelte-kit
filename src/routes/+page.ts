@@ -1,5 +1,5 @@
 /** @type {import('./$types').PageLoad} */
-import { getWeatherForecast } from "$lib/functions/WeatherForecast";
+import { getWeatherForecast, findCurrentForecast } from "$lib/functions/WeatherForecast";
 import type { Forecast } from "$lib/functions/WeatherForecast";
 
 interface Event {
@@ -16,7 +16,7 @@ interface Event {
 interface SeriesData {
     nextEvents: Array<Event>,
     previousEvent: Event | undefined,
-    weatherForecast: Array<Forecast> | undefined
+    weatherForecast: Array<Forecast[]>
 }
 
 export const load = (async ({ fetch }: any) => {
@@ -29,6 +29,7 @@ export const load = (async ({ fetch }: any) => {
         const nextEvents: Array<Event> = getNextEvents(allEvents);
 
         data[series] = {} as SeriesData;
+        data[series].weatherForecast = [];
         data[series].nextEvents = nextEvents;
         data[series].previousEvent = getPreviousEvent(allEvents, nextEvents);
 
@@ -39,26 +40,33 @@ export const load = (async ({ fetch }: any) => {
         const lat: number = nextEvent.latitude;
         const lon: number = nextEvent.longitude;
 
-        // Check delta to last session to decide which forecast to get
-        let nextEventLastSessionDate: string, nextEventLastSessionTimestamp: number, forecast: Forecast[] | undefined;
+        const fourDaysInMs: number = 4 * 24 * 60 * 60 * 1000;
 
-        const nextEventSessions: { [key: string]: string } = nextEvent.sessions;
-        const nextEventLastSessionName: string | undefined = Object.keys(nextEventSessions).at(-1);
+        for (const sessionName of Object.keys(nextEvent.sessions)) {
+            const sessionTimestamp: number = new Date(nextEvent.sessions[sessionName]).getTime();
+            let forecast, accuracy, filteredForecast: any[] = [];
+            const range = 4;
 
-        if (nextEventLastSessionName) {
-            nextEventLastSessionDate = nextEventSessions[nextEventLastSessionName];
-            nextEventLastSessionTimestamp = new Date(nextEventLastSessionDate).getTime();
-
-            const fourDaysInMs: number = 4 * 24 * 60 * 60 * 1000;
-
-            if (nextEventLastSessionTimestamp - new Date().getTime() < fourDaysInMs) {
-                forecast = await getWeatherForecast(lat, lon, 'hourly', fetch);
+            if (sessionTimestamp - new Date().getTime() < fourDaysInMs) {
+                accuracy = 'hourly';
+                forecast = await getWeatherForecast(lat, lon, accuracy, fetch);
             } else {
-                forecast = await getWeatherForecast(lat, lon, 'daily', fetch);
+                accuracy = 'daily';
+                forecast = await getWeatherForecast(lat, lon, accuracy, fetch);
             }
-        }
 
-        data[series].weatherForecast = forecast;
+            const currentForecastIndex: number = findCurrentForecast(sessionTimestamp, forecast, accuracy);
+
+            for (let i = currentForecastIndex - range; i <= currentForecastIndex + range; i++) {
+                if (i < 0) {
+                    filteredForecast.push(undefined);
+                } else {
+                    filteredForecast.push(forecast.at(i));
+                }
+            }
+
+            data[series].weatherForecast.push(filteredForecast);
+        }
     }
 
     return {

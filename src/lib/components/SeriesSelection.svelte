@@ -2,13 +2,11 @@
     import { calculateOffset } from "$lib/functions/SeriesSelection.ts";
     import { afterUpdate } from "svelte";
     import { currentSeries } from "$lib/stores/currentSeries.ts";
-
     import va from '@vercel/analytics';
 
     export let seriesList;
 
-    let currentSeriesIndex = 0;
-    let seriesListEl;
+    let currentSeriesIndex = 0, seriesListEl;
 
     const decreaseSeriesIndex = () => {
         if (currentSeriesIndex > 0) {
