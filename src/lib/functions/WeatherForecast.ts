@@ -31,11 +31,13 @@ export const getWeatherForecast = async (lat: number, lon: number, forecastAccur
     const cnt: string = forecastAccuracy === 'daily' ? '16' : '96';
     apiUrl.searchParams.append('cnt', cnt);
 
-    const res = await fetch(apiUrl);
-
-    if (res.ok) {
+    try {
+        const res = await fetch(apiUrl);
         const data = await res.json();
         return data['list'];
+    } catch (error) {
+        console.log(error);
+        return undefined
     }
 }
 
