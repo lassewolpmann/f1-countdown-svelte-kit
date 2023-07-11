@@ -44,7 +44,7 @@ export const load = (async ({ fetch }: any) => {
 
         for (const sessionName of Object.keys(nextEvent.sessions)) {
             const sessionTimestamp: number = new Date(nextEvent.sessions[sessionName]).getTime();
-            let forecast, accuracy, filteredForecast: any[] = [];
+            let forecast: Forecast[], accuracy, filteredForecast: any[] = [];
             const range = 4;
 
             if (sessionTimestamp - new Date().getTime() < fourDaysInMs) {
@@ -55,14 +55,18 @@ export const load = (async ({ fetch }: any) => {
                 forecast = await getWeatherForecast(lat, lon, accuracy, fetch);
             }
 
-            const currentForecastIndex: number = findCurrentForecast(sessionTimestamp, forecast, accuracy);
+            if (forecast) {
+                const currentForecastIndex: number = findCurrentForecast(sessionTimestamp, forecast, accuracy);
 
-            for (let i = currentForecastIndex - range; i <= currentForecastIndex + range; i++) {
-                if (i < 0) {
-                    filteredForecast.push(undefined);
-                } else {
-                    filteredForecast.push(forecast.at(i));
+                for (let i = currentForecastIndex - range; i <= currentForecastIndex + range; i++) {
+                    if (i < 0) {
+                        filteredForecast.push(undefined);
+                    } else {
+                        filteredForecast.push(forecast.at(i));
+                    }
                 }
+            } else {
+                filteredForecast = []
             }
 
             data[series].weatherForecast.push(filteredForecast);
