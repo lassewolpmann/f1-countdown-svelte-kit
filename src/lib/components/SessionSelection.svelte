@@ -1,6 +1,7 @@
 <script>
     import { calculateOffset } from "$lib/functions/SeriesSelection.ts";
-    import { afterUpdate, beforeUpdate } from "svelte";
+    import { findCurrentSessionIndex } from "$lib/functions/SessionSelection.ts";
+    import { afterUpdate } from "svelte";
     import { currentSessionIndex } from "$lib/stores/currentSessionIndex.ts";
     import va from '@vercel/analytics';
 
@@ -22,14 +23,10 @@
         }
     }
 
-    // Prevent index being bigger than the last valid index of array
-    beforeUpdate(() => {
-        sessionNames = Object.keys(nextEventSessions);
-
-        if ($currentSessionIndex > sessionNames.length - 1) {
-            currentSessionIndex.set(sessionNames.length - 1);
-        }
-    })
+    $: if (nextEventSessions) {
+        const index = findCurrentSessionIndex(nextEventSessions);
+        currentSessionIndex.set(index);
+    }
 
     afterUpdate(() => {
         const offset = calculateOffset($currentSessionIndex, sessionListEl);

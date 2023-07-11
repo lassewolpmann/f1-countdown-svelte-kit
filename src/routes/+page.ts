@@ -45,7 +45,7 @@ export const load = (async ({ fetch }: any) => {
         for (const sessionName of Object.keys(nextEvent.sessions)) {
             const sessionTimestamp: number = new Date(nextEvent.sessions[sessionName]).getTime();
             let forecast: Forecast[], accuracy, filteredForecast: any[] = [];
-            const range = 4;
+            const range: number = 4;
 
             if (sessionTimestamp - new Date().getTime() < fourDaysInMs) {
                 accuracy = 'hourly';
