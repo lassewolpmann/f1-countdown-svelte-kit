@@ -3,22 +3,24 @@
     import { currentSessionIndex } from "$lib/stores/currentSessionIndex.ts";
 
     import { calculateDelta, deltaToDays, deltaToHours, deltaToMinutes, deltaToSeconds, daysToPercent, hoursToPercent, minutesToPercent, secondsToPercent } from "$lib/functions/Timer.ts";
-    import { beforeUpdate, onDestroy } from "svelte";
+    import { onDestroy } from "svelte";
 
     export let nextEventSessions;
 
-    let delta, deltaCounter;
+    let delta, deltaCounterInterval;
 
-    beforeUpdate(() => {
-        clearInterval(deltaCounter);
-        delta = calculateDelta(nextEventSessions, $currentSessionIndex);
-        deltaCounter = setInterval(() => {
-            delta = calculateDelta(nextEventSessions, $currentSessionIndex);
+    $: {
+        // Clear existing interval
+        if (deltaCounterInterval) clearInterval(deltaCounterInterval);
+
+        if (nextEventSessions) delta = calculateDelta(nextEventSessions, $currentSessionIndex);
+        deltaCounterInterval = setInterval(() => {
+            delta -= 1;
         }, 1000);
-    })
+    }
 
     onDestroy(() => {
-        clearInterval(deltaCounter);
+        clearInterval(deltaCounterInterval);
     })
 </script>
 

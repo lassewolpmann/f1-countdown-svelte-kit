@@ -13,28 +13,23 @@
 
     import { dev } from '$app/environment';
     import { inject } from '@vercel/analytics';
-    import {beforeUpdate, onMount} from "svelte";
 
     inject({ mode: dev ? 'development' : 'production' });
 
     export let data;
 
-    let seriesData, seriesList, currentSeriesData, nextEvents, nextEvent, nextEventSessions, weatherForecast;
+    let currentSeriesData, nextEvents, nextEvent, nextEventSessions, weatherForecast;
 
-    onMount(() => {
-        seriesData = data['seriesData'];
-        seriesList = data['seriesList'];
-    })
+    const seriesData = data ? data['seriesData'] : undefined;
+    const seriesList = data ? data['seriesList'] : undefined;
 
-    beforeUpdate(() => {
-        seriesData = data['seriesData'];
-        seriesList = data['seriesList'];
+    $: if (seriesData) {
         currentSeriesData = seriesData[$currentSeries];
         nextEvents = currentSeriesData['nextEvents'];
         nextEvent = nextEvents[0];
         nextEventSessions = nextEvent['sessions'];
         weatherForecast = currentSeriesData['weatherForecast'];
-    })
+    }
 </script>
 <style>
     main, footer {
@@ -72,7 +67,7 @@
     <SessionSelection {nextEventSessions} />
     <Timer {nextEventSessions} />
     <Border />
-    <WeatherForecast {nextEventSessions} {weatherForecast} />
+    <WeatherForecast {weatherForecast} />
     <Border />
     <UpcomingEventList {nextEvents} />
     <Border />

@@ -1,15 +1,9 @@
 <script>
-    import { beforeUpdate } from "svelte";
-
     export let forecast, accuracy;
-    let forecastTime, weatherIcon, weatherDescription, temp, riskOfRain, forecastEl;
+    let forecastTime, temp;
 
-    beforeUpdate(() => {
-        if (forecast) {
-            weatherIcon = `https://openweathermap.org/img/wn/${forecast['weather'][0]['icon']}.png`;
-            weatherDescription = forecast['weather'][0]['description'];
-            riskOfRain = Math.floor(forecast['pop'] * 100);
-
+    $: {
+        if (forecast && accuracy) {
             if (accuracy === 'hourly') {
                 forecastTime = new Date(forecast.dt * 1000).toLocaleTimeString([], {hour: 'numeric', minute:'2-digit'});
                 temp = Math.floor(forecast['main']['temp']);
@@ -18,7 +12,7 @@
                 temp = Math.floor(forecast['temp']['day']);
             }
         }
-    })
+    }
 </script>
 <style>
     .forecast-element {
@@ -64,11 +58,11 @@
         }
     }
 </style>
-<div class="forecast-element" bind:this={forecastEl}>
+<div class="forecast-element">
     {#if forecast}
         {forecastTime}
-        <img src="{weatherIcon}" alt="{weatherDescription}">
+        <img src="https://openweathermap.org/img/wn/{forecast['weather'][0]['icon']}.png" alt="{forecast['weather'][0]['description']}">
         <span>{temp}°</span>
-        <span><i class="fa-solid fa-droplet"></i> {riskOfRain}%</span>
+        <span><i class="fa-solid fa-droplet"></i> {Math.floor(forecast['pop'] * 100)}%</span>
     {/if}
 </div>
