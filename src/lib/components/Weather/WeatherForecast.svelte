@@ -57,10 +57,14 @@
 </style>
 <div class="widget">
     {#if weatherForecast}
-        {#each weatherForecast[$currentSessionIndex] as forecast}
-            <ForecastElement {forecast} {accuracy} />
-        {/each}
-        <div class="current-forecast-indicator"></div>
+        {#if weatherForecast[$currentSessionIndex][4]['dt'] * 1000 > new Date().getTime()}
+            {#each weatherForecast[$currentSessionIndex] as forecast}
+                <ForecastElement {forecast} {accuracy} />
+            {/each}
+            <div class="current-forecast-indicator"></div>
+        {:else}
+            <h2>No forecast</h2>
+        {/if}
     {:else}
         <h2>No forecast</h2>
     {/if}

@@ -15,7 +15,7 @@
 
         if (nextEventSessions) delta = calculateDelta(nextEventSessions, $currentSessionIndex);
         deltaCounterInterval = setInterval(() => {
-            delta -= 1;
+            if (delta > 0) delta -= 1;
         }, 1000);
     }
 
