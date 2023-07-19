@@ -1,81 +1,24 @@
 /** @type {import('./$types').PageLoad} */
-import { getWeatherForecast, findCurrentForecast } from "$lib/functions/WeatherForecast";
-import type { Forecast } from "$lib/functions/WeatherForecast";
-
-interface Event {
-    name: string;
-    location: string;
-    latitude: number;
-    longitude: number;
-    round: number;
-    slug: string;
-    localeKey: string;
-    sessions: { [key: string]: string };
-}
-
-interface SeriesData {
-    nextEvents: Array<Event>,
-    previousEvent: Event | undefined,
-    weatherForecast: Array<Forecast[]>
-}
+import type { AllSeriesData, Event } from "$lib/types/Data";
 
 export const load = (async ({ fetch }: any) => {
-    const data: { [key: string]: SeriesData } = {}
-
+    const allSeriesData: AllSeriesData = {};
     const seriesList: string[] = ['f1', 'f2', 'f3'];
 
     for (const series of seriesList) {
         const allEvents: Array<Event> = await getAllEvents(series, fetch);
         const nextEvents: Array<Event> = getNextEvents(allEvents);
+        const previousEvent: Event = getPreviousEvent(allEvents, nextEvents);
 
-        data[series] = {} as SeriesData;
-        data[series].weatherForecast = [];
-        data[series].nextEvents = nextEvents;
-        data[series].previousEvent = getPreviousEvent(allEvents, nextEvents);
-
-        // Weather Forecast
-        let nextEvent: Event | undefined = nextEvents.at(0);
-        if (!nextEvent) nextEvent = {} as Event;
-
-        const lat: number = nextEvent.latitude;
-        const lon: number = nextEvent.longitude;
-
-        const fourDaysInMs: number = 4 * 24 * 60 * 60 * 1000;
-
-        for (const sessionName of Object.keys(nextEvent.sessions)) {
-            const sessionTimestamp: number = new Date(nextEvent.sessions[sessionName]).getTime();
-            let forecast: Forecast[], accuracy, filteredForecast: any[] = [];
-            const range: number = 4;
-
-            if (sessionTimestamp - new Date().getTime() < fourDaysInMs) {
-                accuracy = 'hourly';
-                forecast = await getWeatherForecast(lat, lon, accuracy, fetch);
-            } else {
-                accuracy = 'daily';
-                forecast = await getWeatherForecast(lat, lon, accuracy, fetch);
-            }
-
-            if (forecast) {
-                const currentForecastIndex: number = findCurrentForecast(sessionTimestamp, forecast, accuracy);
-
-                for (let i = currentForecastIndex - range; i <= currentForecastIndex + range; i++) {
-                    if (i < 0) {
-                        filteredForecast.push(undefined);
-                    } else {
-                        filteredForecast.push(forecast.at(i));
-                    }
-                }
-            } else {
-                filteredForecast = []
-            }
-
-            data[series].weatherForecast.push(filteredForecast);
-        }
+        allSeriesData[series] = {
+            nextEvents: nextEvents,
+            previousEvent: previousEvent,
+        };
     }
 
     return {
         seriesList: seriesList,
-        seriesData: data
+        seriesData: allSeriesData
     }
 });
 

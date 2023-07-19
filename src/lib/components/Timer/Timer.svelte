@@ -1,13 +1,17 @@
-<script>
+<script lang="ts">
+    // Component imports
     import TimerElement from "$lib/components/Timer/TimerElement.svelte";
-    import { currentSessionIndex } from "$lib/stores/currentSessionIndex.ts";
 
-    import { calculateDelta, deltaToDays, deltaToHours, deltaToMinutes, deltaToSeconds, daysToPercent, hoursToPercent, minutesToPercent, secondsToPercent } from "$lib/functions/Timer.ts";
+    // Store imports
+    import { currentSessionIndex } from "$lib/stores/currentSessionIndex";
+
+    // Function imports
+    import { calculateDelta, deltaToDays, deltaToHours, deltaToMinutes, deltaToSeconds, daysToPercent, hoursToPercent, minutesToPercent, secondsToPercent } from "$lib/functions/Timer";
     import { onDestroy } from "svelte";
 
-    export let nextEventSessions;
+    export let nextEventSessions: { [key: string]: string };
 
-    let delta, deltaCounterInterval;
+    let delta: number, deltaCounterInterval: any;
 
     $: {
         // Clear existing interval

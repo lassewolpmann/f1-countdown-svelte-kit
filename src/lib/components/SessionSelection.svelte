@@ -1,13 +1,16 @@
-<script>
-    import { calculateOffset } from "$lib/functions/SeriesSelection.ts";
-    import { findCurrentSessionIndex } from "$lib/functions/SessionSelection.ts";
+<script lang="ts">
+    // Function imports
+    import { calculateOffset } from "$lib/functions/SeriesSelection";
+    import { findCurrentSessionIndex } from "$lib/functions/SessionSelection";
     import { afterUpdate } from "svelte";
-    import { currentSessionIndex } from "$lib/stores/currentSessionIndex.ts";
     import va from '@vercel/analytics';
 
-    export let nextEventSessions;
+    // Store imports
+    import { currentSessionIndex } from "$lib/stores/currentSessionIndex";
 
-    let sessionListEl, sessionNames;
+    export let nextEventSessions: { [key: string]: string };
+
+    let sessionListEl: HTMLElement;
 
     const decreaseSessionIndex = () => {
         if ($currentSessionIndex > 0) {

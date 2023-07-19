@@ -32,9 +32,11 @@ export const secondsToPercent = (delta: number) => {
 
 export const calculateDelta = (nextEventSessions: { [key: string]: string },
                                currentSessionIndex: number)  => {
-    let nextEventSessionNames = Object.keys(nextEventSessions);
-    let nextSessionTime = nextEventSessions[nextEventSessionNames[currentSessionIndex]];
-    let nextSessionTimestamp = new Date(nextSessionTime).getTime();
+    const nextEventSessionDates: string[] = Object.values(nextEventSessions);
+    const nextSessionTime: string | undefined = nextEventSessionDates.at(currentSessionIndex);
+
+    let nextSessionTimestamp: number = 0;
+    if (nextSessionTime) nextSessionTimestamp = new Date(nextSessionTime).getTime();
 
     return calculateDeltaInSeconds(nextSessionTimestamp)
 }

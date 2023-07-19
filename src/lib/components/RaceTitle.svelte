@@ -1,5 +1,7 @@
-<script>
-    export let nextEvents;
+<script lang="ts">
+    // Type imports
+    import type { Event } from "$lib/types/Data";
+    export let nextEvents: Event[];
 </script>
 
 <style>
