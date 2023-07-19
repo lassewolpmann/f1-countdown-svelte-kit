@@ -94,8 +94,8 @@
                 <thead>
                 <tr class="table-head-row">
                     <th class="location">
-                        <a href="{getLocationURL(event)}" target="_blank">
-                            <button><i class="fa-solid fa-location-dot"></i></button>
+                        <a href="{getLocationURL(event)}" target="_blank" aria-label="Google Maps Location of Event">
+                            <button aria-label="Navigate to Location on Google Maps"><i class="fa-solid fa-location-dot"></i></button>
                         </a>
                     </th>
                     <td class="name">{parseName(event.name)}</td>
@@ -108,7 +108,7 @@
                         <td class="date"></td>
                     {/if}
                     <td class="collapse">
-                        <button on:click={() => nextEvents[i].sessionsTableVisible = !nextEvents[i].sessionsTableVisible}>
+                        <button on:click={() => nextEvents[i].sessionsTableVisible = !nextEvents[i].sessionsTableVisible} aria-label="Show or Hide all Sessions of Event">
                             {#if event.sessionsTableVisible}
                                 <i class="fa-solid fa-chevron-up"></i>
                             {:else}
