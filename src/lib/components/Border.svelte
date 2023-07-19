@@ -6,6 +6,4 @@
         display: block;
     }
 </style>
-<div class="element-border">
-
-</div>
+<div class="element-border"></div>

@@ -1,3 +1,6 @@
+import va from "@vercel/analytics";
+import { currentSeries } from "$lib/stores/currentSeries";
+
 export const calculateOffset = (currentSeriesIndex: number, elementList: HTMLElement): number => {
     const childNodes = elementList.childNodes;
 
@@ -14,4 +17,28 @@ export const calculateOffset = (currentSeriesIndex: number, elementList: HTMLEle
     let offsetRight = lastNode.getBoundingClientRect().right - currentNode.getBoundingClientRect().right;
 
     return (offsetRight - offsetLeft) / 2
+}
+
+export const decreaseSeriesIndex = (seriesList: string[], currentSeriesIndex: number): number => {
+    if (currentSeriesIndex > 0) {
+        va.track('Series changed');
+        currentSeriesIndex--;
+
+        const newSeries: string | undefined = seriesList.at(currentSeriesIndex);
+        if (newSeries) currentSeries.set(newSeries);
+    }
+
+    return currentSeriesIndex
+}
+
+export const increaseSeriesIndex = (seriesList: string[], currentSeriesIndex: number): number => {
+    if (currentSeriesIndex < seriesList.length - 1) {
+        va.track('Series changed');
+        currentSeriesIndex++;
+
+        const newSeries: string | undefined = seriesList.at(currentSeriesIndex);
+        if (newSeries) currentSeries.set(newSeries);
+    }
+
+    return currentSeriesIndex
 }

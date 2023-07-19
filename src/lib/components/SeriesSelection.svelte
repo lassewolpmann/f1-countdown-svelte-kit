@@ -1,28 +1,14 @@
-<script>
-    import { calculateOffset } from "$lib/functions/SeriesSelection.ts";
+<script lang="ts">
+    // Function imports
+    import { calculateOffset, decreaseSeriesIndex, increaseSeriesIndex } from "$lib/functions/SeriesSelection";
     import { afterUpdate } from "svelte";
-    import { currentSeries } from "$lib/stores/currentSeries.ts";
-    import va from '@vercel/analytics';
 
-    export let seriesList;
+    // Store imports
+    import { currentSeries } from "$lib/stores/currentSeries";
 
-    let currentSeriesIndex = 0, seriesListEl;
+    export let seriesList: string[];
 
-    const decreaseSeriesIndex = () => {
-        if (currentSeriesIndex > 0) {
-            va.track('Series changed');
-            currentSeriesIndex--;
-            currentSeries.set(seriesList[currentSeriesIndex]);
-        }
-    }
-
-    const increaseSeriesIndex = () => {
-        if (currentSeriesIndex < seriesList.length - 1) {
-            va.track('Series changed');
-            currentSeriesIndex++;
-            currentSeries.set(seriesList[currentSeriesIndex]);
-        }
-    }
+    let currentSeriesIndex: number = 0, seriesListEl: HTMLElement;
 
     afterUpdate(() => {
         const offset = calculateOffset(currentSeriesIndex, seriesListEl);
@@ -81,7 +67,7 @@
     }
 </style>
 <div class="series-selection">
-    <button on:click={decreaseSeriesIndex}><i class="fa-solid fa-arrow-left"></i></button>
+    <button on:click={() => currentSeriesIndex = decreaseSeriesIndex(seriesList, currentSeriesIndex)}><i class="fa-solid fa-arrow-left"></i></button>
     <div class="all-series" bind:this={seriesListEl}>
         {#if seriesList}
             {#each seriesList as series}
@@ -89,5 +75,5 @@
             {/each}
         {/if}
     </div>
-    <button on:click={increaseSeriesIndex}><i class="fa-solid fa-arrow-right"></i></button>
+    <button on:click={() => currentSeriesIndex = increaseSeriesIndex(seriesList, currentSeriesIndex)}><i class="fa-solid fa-arrow-right"></i></button>
 </div>

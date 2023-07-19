@@ -1,10 +1,14 @@
-<script>
+<script lang="ts">
+    // Function imports
     import { onMount } from "svelte";
-    import { parseName, parseDate, parseTime, getLocationURL } from "$lib/functions/UpcomingEventList.ts";
+    import { parseName, parseDate, parseTime, getLocationURL } from "$lib/functions/UpcomingEventList";
 
-    export let nextEvents;
+    // Type imports
+    import type { UpcomingEvent } from "$lib/types/UpcomingEventList";
 
-    let events = [];
+    export let nextEvents: UpcomingEvent[];
+
+    let events: HTMLTableElement[] = [];
 
     onMount(() => {
         for (const nextEvent of nextEvents) {
@@ -94,18 +98,18 @@
                             <button><i class="fa-solid fa-location-dot"></i></button>
                         </a>
                     </th>
-                    <td class="name">{parseName(event['name'])}</td>
-                    {#if !nextEvents[i].sessionsTableVisible}
+                    <td class="name">{parseName(event.name)}</td>
+                    {#if !event.sessionsTableVisible}
                         <td class="date">
-                            <span class="day">{parseDate(event.sessions[Object.keys(event.sessions).at(-1)])}</span><br>
-                            <span class="time">{parseTime(event.sessions[Object.keys(event.sessions).at(-1)])}</span>
+                            <span class="day">{parseDate(event)}</span><br>
+                            <span class="time">{parseTime(event)}</span>
                         </td>
                     {:else}
                         <td class="date"></td>
                     {/if}
                     <td class="collapse">
                         <button on:click={() => nextEvents[i].sessionsTableVisible = !nextEvents[i].sessionsTableVisible}>
-                            {#if nextEvents[i].sessionsTableVisible}
+                            {#if event.sessionsTableVisible}
                                 <i class="fa-solid fa-chevron-up"></i>
                             {:else}
                                 <i class="fa-solid fa-chevron-down"></i>
@@ -114,14 +118,14 @@
                     </td>
                 </tr>
                 </thead>
-                {#if nextEvents[i].sessionsTableVisible}
+                {#if event.sessionsTableVisible}
                     <tbody class="sessions">
                     {#each Object.keys(event['sessions']) as session}
                         <tr>
                             <td class="session-name" colspan="2">{session.toUpperCase()}</td>
                             <td class="date" colspan="2">
-                                <span class="day">{parseDate(event['sessions'][session])}</span>
-                                <span class="time">{parseTime(event['sessions'][session])}</span>
+                                <span class="day">{parseDate(event)}</span>
+                                <span class="time">{parseTime(event)}</span>
                             </td>
                         </tr>
                     {/each}

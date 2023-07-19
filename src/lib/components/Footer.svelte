@@ -45,10 +45,6 @@
     <a href="https://github.com/sportstimes/f1/blob/main/LICENSE" target="_blank"><i class="fa-solid fa-scale-balanced"></i> License</a>
 </div>
 <div>
-    <h1>Weather data</h1>
-    <a href="https://openweathermap.org/" target="_blank"><i class="fa-solid fa-sun"></i> OpenWeather</a>
-</div>
-<div>
     <h1>Donations</h1>
     <a href="https://www.buymeacoffee.com/f1countdowncom" target="_blank"><i class="fa-solid fa-mug-hot"></i> buymeacoffee.com</a>
 </div>

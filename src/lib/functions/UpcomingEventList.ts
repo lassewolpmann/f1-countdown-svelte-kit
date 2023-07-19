@@ -1,14 +1,4 @@
-interface Event {
-    latitude: number,
-    localeKey: string,
-    location: string,
-    longitude: number,
-    name: string,
-    round: number,
-    sessions: object,
-    sessionsTableVisible: boolean,
-    slug: string
-}
+import type { UpcomingEvent } from "$lib/types/UpcomingEventList";
 
 export const parseName = (name: string) => {
     if (name.includes("Grand Prix")) {
@@ -18,14 +8,30 @@ export const parseName = (name: string) => {
     }
 }
 
-export const parseDate = (date: string) => {
-    return new Date(date).toDateString()
+export const parseDate = (event: UpcomingEvent) => {
+    const eventSessions: object = event.sessions;
+    const sessionDates: string[] = Object.values(eventSessions);
+    const lastSessionDate = sessionDates.at(-1);
+
+    if (lastSessionDate) {
+        return new Date(lastSessionDate).toDateString()
+    } else {
+        return undefined
+    }
 }
 
-export const parseTime = (date: string) => {
-    return new Date(date).toLocaleTimeString()
+export const parseTime = (event: UpcomingEvent) => {
+    const eventSessions: object = event.sessions;
+    const sessionDates: string[] = Object.values(eventSessions);
+    const lastSessionDate = sessionDates.at(-1);
+
+    if (lastSessionDate) {
+        return new Date(lastSessionDate).toLocaleTimeString()
+    } else {
+        return undefined
+    }
 }
 
-export const getLocationURL = (event: Event) => {
+export const getLocationURL = (event: UpcomingEvent) => {
     return `https://www.google.com/maps/place/${event.latitude},${event.longitude}`
 }

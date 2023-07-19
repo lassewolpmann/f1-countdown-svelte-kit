@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
     // Component imports
     import Footer from "$lib/components/Footer.svelte";
     import Timer from "$lib/components/Timer/Timer.svelte";
@@ -8,27 +8,34 @@
     import MetaDescription from "$lib/components/MetaDescription.svelte";
     import RaceTitle from "$lib/components/RaceTitle.svelte";
     import SessionSelection from "$lib/components/SessionSelection.svelte";
-    import WeatherForecast from "$lib/components/Weather/WeatherForecast.svelte";
-    import { currentSeries } from "$lib/stores/currentSeries.ts";
+
+    // Store imports
+    import { currentSeries } from "$lib/stores/currentSeries";
+
+    // Type imports
+    import type { Event, SeriesData, AllSeriesData } from "$lib/types/Data";
+    import type { PageData } from './$types';
 
     import { dev } from '$app/environment';
     import { inject } from '@vercel/analytics';
 
     inject({ mode: dev ? 'development' : 'production' });
 
-    export let data;
+    export let data: PageData;
 
-    let currentSeriesData, nextEvents, nextEvent, nextEventSessions, weatherForecast;
+    let currentSeriesData: SeriesData;
+    let nextEvents: Event[];
+    let nextEvent: Event | undefined;
+    let nextEventSessions: { [key: string]: string };
 
-    const seriesData = data ? data['seriesData'] : undefined;
-    const seriesList = data ? data['seriesList'] : undefined;
+    const seriesData = data ? data['seriesData'] : {} as AllSeriesData;
+    const seriesList = data ? data['seriesList'] : [];
 
     $: if (seriesData) {
         currentSeriesData = seriesData[$currentSeries];
-        nextEvents = currentSeriesData['nextEvents'];
-        nextEvent = nextEvents[0];
-        nextEventSessions = nextEvent['sessions'];
-        weatherForecast = currentSeriesData['weatherForecast'];
+        nextEvents = currentSeriesData.nextEvents;
+        nextEvent = nextEvents.at(0);
+        if (nextEvent) nextEventSessions = nextEvent.sessions;
     }
 </script>
 <style>
@@ -66,8 +73,6 @@
     <RaceTitle {nextEvents} />
     <SessionSelection {nextEventSessions} />
     <Timer {nextEventSessions} />
-    <Border />
-    <WeatherForecast {weatherForecast} />
     <Border />
     <UpcomingEventList {nextEvents} />
     <Border />

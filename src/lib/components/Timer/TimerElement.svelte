@@ -1,13 +1,10 @@
-<script>
+<script lang="ts">
     import { afterUpdate } from "svelte";
 
-    export let timeValue;
-    export let timeValuePct;
-    export let timeUnit;
-    export let strokeColor;
+    export let timeValue: number, timeValuePct: number, timeUnit: string, strokeColor: string;
 
-    let innerWidth = 0;
-    let svgEl, countdownCircleEl, fillCircleEl;
+    let innerWidth: number = 0;
+    let svgEl: SVGSVGElement, countdownCircleEl: SVGCircleElement, fillCircleEl: SVGCircleElement;
 
     afterUpdate(() => {
         let diameter, strokeWidth;
@@ -25,8 +22,8 @@
 
         svgEl.style.stroke = strokeColor;
 
-        countdownCircleEl.style.strokeDasharray = dashArray;
-        countdownCircleEl.style.strokeDashoffset = dashArray - dashArray * timeValuePct;
+        countdownCircleEl.style.strokeDasharray = dashArray.toString();
+        countdownCircleEl.style.strokeDashoffset = (dashArray - dashArray * timeValuePct).toString();
         countdownCircleEl.setAttribute('r', `${radius}px`)
 
         fillCircleEl.setAttribute('r', `${radius}px`)
