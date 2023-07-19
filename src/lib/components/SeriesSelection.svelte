@@ -67,7 +67,9 @@
     }
 </style>
 <div class="series-selection">
-    <button on:click={() => currentSeriesIndex = decreaseSeriesIndex(seriesList, currentSeriesIndex)}><i class="fa-solid fa-arrow-left"></i></button>
+    <button on:click={() => currentSeriesIndex = decreaseSeriesIndex(seriesList, currentSeriesIndex)} aria-label="Decrease Series Index">
+        <i class="fa-solid fa-arrow-left"></i>
+    </button>
     <div class="all-series" bind:this={seriesListEl}>
         {#if seriesList}
             {#each seriesList as series}
@@ -75,5 +77,7 @@
             {/each}
         {/if}
     </div>
-    <button on:click={() => currentSeriesIndex = increaseSeriesIndex(seriesList, currentSeriesIndex)}><i class="fa-solid fa-arrow-right"></i></button>
+    <button on:click={() => currentSeriesIndex = increaseSeriesIndex(seriesList, currentSeriesIndex)} aria-label="Increase Series Index">
+        <i class="fa-solid fa-arrow-right"></i>
+    </button>
 </div>

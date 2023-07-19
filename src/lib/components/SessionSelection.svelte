@@ -96,11 +96,15 @@
 </style>
 
 <div class="session-selection" data-nosnippet>
-    <button on:click={decreaseSessionIndex}><i class="fa-solid fa-arrow-left"></i></button>
+    <button on:click={decreaseSessionIndex} aria-label="Decrease Session Index">
+        <i class="fa-solid fa-arrow-left"></i>
+    </button>
     <div class="all-sessions" bind:this={sessionListEl}>
         {#each Object.keys(nextEventSessions) as sessionName, sessionIndex}
             <span class="session" class:selected={sessionIndex === $currentSessionIndex}>{sessionName.toUpperCase()}</span>
         {/each}
     </div>
-    <button on:click={increaseSessionIndex}><i class="fa-solid fa-arrow-right"></i></button>
+    <button on:click={increaseSessionIndex} aria-label="Increase Session Index">
+        <i class="fa-solid fa-arrow-right"></i>
+    </button>
 </div>
