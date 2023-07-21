@@ -31,7 +31,6 @@
         font-size: 18px;
         text-align: left;
         padding: 15px;
-        margin-top: 20px;
     }
 
     table button {
@@ -101,8 +100,8 @@
                     <td class="name">{parseName(event.name)}</td>
                     {#if !event.sessionsTableVisible}
                         <td class="date">
-                            <span class="day">{parseDate(event)}</span><br>
-                            <span class="time">{parseTime(event)}</span>
+                            <span class="day">{parseDate(Object.values(event['sessions']).at(-1))}</span><br>
+                            <span class="time">{parseTime(Object.values(event['sessions']).at(-1))}</span>
                         </td>
                     {:else}
                         <td class="date"></td>
@@ -124,8 +123,8 @@
                         <tr>
                             <td class="session-name" colspan="2">{session.toUpperCase()}</td>
                             <td class="date" colspan="2">
-                                <span class="day">{parseDate(event)}</span>
-                                <span class="time">{parseTime(event)}</span>
+                                <span class="day">{parseDate(event['sessions'][session])}</span>
+                                <span class="time">{parseTime(event['sessions'][session])}</span>
                             </td>
                         </tr>
                     {/each}
