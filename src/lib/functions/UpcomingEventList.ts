@@ -8,25 +8,17 @@ export const parseName = (name: string) => {
     }
 }
 
-export const parseDate = (event: UpcomingEvent) => {
-    const eventSessions: object = event.sessions;
-    const sessionDates: string[] = Object.values(eventSessions);
-    const lastSessionDate = sessionDates.at(-1);
-
-    if (lastSessionDate) {
-        return new Date(lastSessionDate).toDateString()
+export const parseDate = (sessionDate: string | unknown) => {
+    if (typeof sessionDate === "string") {
+        return new Date(sessionDate).toDateString()
     } else {
         return undefined
     }
 }
 
-export const parseTime = (event: UpcomingEvent) => {
-    const eventSessions: object = event.sessions;
-    const sessionDates: string[] = Object.values(eventSessions);
-    const lastSessionDate = sessionDates.at(-1);
-
-    if (lastSessionDate) {
-        return new Date(lastSessionDate).toLocaleTimeString()
+export const parseTime = (sessionDate: string | unknown) => {
+    if (typeof sessionDate === "string") {
+        return new Date(sessionDate).toLocaleTimeString()
     } else {
         return undefined
     }
