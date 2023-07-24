@@ -48,6 +48,14 @@
         padding-top: 0;
     }
 
+    .event-name, .session-name {
+        width: 30%;
+    }
+
+    .session-date, .race-date, .session-time, .race-time {
+        width: 30%;
+    }
+
     .location > a {
         display: flex;
         align-items: center;
