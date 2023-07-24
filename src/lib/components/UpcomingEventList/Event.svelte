@@ -31,20 +31,21 @@
         padding: 5px 15px;
     }
 
-    .session-name, .session-date {
-        border-top: var(--border);
-    }
-
     .session-row.hidden {
         display: none;
     }
 
-    .session-time {
-        color: var(--secondary-text-color);
+    .session-date, .race-date {
+        vertical-align: bottom;
+        height: 35px;
+        padding-bottom: 0;
     }
 
-    .event-name, .session-name {
-        width: 35%;
+    .session-time, .race-time {
+        color: var(--secondary-text-color);
+        vertical-align: top;
+        height: 35px;
+        padding-top: 0;
     }
 
     .location > a {
@@ -109,7 +110,7 @@
         </td>
     </tr>
     <tr class="header-row">
-        <td class="session-time">{parseTime(raceDate)}</td>
+        <td class="race-time">{parseTime(raceDate)}</td>
     </tr>
     {#each Object.keys(event.sessions) as session}
         <tr class="session-row" class:hidden={event.sessionsTableHidden}>
