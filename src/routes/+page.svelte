@@ -2,7 +2,7 @@
     // Component imports
     import Footer from "$lib/components/Footer.svelte";
     import Timer from "$lib/components/Timer/Timer.svelte";
-    import UpcomingEventList from "$lib/components/UpcomingEventList.svelte";
+    import UpcomingEventList from "$lib/components/UpcomingEventList/UpcomingEventList.svelte";
     import SeriesSelection from "$lib/components/SeriesSelection.svelte";
     import Border from "$lib/components/Border.svelte";
     import MetaDescription from "$lib/components/MetaDescription.svelte";

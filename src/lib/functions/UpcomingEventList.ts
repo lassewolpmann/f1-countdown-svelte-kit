@@ -10,7 +10,10 @@ export const parseName = (name: string) => {
 
 export const parseDate = (sessionDate: string | unknown) => {
     if (typeof sessionDate === "string") {
-        return new Date(sessionDate).toDateString()
+        return new Date(sessionDate).toLocaleString(undefined, {
+            month: 'short',
+            day: '2-digit'
+        })
     } else {
         return undefined
     }
@@ -18,7 +21,10 @@ export const parseDate = (sessionDate: string | unknown) => {
 
 export const parseTime = (sessionDate: string | unknown) => {
     if (typeof sessionDate === "string") {
-        return new Date(sessionDate).toLocaleTimeString()
+        return new Date(sessionDate).toLocaleString(undefined, {
+            hour: '2-digit',
+            minute: '2-digit'
+        })
     } else {
         return undefined
     }
