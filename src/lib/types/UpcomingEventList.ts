@@ -6,6 +6,6 @@ export interface UpcomingEvent {
     name: string,
     round: number,
     sessions: object,
-    sessionsTableVisible?: boolean,
+    sessionsTableHidden?: boolean,
     slug: string
 }
