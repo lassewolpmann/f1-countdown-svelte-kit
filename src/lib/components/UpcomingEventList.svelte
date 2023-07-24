@@ -8,8 +8,6 @@
 
     export let nextEvents: UpcomingEvent[];
 
-    let events: HTMLTableElement[] = [];
-
     onMount(() => {
         for (const nextEvent of nextEvents) {
             nextEvent.sessionsTableVisible = false;
@@ -23,43 +21,38 @@
         margin: 20px 0;
         font-size: 14px;
         border-collapse: collapse;
-        width: min(90vw, 850px);
-    }
-
-    table caption {
-        font-weight: bold;
-        font-size: 18px;
-        text-align: left;
-        padding: 15px;
+        width: min(90vw, 750px);
     }
 
     table button {
         padding: 5px 10px;
     }
 
+    /* Hiding and showing all sessions */
+    tbody {
+        display: none;
+    }
+
+    tbody.visible {
+        display: table-row-group;
+    }
+
     /* Making every second row a different color */
-    thead tr {
+    thead tr, tbody tr {
         background-color: var(--table-row-primary-color);
     }
 
-    tbody tr {
+    tbody tr:nth-child(2n-1) {
         background-color: var(--table-row-secondary-color);
     }
 
-    tbody tr:nth-child(2n) {
-        background-color: var(--table-row-primary-color);
-    }
-
-
     /* Table cells settings */
-    .name, .session-name, .date {
-        width: 45%;
+    .name, .date, .collapse, .location {
         padding: 15px;
-        text-align: left;
     }
 
-    .name {
-        font-weight: bold;
+    .name, .date {
+        width: 45%;
     }
 
     .time {
@@ -67,70 +60,70 @@
     }
 
     /* Collapse button settings */
-    .location, .collapse {
+    .collapse, .location {
         width: 5%;
-        padding: 15px;
-        text-align: center;
-        vertical-align: center;
     }
 
-    .table-head-row {
-        height: 75px;
+    /* Rotating chevron */
+    i {
+        transition: transform 0.3s ease;
     }
 
-    @media only screen and (max-width: 768px) {
-        .table-head-row {
-            height: 125px;
-        }
+    i.visible {
+        transform: rotateX(180deg);
+    }
+
+    /* Giving a element same properties as button */
+    a {
+        font-size: 16px;
+        color: var(--secondary-text-color);
+        background: var(--button-inactive-color);
+        padding: 10px 15px;
+        border: none;
+        border-radius: 5px;
+        transition: background 0.2s ease;
+    }
+
+    a:hover {
+        background: var(--button-hover-color);
+        color: var(--main-text-color);
     }
 </style>
 
-<table class="upcoming">
-    <caption>Upcoming Grands Prix</caption>
-    {#if nextEvents}
-        {#each nextEvents as event, i}
-            <table bind:this={events[i]} class="event">
-                <thead>
+<div class="upcoming-event-list">
+    <h3>Upcoming Grands Prix</h3>
+    {#each nextEvents as event}
+        <table class="event">
+            <thead>
                 <tr class="table-head-row">
-                    <th class="location">
+                    <td class="location">
                         <a href="{getLocationURL(event)}" target="_blank" aria-label="Google Maps Location of Event">
-                            <button aria-label="Navigate to Location on Google Maps"><i class="fa-solid fa-location-dot"></i></button>
+                            <i class="fa-solid fa-location-dot"></i>
                         </a>
-                    </th>
+                    </td>
                     <td class="name">{parseName(event.name)}</td>
-                    {#if !event.sessionsTableVisible}
-                        <td class="date">
-                            <span class="day">{parseDate(Object.values(event['sessions']).at(-1))}</span><br>
-                            <span class="time">{parseTime(Object.values(event['sessions']).at(-1))}</span>
-                        </td>
-                    {:else}
-                        <td class="date"></td>
-                    {/if}
+                    <td class="date">
+                        <span class="day">{parseDate(Object.values(event['sessions']).at(-1))}</span><br>
+                        <span class="time">{parseTime(Object.values(event['sessions']).at(-1))}</span>
+                    </td>
                     <td class="collapse">
-                        <button on:click={() => nextEvents[i].sessionsTableVisible = !nextEvents[i].sessionsTableVisible} aria-label="Show or Hide all Sessions of Event">
-                            {#if event.sessionsTableVisible}
-                                <i class="fa-solid fa-chevron-up"></i>
-                            {:else}
-                                <i class="fa-solid fa-chevron-down"></i>
-                            {/if}
+                        <button on:click={() => event.sessionsTableVisible = !event.sessionsTableVisible} aria-label="Show or hide all Sessions of Event">
+                            <i class="fa-solid fa-chevron-up" class:visible={event.sessionsTableVisible}></i>
                         </button>
                     </td>
                 </tr>
-                </thead>
-                {#if event.sessionsTableVisible}
-                    <tbody class="sessions">
-                    {#each Object.keys(event['sessions']) as session}
-                        <tr>
-                            <td class="session-name" colspan="2">{session.toUpperCase()}</td>
-                            <td class="date" colspan="2">
-                                <span class="day">{parseDate(event['sessions'][session])}</span>
-                                <span class="time">{parseTime(event['sessions'][session])}</span>
-                            </td>
-                        </tr>
-                    {/each}
-                    </tbody>
-                {/if}
-            </table>
-        {/each}
-    {/if}
-</table>
+            </thead>
+            <tbody class:visible={event.sessionsTableVisible}>
+            {#each Object.keys(event['sessions']) as session}
+                <tr>
+                    <td class="name" colspan="2">{session.toUpperCase()}</td>
+                    <td class="date" colspan="2">
+                        <span class="day">{parseDate(event['sessions'][session])}</span><br>
+                        <span class="time">{parseTime(event['sessions'][session])}</span>
+                    </td>
+                </tr>
+            {/each}
+            </tbody>
+        </table>
+    {/each}
+</div>
