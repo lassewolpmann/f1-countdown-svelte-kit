@@ -11,6 +11,7 @@ export interface Event {
     slug: string;
     localeKey: string;
     sessions: { [key: string]: string };
+    sessionsTableHidden?: boolean;
 }
 
 export interface SeriesData {

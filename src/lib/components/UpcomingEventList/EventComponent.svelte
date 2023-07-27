@@ -4,10 +4,10 @@
     import { onMount } from "svelte";
 
     // Type imports
-    import type { UpcomingEvent } from "$lib/types/UpcomingEventList";
+    import type { Event } from "$lib/types/Data";
 
-    export let event: UpcomingEvent;
-    let raceDate: string;
+    export let event: Event;
+    let raceDate: string | undefined;
 
     onMount(() => {
         raceDate = Object.values(event.sessions).at(-1);

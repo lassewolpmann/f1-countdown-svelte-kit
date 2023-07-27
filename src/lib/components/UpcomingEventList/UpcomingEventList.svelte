@@ -1,11 +1,11 @@
 <script lang="ts">
     // Type imports
-    import type { UpcomingEvent } from "$lib/types/UpcomingEventList";
+    import type { Event } from "$lib/types/Data";
 
     // Component imports
-    import Event from "$lib/components/UpcomingEventList/Event.svelte";
+    import EventComponent from "$lib/components/UpcomingEventList/EventComponent.svelte";
 
-    export let nextEvents: UpcomingEvent[];
+    export let nextEvents: Event[];
 </script>
 
 <style>
@@ -29,6 +29,6 @@
     <caption>Upcoming Grands Prix</caption>
     <thead></thead>
     {#each nextEvents as event}
-        <Event {event} />
+        <EventComponent {event} />
     {/each}
 </table>
