@@ -1,4 +1,4 @@
-import type { UpcomingEvent } from "$lib/types/UpcomingEventList";
+import type { Event } from "$lib/types/Data";
 
 export const parseName = (name: string) => {
     if (name.includes("Grand Prix")) {
@@ -30,6 +30,6 @@ export const parseTime = (sessionDate: string | unknown) => {
     }
 }
 
-export const getLocationURL = (event: UpcomingEvent) => {
+export const getLocationURL = (event: Event) => {
     return `https://www.google.com/maps/place/${event.latitude},${event.longitude}`
 }
