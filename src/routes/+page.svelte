@@ -16,11 +16,6 @@
     import type { Event, SeriesData, AllSeriesData } from "$lib/types/Data";
     import type { PageData } from './$types';
 
-    import { dev } from '$app/environment';
-    import { inject } from '@vercel/analytics';
-
-    inject({ mode: dev ? 'development' : 'production' });
-
     export let data: PageData;
 
     let currentSeriesData: SeriesData;
