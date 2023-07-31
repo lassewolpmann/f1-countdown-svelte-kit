@@ -40,6 +40,7 @@ async function getAllEvents(series: string, fetch: any) {
 
 function getNextEvents(allEvents: Array<Event>): Event[] {
     const timestamp: number = new Date().getTime();
+    // const timestamp: number = new Date('2023-10-30').getTime();
 
     let nextEvents: Array<Event> = allEvents.filter((event: Event): boolean => {
         const eventSessions: object = event['sessions'];

@@ -1,4 +1,3 @@
-import va from "@vercel/analytics";
 import { currentSeries } from "$lib/stores/currentSeries";
 
 export const calculateOffset = (currentSeriesIndex: number, elementList: HTMLElement): number => {
@@ -21,7 +20,6 @@ export const calculateOffset = (currentSeriesIndex: number, elementList: HTMLEle
 
 export const decreaseSeriesIndex = (seriesList: string[], currentSeriesIndex: number): number => {
     if (currentSeriesIndex > 0) {
-        va.track('Series changed');
         currentSeriesIndex--;
 
         const newSeries: string | undefined = seriesList.at(currentSeriesIndex);
@@ -33,7 +31,6 @@ export const decreaseSeriesIndex = (seriesList: string[], currentSeriesIndex: nu
 
 export const increaseSeriesIndex = (seriesList: string[], currentSeriesIndex: number): number => {
     if (currentSeriesIndex < seriesList.length - 1) {
-        va.track('Series changed');
         currentSeriesIndex++;
 
         const newSeries: string | undefined = seriesList.at(currentSeriesIndex);
