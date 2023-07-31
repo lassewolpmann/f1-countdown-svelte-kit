@@ -3,7 +3,6 @@
     import { calculateOffset } from "$lib/functions/SeriesSelection";
     import { findCurrentSessionIndex } from "$lib/functions/SessionSelection";
     import { afterUpdate } from "svelte";
-    import va from '@vercel/analytics';
 
     // Store imports
     import { currentSessionIndex } from "$lib/stores/currentSessionIndex";
@@ -14,14 +13,12 @@
 
     const decreaseSessionIndex = () => {
         if ($currentSessionIndex > 0) {
-            va.track('Session changed');
             currentSessionIndex.update((index) => index - 1);
         }
     }
 
     const increaseSessionIndex = () => {
         if ($currentSessionIndex < Object.keys(nextEventSessions).length - 1) {
-            va.track('Session changed');
             currentSessionIndex.update((index) => index + 1);
         }
     }

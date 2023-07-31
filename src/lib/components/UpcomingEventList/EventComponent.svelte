@@ -1,18 +1,11 @@
 <script lang="ts">
     // Function imports
     import { parseName, parseDate, parseTime, getLocationURL } from "$lib/functions/UpcomingEventList";
-    import { onMount } from "svelte";
 
     // Type imports
     import type { Event } from "$lib/types/Data";
 
     export let event: Event;
-    let raceDate: string | undefined;
-
-    onMount(() => {
-        raceDate = Object.values(event.sessions).at(-1);
-        event.sessionsTableHidden = true;
-    })
 
     const toggleSessionVisibility = () => {
         event.sessionsTableHidden = !event.sessionsTableHidden
@@ -110,7 +103,7 @@
             </a>
         </td>
         <td class="event-name" rowspan="2">{parseName(event.name)}</td>
-        <td class="race-date">{parseDate(raceDate)}</td>
+        <td class="race-date">{parseDate(Object.values(event.sessions).at(-1))}</td>
         <td class="collapse" rowspan="2">
             <button on:click={toggleSessionVisibility} aria-label="Show or hide all Sessions of Event">
                 <i class="fa-solid fa-chevron-down" class:hidden={event.sessionsTableHidden}></i>
@@ -118,7 +111,7 @@
         </td>
     </tr>
     <tr class="header-row">
-        <td class="race-time">{parseTime(raceDate)}</td>
+        <td class="race-time">{parseTime(Object.values(event.sessions).at(-1))}</td>
     </tr>
     {#each Object.keys(event.sessions) as session}
         <tr class="session-row" class:hidden={event.sessionsTableHidden}>
