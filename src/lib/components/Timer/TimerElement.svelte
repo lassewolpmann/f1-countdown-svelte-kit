@@ -20,7 +20,7 @@
         const radius = diameter / 2 - (strokeWidth / 2);
         const dashArray =  2 * Math.PI * radius;
 
-        const numberBeforeDecimal: number = parseFloat(timeValuePct.toFixed());
+        const numberBeforeDecimal: number = parseInt(timeValuePct.toString());
         timeValuePct = timeValuePct > 1 ? timeValuePct - numberBeforeDecimal : timeValuePct
 
         svgEl.style.stroke = strokeColor;
