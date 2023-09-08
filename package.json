@@ -21,6 +21,7 @@
 	},
 	"type": "module",
 	"dependencies": {
-		"@fontsource/poppins": "^5.0.5"
+		"@fontsource/poppins": "^5.0.5",
+		"sass": "^1.65.1"
 	}
 }

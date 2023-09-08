@@ -20,6 +20,9 @@
         const radius = diameter / 2 - (strokeWidth / 2);
         const dashArray =  2 * Math.PI * radius;
 
+        const numberBeforeDecimal: number = parseInt(timeValuePct.toString());
+        timeValuePct = timeValuePct > 1 ? timeValuePct - numberBeforeDecimal : timeValuePct
+
         svgEl.style.stroke = strokeColor;
 
         countdownCircleEl.style.strokeDasharray = dashArray.toString();
