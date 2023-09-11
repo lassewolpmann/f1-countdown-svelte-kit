@@ -1,9 +1,6 @@
 # f1-countdown.com
 
 Source code for f1-countdown.com, a website created for F1 Fans to keep track of the schedule and never miss a race again.  
-Hosted by Vercel.  
-Production build: https://f1-countdown-svelte-kit.vercel.app  
-Development build: https://f1-countdown-svelte-kit-git-development-lassewolpmann.vercel.app/
 
 # Running Locally
 
@@ -31,3 +28,17 @@ npm run build
 ```
 
 You can preview the production build with `npm run preview`.
+
+## Running with Docker
+```bash
+docker compose up
+```
+
+or
+
+```bash
+docker compose up -d
+```
+
+to run in the background.  
+You can then access the running container on http://localhost:3000
