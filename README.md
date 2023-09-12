@@ -41,4 +41,5 @@ docker compose up -d
 ```
 
 to run in the background.  
-You can then access the running container on http://localhost:3000
+You can then access the running container on http://localhost:3000  
+Note: The Docker image doesn't use local changes. It always pulls the latest version from GitHub.
