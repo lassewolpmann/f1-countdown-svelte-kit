@@ -18,7 +18,7 @@
 
     export let data: PageData;
 
-    let currentSeriesData: SeriesData;
+    let currentSeriesData: SeriesData | undefined;
     let nextEvents: Event[];
     let nextEvent: Event | undefined;
     let nextEventSessions: { [key: string]: string };
@@ -28,7 +28,7 @@
 
     $: if (seriesData) {
         currentSeriesData = seriesData[$currentSeries];
-        nextEvents = currentSeriesData.nextEvents;
+        if (currentSeriesData) nextEvents = currentSeriesData.nextEvents;
         nextEvent = nextEvents.at(0);
         if (nextEvent) nextEventSessions = nextEvent.sessions;
     }
@@ -75,4 +75,3 @@
 <footer>
     <Footer />
 </footer>
-
