@@ -8,20 +8,20 @@
     export let nextEvents: Event[];
 </script>
 
-<style>
+<style lang="scss">
     /* General table settings */
     table {
         margin: 20px 0;
         font-size: 14px;
         border-collapse: collapse;
         width: min(90vw, 600px);
-    }
 
-    table > caption {
-        text-align: left;
-        padding-bottom: 15px;
-        font-weight: 600;
-        font-size: 16px;
+        caption {
+            text-align: left;
+            padding-bottom: 15px;
+            font-weight: 600;
+            font-size: 16px;
+        }
     }
 </style>
 
