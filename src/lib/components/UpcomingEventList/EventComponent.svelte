@@ -11,7 +11,7 @@
         event.sessionsTableHidden = !event.sessionsTableHidden
     }
 </script>
-<style>
+<style lang="scss">
     tbody {
         background: var(--table-row-primary-color);
     }
@@ -49,49 +49,53 @@
         width: 30%;
     }
 
-    .location > a {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-
-        width: 30px;
-        height: 30px;
-
-        background: var(--button-inactive-color);
-        cursor: pointer;
-        border: none;
-        border-radius: 5px;
-
-        color: var(--secondary-text-color);
-        transition: background 0.2s ease;
-
-        text-decoration: none;
-    }
-
-    .location > a:hover {
-        background: var(--button-hover-color);
-        color: var(--main-text-color);
-    }
-
-    .collapse, .location {
+    .location, .collapse {
         width: 5%;
     }
 
-    .collapse > button {
-        width: 30px;
-        height: 30px;
+    .location {
+        a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
 
-        display: flex;
-        align-items: center;
-        justify-content: center;
+            width: 30px;
+            height: 30px;
+
+            background: var(--button-inactive-color);
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+
+            color: var(--secondary-text-color);
+            transition: background 0.2s ease;
+
+            text-decoration: none;
+        }
+
+        a:hover {
+            background: var(--button-hover-color);
+            color: var(--main-text-color);
+        }
     }
 
-    .collapse > button > i {
-        transition: transform 0.3s ease;
-    }
+    .collapse {
+        button {
+            width: 30px;
+            height: 30px;
 
-    .collapse > button > i.hidden {
-        transform: rotateX(180deg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            i {
+                transition: transform 0.3s ease;
+            }
+
+            i.hidden {
+                transform: rotateX(180deg);
+            }
+        }
     }
 </style>
 
@@ -106,7 +110,7 @@
         <td class="race-date">{parseDate(Object.values(event.sessions).at(-1))}</td>
         <td class="collapse" rowspan="2">
             <button on:click={toggleSessionVisibility} aria-label="Show or hide all Sessions of Event">
-                <i class="fa-solid fa-chevron-down" class:hidden={event.sessionsTableHidden}></i>
+                <i class="fa-solid fa-chevron-up" class:hidden={event.sessionsTableHidden}></i>
             </button>
         </td>
     </tr>
