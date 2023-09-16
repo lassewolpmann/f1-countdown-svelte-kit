@@ -8,6 +8,7 @@
     import MetaDescription from "$lib/components/MetaDescription.svelte";
     import RaceTitle from "$lib/components/RaceTitle.svelte";
     import SessionSelection from "$lib/components/SessionSelection.svelte";
+    import DonationButton from "$lib/components/DonationButton.svelte";
 
     // Store imports
     import { currentSeries } from "$lib/stores/currentSeries";
@@ -34,7 +35,7 @@
     }
 </script>
 <style>
-    main, footer {
+    main, footer, header {
         display: flex;
         align-items: center;
         justify-content: center;
@@ -44,7 +45,7 @@
         flex-direction: column;
     }
 
-    footer {
+    footer, header {
         padding: 20px;
         flex-direction: row;
         gap: 50px;
@@ -62,9 +63,12 @@
 
 <MetaDescription {seriesData} {seriesList} />
 
-<main>
+<header>
+    <DonationButton />
     <SeriesSelection {seriesList} />
-    <Border />
+</header>
+<Border />
+<main>
     <RaceTitle {nextEvents} />
     <SessionSelection {nextEventSessions} />
     <Timer {nextEventSessions} />

@@ -17,8 +17,6 @@
 </script>
 <style>
     .series-selection {
-        margin: 20px 0;
-
         display: flex;
         flex-direction: row;
         align-items: center;

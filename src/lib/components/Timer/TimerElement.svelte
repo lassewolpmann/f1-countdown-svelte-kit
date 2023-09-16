@@ -33,7 +33,7 @@
     })
 </script>
 
-<style>
+<style lang="scss">
     .timer {
         display: flex;
         flex-direction: column;
@@ -59,22 +59,22 @@
 
         width: 270px;
         height: 270px;
-    }
 
-    svg > circle {
-        fill: transparent;
-        stroke-width: 12px;
-    }
+        circle {
+            fill: transparent;
+            stroke-width: 12px;
+        }
 
-    svg > .countdown-circle {
-        stroke-linecap: round;
-        transform: rotate(270deg);
-        transform-origin: center;
-        transition: stroke-dashoffset 0.5s ease-in-out;
-    }
+        .countdown-circle {
+            stroke-linecap: round;
+            transform: rotate(270deg);
+            transform-origin: center;
+            transition: stroke-dashoffset 0.5s ease-in-out;
+        }
 
-    svg > .fill-circle {
-        opacity: 0.2;
+        .fill-circle {
+            opacity: 0.2;
+        }
     }
 
     @media only screen and (max-width: 768px) {
@@ -86,10 +86,10 @@
         svg {
             width: 135px;
             height: 135px;
-        }
 
-        svg > circle {
-            stroke-width: 6px;
+            circle {
+                stroke-width: 6px;
+            }
         }
 
         .time {
