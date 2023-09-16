@@ -4,9 +4,3 @@ services:
     build: .
     ports:
       - "3000:3000"
-
-
-networks:
-  default:
-    name: nginx-network
-    external: true
