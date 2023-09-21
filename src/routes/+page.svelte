@@ -74,8 +74,8 @@
     <Timer {nextEventSessions} />
     <Border />
     <UpcomingEventList {nextEvents} />
-    <Border />
 </main>
+<Border />
 <footer>
     <Footer />
 </footer>
