@@ -1,4 +1,4 @@
-import { currentSeries } from "$lib/stores/currentSeries";
+import { currentSeries } from "$lib/components/SeriesSelection/currentSeries";
 
 export const calculateOffset = (currentSeriesIndex: number, elementList: HTMLElement): number => {
     const childNodes = elementList.childNodes;

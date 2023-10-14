@@ -1,20 +1,16 @@
 <style>
-    a {
-        color: inherit;
-        text-decoration: inherit;
-        transition: color 0.2s ease;
-    }
+    footer {
+        display: flex;
+        align-items: flex-start;
+        justify-content: center;
+        flex-direction: row;
 
-    a:hover {
-        color: var(--button-hover-color);
+        padding: 50px;
+        gap: 20px;
     }
 
     .fa-heart {
         color: red;
-    }
-
-    .fa-github {
-        padding-bottom: 5px;
     }
 
     div {
@@ -24,27 +20,42 @@
         justify-content: center;
     }
 
-    h1 {
-        font-size: 16px;
+    @media only screen and (max-width: 768px) {
+        footer {
+            flex-direction: column;
+        }
     }
 </style>
 
-<div>
-    <span>Made with <i class="fa-solid fa-heart"></i></span>
-    <span>by Lasse Wolpmann</span>
-</div>
-<div>
-    <h1>Project links</h1>
-    <a href="https://github.com/lassewolpmann/f1-countdown-svelte-kit" target="_blank"><i class="fa-brands fa-github"></i> Code</a>
-    <a href="https://github.com/lassewolpmann/f1-countdown-svelte-kit/issues" target="_blank"><i class="fa-brands fa-github"></i> Issues</a>
-    <a href="https://github.com/lassewolpmann/f1-countdown-svelte-kit/blob/main/LICENSE.md" target="_blank"><i class="fa-solid fa-scale-balanced"></i> License</a>
-</div>
-<div>
-    <h1>Session data</h1>
-    <a href="https://github.com/sportstimes/f1" target="_blank"><i class="fa-brands fa-github"></i> sportstimes</a>
-    <a href="https://github.com/sportstimes/f1/blob/main/LICENSE" target="_blank"><i class="fa-solid fa-scale-balanced"></i> License</a>
-</div>
-<div>
-    <h1>Donations</h1>
-    <a href="https://www.buymeacoffee.com/f1countdowncom" target="_blank"><i class="fa-solid fa-mug-hot"></i> buymeacoffee.com</a>
-</div>
+<footer>
+    <div>
+        <h4>Made with <i class="fa-solid fa-heart"></i><br>by Lasse Wolpmann</h4>
+    </div>
+    <div>
+        <h4>Project links</h4>
+        <a href="https://github.com/lassewolpmann/f1-countdown-svelte-kit" target="_blank">
+            <i class="fa-brands fa-github"></i> Code
+        </a>
+        <a href="https://github.com/lassewolpmann/f1-countdown-svelte-kit/issues" target="_blank">
+            <i class="fa-brands fa-github"></i> Issues
+        </a>
+        <a href="https://github.com/lassewolpmann/f1-countdown-svelte-kit/blob/main/LICENSE.md" target="_blank">
+            <i class="fa-solid fa-scale-balanced"></i> License
+        </a>
+    </div>
+    <div>
+        <h4>Session data</h4>
+        <a href="https://github.com/sportstimes/f1" target="_blank">
+            <i class="fa-brands fa-github"></i> sportstimes
+        </a>
+        <a href="https://github.com/sportstimes/f1/blob/main/LICENSE" target="_blank">
+            <i class="fa-solid fa-scale-balanced"></i> License
+        </a>
+    </div>
+    <div>
+        <h4>Donations</h4>
+        <a href="https://www.buymeacoffee.com/f1countdowncom" target="_blank">
+            <i class="fa-solid fa-mug-hot"></i> buymeacoffee.com
+        </a>
+    </div>
+</footer>

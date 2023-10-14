@@ -3,28 +3,33 @@
     import TimerElement from "$lib/components/Timer/TimerElement.svelte";
 
     // Store imports
-    import { currentSessionIndex } from "$lib/stores/currentSessionIndex";
+    import { currentSessionIndex } from "$lib/components/SessionSelection/currentSessionIndex";
+
+    // Class imports
+    import { Timer } from "$lib/components/Timer/Timer";
 
     // Function imports
-    import { calculateDelta, deltaToDays, deltaToHours, deltaToMinutes, deltaToSeconds, daysToPercent, hoursToPercent, minutesToPercent, secondsToPercent } from "$lib/functions/Timer";
-    import { onDestroy } from "svelte";
+    import { onDestroy, onMount } from "svelte";
 
     export let nextEventSessions: { [key: string]: string };
 
-    let delta: number, deltaCounterInterval: any;
+    let timer: Timer;
 
-    $: {
-        // Clear existing interval
-        if (deltaCounterInterval) clearInterval(deltaCounterInterval);
+    onMount(() => {
+        timer = new Timer(nextEventSessions, $currentSessionIndex);
 
-        if (nextEventSessions) delta = calculateDelta(nextEventSessions, $currentSessionIndex);
-        deltaCounterInterval = setInterval(() => {
-            if (delta > 0) delta -= 1;
-        }, 1000);
+        timer.timerInterval = setInterval(() => {
+            timer.delta = timer.calculateDelta();
+        }, 1000)
+    })
+
+    // Create a new timer object when either the sessions or session index update
+    $: if (nextEventSessions || $currentSessionIndex) {
+        timer = new Timer(nextEventSessions, $currentSessionIndex);
     }
 
     onDestroy(() => {
-        clearInterval(deltaCounterInterval);
+        clearInterval(timer.timerInterval);
     })
 </script>
 
@@ -38,15 +43,12 @@
 
     .timer {
         flex-direction: column;
-        width: 100%;
-        margin: 10px 0;
-        position: relative;
+        margin: 30px 0;
     }
 
     .timer-elements {
         flex-direction: row;
         gap: 50px;
-        margin: 20px;
     }
 
     @media only screen and (max-width: 768px) {
@@ -59,9 +61,9 @@
 
 <div class="timer">
     <div class="timer-elements" data-nosnippet>
-        <TimerElement timeValue={deltaToDays(delta)} timeValuePct={daysToPercent(delta)} timeUnit="days" strokeColor="rgb(234, 53, 19)"/>
-        <TimerElement timeValue={deltaToHours(delta)} timeValuePct={hoursToPercent(delta)} timeUnit="hours" strokeColor="rgb(244, 200, 68)"/>
-        <TimerElement timeValue={deltaToMinutes(delta)} timeValuePct={minutesToPercent(delta)} timeUnit="minutes" strokeColor="rgb(232, 232, 228)"/>
-        <TimerElement timeValue={deltaToSeconds(delta)} timeValuePct={secondsToPercent(delta)} timeUnit="seconds" strokeColor="rgb(57, 97, 164)"/>
+        <TimerElement timeValue={timer.deltaDays} timeValuePct={timer.deltaDaysPct} timeUnit="days" strokeColor="rgb(234, 53, 19)"/>
+        <TimerElement timeValue={timer.deltaHours} timeValuePct={timer.deltaHoursPct} timeUnit="hours" strokeColor="rgb(244, 200, 68)"/>
+        <TimerElement timeValue={timer.deltaMinutes} timeValuePct={timer.deltaMinutesPct} timeUnit="minutes" strokeColor="rgb(232, 232, 228)"/>
+        <TimerElement timeValue={timer.deltaSeconds} timeValuePct={timer.deltaSecondsPct} timeUnit="seconds" strokeColor="rgb(57, 97, 164)"/>
     </div>
 </div>

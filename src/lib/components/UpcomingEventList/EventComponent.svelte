@@ -1,6 +1,6 @@
 <script lang="ts">
     // Function imports
-    import { parseName, parseDate, parseTime, getLocationURL } from "$lib/functions/UpcomingEventList";
+    import { parseName, parseDate, parseTime, getLocationURL } from "$lib/components/UpcomingEventList/UpcomingEventList";
 
     // Type imports
     import type { Event } from "$lib/types/Data";

@@ -9,7 +9,6 @@
 </script>
 
 <style lang="scss">
-    /* General table settings */
     table {
         margin: 20px 0;
         font-size: 14px;
