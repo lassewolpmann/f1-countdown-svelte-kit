@@ -9,24 +9,18 @@
     import { Timer } from "$lib/components/Timer/Timer";
 
     // Function imports
-    import { onDestroy, onMount } from "svelte";
+    import { onDestroy } from "svelte";
 
     export let nextEventSessions: { [key: string]: string };
 
-    let timer: Timer;
+    let timer = new Timer(nextEventSessions, $currentSessionIndex);
 
-    onMount(() => {
-        timer = new Timer(nextEventSessions, $currentSessionIndex);
-
-        timer.timerInterval = setInterval(() => {
-            timer.delta = timer.calculateDelta();
-        }, 1000)
-    })
+    timer.timerInterval = setInterval(() => {
+        timer.delta = timer.calculateDelta();
+    }, 1000)
 
     // Create a new timer object when either the sessions or session index update
-    $: if (nextEventSessions || $currentSessionIndex) {
-        timer = new Timer(nextEventSessions, $currentSessionIndex);
-    }
+    $: timer = new Timer(nextEventSessions, $currentSessionIndex);
 
     onDestroy(() => {
         clearInterval(timer.timerInterval);
