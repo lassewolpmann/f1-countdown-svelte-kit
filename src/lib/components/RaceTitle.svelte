@@ -1,16 +1,15 @@
 <script lang="ts">
     // Type imports
     import type { Event } from "$lib/types/Data";
-    import { afterUpdate } from "svelte";
 
     export let nextEvents: Event[];
 
     let nextEvent: undefined | Event, nextEventName: string;
 
-    afterUpdate(() => {
+    $: {
         nextEvent = nextEvents.at(0);
         nextEventName = nextEvent !== undefined ? nextEvent.name : "Unknown Grand Prix";
-    })
+    }
 </script>
 
 <style>
