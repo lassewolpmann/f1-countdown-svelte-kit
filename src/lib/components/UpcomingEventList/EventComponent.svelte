@@ -1,14 +1,17 @@
 <script lang="ts">
     // Function imports
-    import { parseName, parseDate, parseTime, getLocationURL } from "$lib/functions/UpcomingEventList";
+    import { EventComponent } from "$lib/components/UpcomingEventList/EventComponent";
 
     // Type imports
     import type { Event } from "$lib/types/Data";
 
     export let event: Event;
 
+    let eventComponent: EventComponent;
+    $: eventComponent = new EventComponent(event)
+
     const toggleSessionVisibility = () => {
-        event.sessionsTableHidden = !event.sessionsTableHidden
+        eventComponent.sessionsHidden = !eventComponent.sessionsHidden
     }
 </script>
 <style lang="scss">
@@ -99,31 +102,31 @@
     }
 </style>
 
-<tbody class="event" id="{event.slug}">
+<tbody class="event">
     <tr class="header-row">
         <td class="location" rowspan="2">
-            <a href="{getLocationURL(event)}" target="_blank" aria-label="Google Maps Location of Event">
+            <a href={eventComponent.locationURL} target="_blank" aria-label="Google Maps Location of Event">
                 <i class="fa-solid fa-location-dot"></i>
             </a>
         </td>
-        <td class="event-name" rowspan="2">{parseName(event.name)}</td>
-        <td class="race-date">{parseDate(Object.values(event.sessions).at(-1))}</td>
+        <td class="event-name" rowspan="2">{eventComponent.eventName}</td>
+        <td class="race-date">{eventComponent.raceDate}</td>
         <td class="collapse" rowspan="2">
             <button on:click={toggleSessionVisibility} aria-label="Show or hide all Sessions of Event">
-                <i class="fa-solid fa-chevron-up" class:hidden={event.sessionsTableHidden}></i>
+                <i class="fa-solid fa-chevron-up" class:hidden={eventComponent.sessionsHidden}></i>
             </button>
         </td>
     </tr>
     <tr class="header-row">
-        <td class="race-time">{parseTime(Object.values(event.sessions).at(-1))}</td>
+        <td class="race-time">{eventComponent.raceTime}</td>
     </tr>
-    {#each Object.keys(event.sessions) as session}
-        <tr class="session-row" class:hidden={event.sessionsTableHidden}>
-            <td class="session-name" rowspan="2" colspan="2">{session.toUpperCase()}</td>
-            <td class="session-date" colspan="2">{parseDate(event.sessions[session])}</td>
+    {#each { length: eventComponent.sessionNames.length } as _, i}
+        <tr class="session-row" class:hidden={eventComponent.sessionsHidden}>
+            <td class="session-name" rowspan="2" colspan="2">{eventComponent.sessionNames.at(i)}</td>
+            <td class="session-date" colspan="2">{eventComponent.sessionDates.at(i)}</td>
         </tr>
-        <tr class="session-row" class:hidden={event.sessionsTableHidden}>
-            <td class="session-time" colspan="2">{parseTime(event.sessions[session])}</td>
+        <tr class="session-row" class:hidden={eventComponent.sessionsHidden}>
+            <td class="session-time" colspan="2">{eventComponent.sessionTimes.at(i)}</td>
         </tr>
     {/each}
 </tbody>

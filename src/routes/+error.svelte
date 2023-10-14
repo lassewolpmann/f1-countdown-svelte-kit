@@ -2,20 +2,22 @@
     import { page } from '$app/stores';
 </script>
 
-<style>
+<style lang="scss">
     .error {
         margin: 50px;
         text-align: center;
-    }
 
-    .error > img {
-        margin-top: 50px;
-        width: min(90vw, 500px);
-        height: auto;
-    }
+        img {
+            margin-top: 50px;
+            width: min(90vw, 500px);
+            height: auto;
+        }
 
-    .error > h2 > span {
-        color: red;
+        h2 {
+            span {
+                color: red;
+            }
+        }
     }
 </style>
 

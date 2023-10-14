@@ -3,19 +3,22 @@
     import Footer from "$lib/components/Footer.svelte";
     import Timer from "$lib/components/Timer/Timer.svelte";
     import UpcomingEventList from "$lib/components/UpcomingEventList/UpcomingEventList.svelte";
-    import SeriesSelection from "$lib/components/SeriesSelection.svelte";
+    import SeriesSelection from "$lib/components/SeriesSelection/SeriesSelection.svelte";
     import Border from "$lib/components/Border.svelte";
-    import MetaDescription from "$lib/components/MetaDescription.svelte";
+    import MetaDescription from "$lib/components/MetaDescription/MetaDescription.svelte";
     import RaceTitle from "$lib/components/RaceTitle.svelte";
-    import SessionSelection from "$lib/components/SessionSelection.svelte";
-    import DonationButton from "$lib/components/DonationButton.svelte";
+    import SessionSelection from "$lib/components/SessionSelection/SessionSelection.svelte";
 
     // Store imports
-    import { currentSeries } from "$lib/stores/currentSeries";
+    import { currentSeries } from "$lib/components/SeriesSelection/currentSeries";
 
     // Type imports
-    import type { Event, SeriesData, AllSeriesData } from "$lib/types/Data";
+    import type { Event, SeriesData } from "$lib/types/Data";
     import type { PageData } from './$types';
+
+    // Font imports
+    import "@fontsource/poppins/400.css";
+    import "@fontsource/poppins/600.css";
 
     export let data: PageData;
 
@@ -24,8 +27,8 @@
     let nextEvent: Event | undefined;
     let nextEventSessions: { [key: string]: string };
 
-    const seriesData = data ? data['seriesData'] : {} as AllSeriesData;
-    const seriesList = data ? data['seriesList'] : [];
+    const seriesData = data['seriesData'];
+    const seriesList = data['seriesList'];
 
     $: if (seriesData) {
         currentSeriesData = seriesData[$currentSeries];
@@ -35,7 +38,7 @@
     }
 </script>
 <style>
-    main, footer, header {
+    main, header {
         display: flex;
         align-items: center;
         justify-content: center;
@@ -45,18 +48,10 @@
         flex-direction: column;
     }
 
-    footer, header {
+    header {
         padding: 20px;
         flex-direction: row;
         gap: 50px;
-    }
-
-    @media only screen and (max-width: 768px) {
-        footer {
-            flex-direction: column;
-            align-items: flex-start;
-            gap: 20px;
-        }
     }
 </style>
 
@@ -64,7 +59,6 @@
 <MetaDescription {seriesData} {seriesList} />
 
 <header>
-    <DonationButton />
     <SeriesSelection {seriesList} />
 </header>
 <Border />
@@ -74,8 +68,6 @@
     <Timer {nextEventSessions} />
     <Border />
     <UpcomingEventList {nextEvents} />
-    <Border />
 </main>
-<footer>
-    <Footer />
-</footer>
+<Border />
+<Footer />

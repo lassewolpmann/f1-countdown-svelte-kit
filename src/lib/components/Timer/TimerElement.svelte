@@ -3,33 +3,26 @@
 
     export let timeValue: number, timeValuePct: number, timeUnit: string, strokeColor: string;
 
-    let innerWidth: number = 0;
+    let innerWidth: number;
     let svgEl: SVGSVGElement, countdownCircleEl: SVGCircleElement, fillCircleEl: SVGCircleElement;
 
     afterUpdate(() => {
-        let diameter, strokeWidth;
-
-        if (innerWidth >= 769) {
-            diameter = 270;
-            strokeWidth = 12;
-        } else {
-            diameter = 135;
-            strokeWidth = 6;
-        }
+        let diameter = innerWidth > 783 ? 270 : 135;
+        let strokeWidth = innerWidth > 783 ? 12 : 6;
 
         const radius = diameter / 2 - (strokeWidth / 2);
         const dashArray =  2 * Math.PI * radius;
 
         const numberBeforeDecimal: number = parseInt(timeValuePct.toString());
-        timeValuePct = timeValuePct > 1 ? timeValuePct - numberBeforeDecimal : timeValuePct
+        timeValuePct = timeValuePct > 1 ? timeValuePct - numberBeforeDecimal : timeValuePct;
 
         svgEl.style.stroke = strokeColor;
 
         countdownCircleEl.style.strokeDasharray = dashArray.toString();
         countdownCircleEl.style.strokeDashoffset = (dashArray - dashArray * timeValuePct).toString();
-        countdownCircleEl.setAttribute('r', `${radius}px`)
+        countdownCircleEl.setAttribute('r', `${radius}px`);
 
-        fillCircleEl.setAttribute('r', `${radius}px`)
+        fillCircleEl.setAttribute('r', `${radius}px`);
     })
 </script>
 

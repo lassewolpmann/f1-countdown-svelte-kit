@@ -1,13 +1,14 @@
 /** @type {import('./$types').PageLoad} */
 import type { AllSeriesData, Event } from "$lib/types/Data";
+import { error } from '@sveltejs/kit';
 
 export const load = (async ({ fetch }: any) => {
     const allSeriesData: AllSeriesData = {};
     const seriesList: string[] = ['f1', 'f2', 'f3'];
 
     for (const series of seriesList) {
-        const allEvents: Array<Event> = await getAllEvents(series, fetch);
-        const nextEvents: Array<Event> = getNextEvents(allEvents);
+        const allEvents: Event[] = await getAllEvents(series, fetch);
+        const nextEvents: Event[] = getNextEvents(allEvents);
 
         for (const event of nextEvents) {
             event.sessionsTableHidden = true;
@@ -19,6 +20,13 @@ export const load = (async ({ fetch }: any) => {
             nextEvents: nextEvents,
             previousEvent: previousEvent,
         };
+    }
+
+    // Make sure that every series has a data entry in allSeriesData
+    for (const series of seriesList) {
+        if (!allSeriesData[series]) throw error(404, {
+            message: "Couldn't retrieve data from API"
+        })
     }
 
     return {

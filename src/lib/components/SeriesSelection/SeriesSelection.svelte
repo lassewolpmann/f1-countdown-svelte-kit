@@ -1,10 +1,10 @@
 <script lang="ts">
     // Function imports
-    import { calculateOffset, decreaseSeriesIndex, increaseSeriesIndex } from "$lib/functions/SeriesSelection";
+    import { calculateOffset, decreaseSeriesIndex, increaseSeriesIndex } from "$lib/components/SeriesSelection/SeriesSelection";
     import { afterUpdate } from "svelte";
 
     // Store imports
-    import { currentSeries } from "$lib/stores/currentSeries";
+    import { currentSeries } from "$lib/components/SeriesSelection/currentSeries";
 
     export let seriesList: string[];
 

@@ -1,23 +1,29 @@
 <script lang="ts">
     // Type imports
     import type { Event } from "$lib/types/Data";
+
     export let nextEvents: Event[];
+
+    let nextEvent: undefined | Event, nextEventName: string;
+
+    $: {
+        nextEvent = nextEvents.at(0);
+        nextEventName = nextEvent !== undefined ? nextEvent.name : "Unknown Grand Prix";
+    }
 </script>
 
 <style>
     .event-name {
         font-size: 48px;
-        font-weight: bold;
         margin: 10px 0;
+        text-align: center;
     }
 
     @media only screen and (max-width: 768px) {
         .event-name {
             font-size: 32px;
-            font-weight: bold;
-            margin: 10px 0;
         }
     }
 </style>
 
-<h1 class="event-name">{nextEvents[0]['name']} Grand Prix</h1>
+<h1 class="event-name">{nextEventName} Grand Prix</h1>
