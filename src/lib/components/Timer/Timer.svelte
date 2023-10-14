@@ -1,6 +1,6 @@
 <script lang="ts">
     // Component imports
-    import TimerElement from "$lib/components/Timer/TimerElement.svelte";
+    import TimerElement from "$lib/components/Timer/TimerElement/TimerElement.svelte";
 
     // Store imports
     import { currentSessionIndex } from "$lib/components/SessionSelection/currentSessionIndex";
