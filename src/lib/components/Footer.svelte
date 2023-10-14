@@ -36,11 +36,11 @@
         <a href="https://github.com/lassewolpmann/f1-countdown-svelte-kit" target="_blank">
             <i class="fa-brands fa-github"></i> Code
         </a>
-        <a href="https://github.com/lassewolpmann/f1-countdown-svelte-kit/issues" target="_blank">
-            <i class="fa-brands fa-github"></i> Issues
-        </a>
         <a href="https://github.com/lassewolpmann/f1-countdown-svelte-kit/blob/main/LICENSE.md" target="_blank">
             <i class="fa-solid fa-scale-balanced"></i> License
+        </a>
+        <a href="mailto:lasse@f1-countdown.com">
+            <i class="fa-solid fa-envelope"></i> Feedback
         </a>
     </div>
     <div>
@@ -50,12 +50,6 @@
         </a>
         <a href="https://github.com/sportstimes/f1/blob/main/LICENSE" target="_blank">
             <i class="fa-solid fa-scale-balanced"></i> License
-        </a>
-    </div>
-    <div>
-        <h4>Donations</h4>
-        <a href="https://www.buymeacoffee.com/f1countdowncom" target="_blank">
-            <i class="fa-solid fa-mug-hot"></i> buymeacoffee.com
         </a>
     </div>
 </footer>

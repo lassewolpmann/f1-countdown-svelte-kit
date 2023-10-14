@@ -1,6 +1,6 @@
 import type { Event } from "$lib/types/Data"
 
-export class EventComponent {
+export class UpcomingEvent {
     event: Event
     locationURL: string;
     eventName: string;
