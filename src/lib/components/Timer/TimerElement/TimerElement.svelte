@@ -5,8 +5,8 @@
 
     let innerWidth: number = 768;
 
-    let timerElement: TimerElement = new TimerElement(innerWidth);
-    $: timerElement = new TimerElement(innerWidth);
+    let timerElement: TimerElement = new TimerElement(innerWidth, timeValuePct);
+    $: timerElement = new TimerElement(innerWidth, timeValuePct);
 </script>
 
 <style lang="scss">
@@ -78,7 +78,7 @@
                 stroke="{strokeColor}"
                 stroke-width="{timerElement.strokeWidth}"
                 stroke-dasharray="{timerElement.dashArray}"
-                stroke-dashoffset="{timerElement.dashArray - timerElement.dashArray * timeValuePct}"
+                stroke-dashoffset="{timerElement.dashOffset}"
         />
         <circle
                 class="fill-circle"

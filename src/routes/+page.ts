@@ -10,10 +10,6 @@ export const load = (async ({ fetch }: any) => {
         const allEvents: Event[] = await getAllEvents(series, fetch);
         const nextEvents: Event[] = getNextEvents(allEvents);
 
-        for (const event of nextEvents) {
-            event.sessionsTableHidden = true;
-        }
-
         const previousEvent: Event = getPreviousEvent(allEvents, nextEvents);
 
         allSeriesData[series] = {
