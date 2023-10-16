@@ -10,7 +10,7 @@ html {
     --main-text-color: #eee;
     --secondary-text-color: #868686;
 
-    --button-inactive-color: #222;
+    --button-inactive-color: #333;
     --button-hover-color: #444;
 
     --table-row-primary-color: rgb(29, 29, 29);
@@ -24,13 +24,13 @@ body {
 button {
     font-family: inherit;
     font-weight: bold;
-    font-size: 20px;
+    font-size: 16px;
     color: var(--secondary-text-color);
     cursor: pointer;
     background: var(--button-inactive-color);
     padding: 10px 15px;
     border: none;
-    border-radius: 5px;
+    border-radius: 50%;
     transition: background 0.2s ease;
 
     /* Necessary for switching between F1, F2, and F3 */
@@ -46,8 +46,8 @@ button:hover {
 }
 
 a {
-    color: inherit;
-    text-decoration: inherit;
+    color: var(--main-text-color);
+    text-decoration: none;
     transition: color 0.2s ease;
 }
 

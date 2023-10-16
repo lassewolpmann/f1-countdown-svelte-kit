@@ -21,12 +21,6 @@
         gap: 5px;
 
         button {
-            width: 30px;
-            height: 30px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-
             i {
                 transition: transform 200ms;
             }
@@ -48,15 +42,13 @@
         padding: 10px 20px;
         border-radius: 10px;
 
-        div:first-child, div:last-child {
-            flex: 1;
-        }
-
         .name {
+            font-weight: 500;
             flex: 6;
         }
 
         .date {
+            font-weight: 300;
             flex: 2;
 
             display: flex;
@@ -66,12 +58,17 @@
                 color: var(--secondary-text-color);
             }
         }
+
+        .toggle-visibility {
+            flex: 1;
+        }
     }
 
     .all-sessions {
         .session {
             background: var(--table-row-secondary-color);
             border-radius: 0;
+            border-bottom: 2px solid var(--table-row-primary-color);
         }
 
         .session:first-child {
@@ -80,6 +77,7 @@
 
         .session:last-child {
             border-radius: 0 0 10px 10px;
+            border-bottom: none;
         }
     }
 
@@ -100,11 +98,6 @@
 
 <div class="upcoming-event">
     <div class="session">
-        <div class="location">
-            <a href={upcomingEvent.locationURL} target="_blank" aria-label="Google Maps Location of Event">
-                <i class="fa-solid fa-location-dot"></i>
-            </a>
-        </div>
         <div class="name">{upcomingEvent.eventName}</div>
         <div class="date">
             <span>{upcomingEvent.raceDate}</span>
@@ -119,7 +112,6 @@
     <div class="all-sessions" class:hidden={upcomingEvent.sessionsHidden}>
         {#each { length: upcomingEvent.sessionNames.length } as _, i}
             <div class="session">
-                <div class="location"></div>
                 <div class="name">
                     {upcomingEvent.sessionNames.at(i)}
                 </div>
