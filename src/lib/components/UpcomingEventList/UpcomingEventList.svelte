@@ -20,7 +20,7 @@
         margin-bottom: 25px;
 
         h3 {
-            margin: 20px 0 0 0;
+            margin: 20px 0 0 15px;
         }
     }
 </style>
