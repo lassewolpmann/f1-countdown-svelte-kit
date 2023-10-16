@@ -15,84 +15,20 @@
     }
 </script>
 <style lang="scss">
-    tbody {
-        background: var(--table-row-primary-color);
-    }
+    .upcoming-event {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
 
-    tbody:nth-child(2n) {
-        background: var(--table-row-secondary-color);
-    }
-
-    td {
-        padding: 5px 15px;
-    }
-
-    .session-row.hidden {
-        display: none;
-    }
-
-    .session-date, .race-date {
-        vertical-align: bottom;
-        height: 35px;
-        padding-bottom: 0;
-    }
-
-    .session-time, .race-time {
-        color: var(--secondary-text-color);
-        vertical-align: top;
-        height: 35px;
-        padding-top: 0;
-    }
-
-    .event-name, .session-name {
-        width: 30%;
-    }
-
-    .session-date, .race-date, .session-time, .race-time {
-        width: 30%;
-    }
-
-    .location, .collapse {
-        width: 5%;
-    }
-
-    .location {
-        a {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-
-            width: 30px;
-            height: 30px;
-
-            background: var(--button-inactive-color);
-            cursor: pointer;
-            border: none;
-            border-radius: 5px;
-
-            color: var(--secondary-text-color);
-            transition: background 0.2s ease;
-
-            text-decoration: none;
-        }
-
-        a:hover {
-            background: var(--button-hover-color);
-            color: var(--main-text-color);
-        }
-    }
-
-    .collapse {
         button {
             width: 30px;
             height: 30px;
-
             display: flex;
             align-items: center;
             justify-content: center;
 
             i {
-                transition: transform 0.3s ease;
+                transition: transform 200ms;
             }
 
             i.hidden {
@@ -100,33 +36,99 @@
             }
         }
     }
+
+    .session {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        gap: 30px;
+
+        background: var(--table-row-primary-color);
+        padding: 10px 20px;
+        border-radius: 10px;
+
+        div:first-child, div:last-child {
+            flex: 1;
+        }
+
+        .name {
+            flex: 6;
+        }
+
+        .date {
+            flex: 2;
+
+            display: flex;
+            flex-direction: column;
+
+            span:last-child {
+                color: var(--secondary-text-color);
+            }
+        }
+    }
+
+    .all-sessions {
+        .session {
+            background: var(--table-row-secondary-color);
+            border-radius: 0;
+        }
+
+        .session:first-child {
+            border-radius: 10px 10px 0 0;
+        }
+
+        .session:last-child {
+            border-radius: 0 0 10px 10px;
+        }
+    }
+
+    .all-sessions.hidden {
+        display: none;
+    }
+
+    @media only screen and (max-width: 768px) {
+        .upcoming-event, .session {
+            font-size: 14px;
+        }
+
+        .session {
+            gap: 15px;
+        }
+    }
 </style>
 
-<tbody class="event">
-    <tr class="header-row">
-        <td class="location" rowspan="2">
+<div class="upcoming-event">
+    <div class="session">
+        <div class="location">
             <a href={upcomingEvent.locationURL} target="_blank" aria-label="Google Maps Location of Event">
                 <i class="fa-solid fa-location-dot"></i>
             </a>
-        </td>
-        <td class="event-name" rowspan="2">{upcomingEvent.eventName}</td>
-        <td class="race-date">{upcomingEvent.raceDate}</td>
-        <td class="collapse" rowspan="2">
+        </div>
+        <div class="name">{upcomingEvent.eventName}</div>
+        <div class="date">
+            <span>{upcomingEvent.raceDate}</span>
+            <span>{upcomingEvent.raceTime}</span>
+        </div>
+        <div class="toggle-visibility">
             <button on:click={toggleSessionVisibility} aria-label="Show or hide all Sessions of Event">
                 <i class="fa-solid fa-chevron-up" class:hidden={upcomingEvent.sessionsHidden}></i>
             </button>
-        </td>
-    </tr>
-    <tr class="header-row">
-        <td class="race-time">{upcomingEvent.raceTime}</td>
-    </tr>
-    {#each { length: upcomingEvent.sessionNames.length } as _, i}
-        <tr class="session-row" class:hidden={upcomingEvent.sessionsHidden}>
-            <td class="session-name" rowspan="2" colspan="2">{upcomingEvent.sessionNames.at(i)}</td>
-            <td class="session-date" colspan="2">{upcomingEvent.sessionDates.at(i)}</td>
-        </tr>
-        <tr class="session-row" class:hidden={upcomingEvent.sessionsHidden}>
-            <td class="session-time" colspan="2">{upcomingEvent.sessionTimes.at(i)}</td>
-        </tr>
-    {/each}
-</tbody>
+        </div>
+    </div>
+    <div class="all-sessions" class:hidden={upcomingEvent.sessionsHidden}>
+        {#each { length: upcomingEvent.sessionNames.length } as _, i}
+            <div class="session">
+                <div class="location"></div>
+                <div class="name">
+                    {upcomingEvent.sessionNames.at(i)}
+                </div>
+                <div class="date">
+                    <span>{upcomingEvent.sessionDates.at(i)}</span>
+                    <span>{upcomingEvent.sessionTimes.at(i)}</span>
+                </div>
+                <div class="toggle-visibility"></div>
+            </div>
+        {/each}
+    </div>
+</div>

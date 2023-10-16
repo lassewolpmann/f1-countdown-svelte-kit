@@ -9,25 +9,25 @@
 </script>
 
 <style lang="scss">
-    table {
-        margin: 20px 0;
-        font-size: 14px;
-        border-collapse: collapse;
-        width: min(90vw, 600px);
+    .upcoming-event-list {
+        display: flex;
+        flex-direction: column;
 
-        caption {
-            text-align: left;
-            padding-bottom: 15px;
-            font-weight: 600;
-            font-size: 16px;
+        gap: 25px;
+
+        width: min(90vw, 700px);
+
+        margin-bottom: 25px;
+
+        h3 {
+            margin: 20px 0 0 0;
         }
     }
 </style>
 
-<table class="upcoming-event-list">
-    <caption>Upcoming Grands Prix</caption>
-    <thead></thead>
+<div class="upcoming-event-list">
+    <h3>Upcoming Grands Prix</h3>
     {#each nextEvents as event}
         <UpcomingEvent {event} />
     {/each}
-</table>
+</div>
