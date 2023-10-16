@@ -6,7 +6,7 @@
         flex-direction: row;
 
         padding: 50px;
-        gap: 20px;
+        gap: 50px;
     }
 
     .fa-heart {
@@ -23,6 +23,7 @@
     @media only screen and (max-width: 768px) {
         footer {
             flex-direction: column;
+            gap: 10px;
         }
     }
 </style>
