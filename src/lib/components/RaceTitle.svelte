@@ -6,7 +6,7 @@
 
     let nextEvent: undefined | Event, nextEventName: string;
 
-    $: {
+    $: if (nextEvents) {
         nextEvent = nextEvents.at(0);
         nextEventName = nextEvent !== undefined ? nextEvent.name : "Unknown Grand Prix";
     }
