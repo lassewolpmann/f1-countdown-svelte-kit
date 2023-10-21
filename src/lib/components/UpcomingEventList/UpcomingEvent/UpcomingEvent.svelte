@@ -21,6 +21,8 @@
         gap: 5px;
 
         button {
+            padding: 5px 10px;
+
             i {
                 transition: transform 200ms;
             }
