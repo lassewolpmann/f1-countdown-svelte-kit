@@ -47,6 +47,9 @@
         <a href="mailto:lasse@f1-countdown.com">
             <i class="fa-solid fa-envelope"></i> Feedback
         </a>
+        <a href="/privacy-policy" target="_blank">
+            <i class="fa-solid fa-cookie-bite"></i> Privacy Policy
+        </a>
     </div>
     <div>
         <h4>Session data</h4>
