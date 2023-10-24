@@ -1,28 +1,59 @@
-import type { AllSeriesData, SeriesData, Event } from "$lib/types/Data";
+import type { AllSeriesData, Event } from "$lib/types/Data";
 
-const getNextEvent = (data: AllSeriesData, seriesName: string): Event => {
-    const seriesData: SeriesData | undefined = data[seriesName];
+export class MetaDescription {
+    seriesList: string[];
+    seriesData: AllSeriesData;
+    descriptionString: string;
 
-    let nextEvents, nextEvent;
-
-    if (seriesData) nextEvents = seriesData.nextEvents;
-    if (nextEvents) nextEvent = nextEvents.at(0);
-
-    if (nextEvent) {
-        return nextEvent;
-    } else {
-        return {} as Event
+    constructor(seriesList: string[], seriesData: AllSeriesData) {
+        this.seriesList = seriesList;
+        this.seriesData = seriesData;
+        this.descriptionString = this.createDescriptionString();
     }
-}
 
-export const getNextEventName = (data: AllSeriesData, seriesName: string): string => {
-    const nextEvent: Event = getNextEvent(data, seriesName)
+    createDescriptionString(): string {
+        let dString = `When is the next F1, F2 and F3 race? Countdown to the `
 
-    return nextEvent.name
-}
+        for (const seriesName of this.seriesList) {
+            const nextEvent = this.getNextEvent(seriesName);
+            const nextEventYear = this.getEventYear(nextEvent);
+            const nextEventName = `${nextEvent.name} Grand Prix`;
+            const nextEventSessions = Object.keys(nextEvent.sessions).map((sessionName => sessionName.toUpperCase()));
 
-export const getSessionNames = (data: AllSeriesData, seriesName: string): string => {
-    const nextEvent: Event = getNextEvent(data, seriesName)
+            if (seriesName === 'f1') {
+                dString = dString.concat(`${nextEventYear} ${seriesName.toUpperCase()} ${nextEventName} ${nextEventSessions.join(', ')}; `)
+            } else {
+                dString = dString.concat(`${nextEventYear} ${seriesName.toUpperCase()} ${nextEventName}; `)
+            }
+        }
 
-    return Object.keys(nextEvent.sessions).join(', ').toUpperCase()
+        return dString
+    }
+
+    getNextEvent(seriesName: string) {
+        const seriesData = this.seriesData[seriesName];
+
+        let nextEvents;
+        if (seriesData) nextEvents = seriesData.nextEvents;
+
+        let nextEvent;
+        if (nextEvents) nextEvent = nextEvents.at(0);
+
+        if (nextEvent) {
+            return nextEvent
+        } else {
+            return {} as Event
+        }
+    }
+
+    getEventYear(event: Event): number {
+        const eventSessions = event.sessions;
+        const raceYear = Object.values(eventSessions).at(-1);
+
+        if (raceYear) {
+            return new Date(raceYear).getFullYear()
+        } else {
+            return 0
+        }
+    }
 }
