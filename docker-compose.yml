@@ -1,0 +1,52 @@
+services:
+  formulacountdown:
+    build: .
+    container_name: 'formulacountdown-sveltekit'
+    restart: 'always'
+    labels:
+      traefik.enable: 'true'
+      traefik.http.routers.formulacountdown.rule: 'Host(`formulacountdown.com`) || Host(`www.formulacountdown.com`)'
+      traefik.http.routers.formulacountdown.entrypoints: 'websecure'
+      traefik.http.routers.formulacountdown.tls: 'true'
+      traefik.http.routers.formulacountdown.tls.certresolver: 'hetzner'
+
+  traefik:
+    image: traefik:latest
+    container_name: 'formulacountdown-traefik'
+    restart: 'always'
+    env_file: .env
+    ports:
+      - 80:80
+      - 443:443
+    command:
+      # API & Dashboard
+      - "--api.insecure=true"
+      - "--api.dashboard=true"
+
+      # Providers
+      - "--providers.docker=true"
+      - "--providers.docker.exposedByDefault=false"
+
+      # Entrypoints
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.web.http.redirections.entryPoint.to=websecure"
+      - "--entrypoints.web.http.redirections.entryPoint.scheme=https"
+      - "--entrypoints.websecure.address=:443"
+      - "--entrypoints.websecure.http.tls=true"
+
+      # Certificates Resolvers
+      - "--certificatesResolvers.hetzner.acme.email=lassewolpmann@outlook.de"
+      - "--certificatesResolvers.hetzner.acme.storage=/acme.json"
+      - "--certificatesResolvers.hetzner.acme.dnsChallenge.provider=hetzner"
+    labels:
+      traefik.enable: 'true'
+      traefik.http.middlewares.dashboard-auth.basicauth.users: '${BASIC_AUTH_PASSWORD}'
+      traefik.http.routers.dashboard.rule: 'Host(`dashboard.formulacountdown.com`)'
+      traefik.http.routers.dashboard.entrypoints: 'websecure'
+      traefik.http.routers.dashboard.middlewares: 'dashboard-auth'
+      traefik.http.routers.dashboard.tls: 'true'
+      traefik.http.routers.dashboard.tls.certresolver: 'hetzner'
+      traefik.http.routers.dashboard.service: 'api@internal'
+    volumes:
+      - ./acme.json:/acme.json
+      - /var/run/docker.sock:/var/run/docker.sock
