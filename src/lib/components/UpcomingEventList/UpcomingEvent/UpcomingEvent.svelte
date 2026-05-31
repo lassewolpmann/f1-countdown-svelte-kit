@@ -11,6 +11,7 @@
     }
 
     let { event }: Props = $props();
+    console.log(event);
 
     let scrollEl: HTMLElement | undefined = $state();
     let scrollbarEl: HTMLElement | undefined = $state();

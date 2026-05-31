@@ -44,11 +44,7 @@ export class APIData {
             let races: RaceData[] = data['races']
             races = races.map(race => {
                 race.name += " Grand Prix"
-
-                // Add Flag
-                let flag = flags[race.localeKey]
-                if (!flag) return race
-                race.flag = flag
+                race.flag = flags[race.localeKey] ?? "🏁"
 
                 // Add extra info to sessions
                 let sessions: {[key: string]: string} = race.sessions

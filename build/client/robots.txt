@@ -1,0 +1,6 @@
+Sitemap: https://formulacountdown.com/sitemap.xml
+
+User-agent: *
+Disallow: /*.xml$
+Disallow: /cdn-cgi/
+Disallow: /_app/

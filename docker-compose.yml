@@ -1,0 +1,18 @@
+services:
+  formulacountdown:
+    build: .
+    container_name: 'formulacountdown-sveltekit'
+    restart: 'always'
+    labels:
+      traefik.enable: 'true'
+      traefik.http.routers.formulacountdown.rule: 'Host(`formulacountdown.com`) || Host(`www.formulacountdown.com`)'
+      traefik.http.routers.formulacountdown.entrypoints: 'websecure'
+      traefik.http.routers.formulacountdown.tls: 'true'
+      traefik.http.routers.formulacountdown.tls.certresolver: 'hetzner'
+    networks:
+      - traefik
+
+networks:
+  traefik:
+    name: traefik
+    external: true
