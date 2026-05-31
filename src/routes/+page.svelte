@@ -53,13 +53,6 @@
                 bind:value={currentSeries}
                 class="bg-neutral-800 border-0 rounded-xl p-2.5"
                 aria-label="Selection of Series (F1, F2, F3, F1 Academy)"
-                onchange={() => {
-                    plausible('Series changed', {
-                        props: {
-                            selectedSeries: currentSeries
-                        }
-                    })
-                }}
         >
             {#each apiData.seriesOptions as seriesOption}
                 <option value="{seriesOption}">{seriesName(seriesOption)}</option>

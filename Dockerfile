@@ -1,12 +1,12 @@
-FROM node:alpine as builder
+FROM node:26-alpine as builder
 WORKDIR /app
 COPY package*.json .
 RUN npm ci
 COPY . .
 RUN npm run build
-RUN npm prune --production
+RUN npm prune --omit=dev
 
-FROM node:18-alpine
+FROM node:26-alpine
 WORKDIR /app
 COPY --from=builder /app/build build/
 COPY --from=builder /app/node_modules node_modules/
