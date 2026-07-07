@@ -10,9 +10,9 @@ services:
       traefik.http.routers.formulacountdown.tls: 'true'
       traefik.http.routers.formulacountdown.tls.certresolver: 'hetzner'
     networks:
-      - traefik
+      - formulacountdown-proxy
 
 networks:
-  traefik:
-    name: traefik
+  formulacountdown-proxy:
+    name: formulacountdown-proxy
     external: true
